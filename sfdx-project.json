@@ -12,6 +12,14 @@
                     "versionNumber": "0.141.0.LATEST"
                 },
                 {
+                    "package": "crm-platform-integration",
+                    "versionNumber": "0.71.0.LATEST"
+                },
+                {
+                    "package": "crm-nks-base-components",
+                    "versionNumber": "0.1.0.LATEST"
+                },
+                {
                     "package": "crm-journal-utilities",
                     "versionNumber": "0.11.0.LATEST"
                 },
@@ -39,6 +47,8 @@
         "crm-journal-utilities": "0Ho2o000000fxXkCAI",
         "crm-platform-base": "0Ho2o0000008ORmCAM",
         "crm-shared-user-notification": "0Ho2o000000fxY4CAI",
-        "crm-shared-flowComponents": "0Ho2o000000fxYJCAY"
+        "crm-shared-flowComponents": "0Ho2o000000fxYJCAY",
+        "crm-platform-integration": "0Ho2o0000008ORrCAM",
+        "crm-nks-base-components": "0Ho7U000000000LSAQ"
     }
 }
