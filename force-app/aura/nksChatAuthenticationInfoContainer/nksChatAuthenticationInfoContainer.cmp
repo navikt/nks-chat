@@ -10,6 +10,8 @@
     <aura:attribute name="conversation" type="object[]" />
 
     <lightning:conversationToolkitApi aura:id="chatToolkit" />
+    <!-- Connecting to workspace API for i.e. workspace tab handling-->
+    <lightning:workspaceAPI aura:id="workspace" />
 
     <c:nksChatAuthenticationInfo
         recordId="{!v.recordId}"
@@ -18,7 +20,7 @@
         accountFields="{!v.accountFields}"
         personFields="{!v.personFields}"
         onrequestauthentication="{!c.requestAuthentication}"
-        onauthenticationcomplete="{!c.showLoginMsg}"
+        onauthenticationcomplete="{!c.handleAuthCompleted}"
         aura:id="chatAuthInfo"
     >
     </c:nksChatAuthenticationInfo>

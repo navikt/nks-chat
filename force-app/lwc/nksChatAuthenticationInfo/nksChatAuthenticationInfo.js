@@ -1,5 +1,5 @@
 import { LightningElement, api, wire, track } from 'lwc';
-import { subscribe, unsubscribe } from 'lightning/empApi';
+import { subscribe, unsubscribe, onError } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getChatInfo from '@salesforce/apex/ChatAuthController.getChatInfo';
 import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusRequested';
@@ -78,6 +78,16 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     connectedCallback() {
         this.getAuthUrl();
+        //Registering an error listener for handling empApi errors and potential reconnect
+        this.registerErrorListener();
+    }
+
+    registerErrorListener() {
+        // Invoke onError empApi method
+        onError((error) => {
+            console.log('Received error from empApi: ', JSON.stringify(error));
+            //Check if the error is related to subscribe method or if we require to perorm a new subscribe/handshake
+        });
     }
 
     @wire(getChatInfo, { chatTranscriptId: '$recordId' })
