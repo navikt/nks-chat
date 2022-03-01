@@ -13,14 +13,14 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>nksChatConversationHandler</componentName>
-                <identifier>nksChatConversationHandler</identifier>
+                <componentName>nksBackgroundTabUpdator</componentName>
+                <identifier>nksBackgroundTabUpdator</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
-                <componentName>nksBackgroundTabUpdator</componentName>
-                <identifier>nksBackgroundTabUpdator</identifier>
+                <componentName>nksChatConversationHandler</componentName>
+                <identifier>nksChatConversationHandler</identifier>
             </componentInstance>
         </itemInstances>
         <name>backgroundComponents</name>
@@ -31,7 +31,7 @@
         <name>one:utilityBarTemplateDesktop</name>
         <properties>
             <name>isLeftAligned</name>
-            <value>true</value>
+            <value>false</value>
         </properties>
     </template>
     <type>UtilityBar</type>
