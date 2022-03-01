@@ -50,6 +50,9 @@
 **/.eslintrc.json
 **/__tests__/**
 
+# FieldRestrictionRules
+**/fieldRestrictionRules/*
+
 
 # Other packages
 # ----------------------------------------------------------------------------------------
