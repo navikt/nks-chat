@@ -1,12 +1,33 @@
 {
-    "orgName": "crm-shared-template",
+    "orgName": "crm-nks-chat",
     "edition": "Enterprise",
     "release": "Current",
     "adminEmail": "fakeemail@nav.no.scratchorg",
-    "features": ["ProcessBuilder", "API", "LiveAgent", "PersonAccounts", "ContactsToMultipleAccounts"],
+    "features": [
+        "ProcessBuilder",
+        "API",
+        "LiveAgent",
+        "PersonAccounts",
+        "Sites",
+        "ForceComPlatform",
+        "Communities",
+        "CustomerCommunity",
+        "CustomerCommunityPlus",
+        "ServiceCloud",
+        "Knowledge",
+        "LightningServiceConsole",
+        "FIELDSERVICE:1"
+    ],
     "country": "NO",
     "language": "en_US",
     "settings": {
+        "communitiesSettings": {
+            "enableNetworksEnabled": true,
+            "enableOotbProfExtUserOpsEnable": true
+        },
+        "experienceBundleSettings": {
+            "enableExperienceBundleMetadata": true
+        },
         "lightningExperienceSettings": {
             "enableS1DesktopEnabled": true
         },
@@ -14,16 +35,35 @@
             "enableTranslationWorkbench": true
         },
         "accountSettings": {
-            "enableAccountTeams": true
+            "enableRelateContactToMultipleAccounts": true
+        },
+        "omniChannelSettings": {
+            "enableOmniChannel": true
         },
         "liveAgentSettings": {
             "enableLiveAgent": true
+        },
+        "knowledgeSettings": {
+            "enableKnowledge": true,
+            "enableLightningKnowledge": true
         },
         "emailAdministrationSettings": {
             "enableEnhancedEmailEnabled": true
         },
         "nameSettings": {
             "enableMiddleName": true
+        },
+        "fieldServiceSettings": {
+            "fieldServiceOrgPref": true,
+            "doesShareSaParentWoWithAr": false,
+            "doesShareSaWithAr": false,
+            "enableWorkOrders": true,
+            "isGeoCodeSyncEnabled": false,
+            "isLocationHistoryEnabled": false,
+            "fieldServiceNotificationsOrgPref": true
+        },
+        "userManagementSettings": {
+            "enableNewProfileUI": true
         }
     }
 }

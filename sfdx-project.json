@@ -2,11 +2,53 @@
     "packageDirectories": [
         {
             "path": "force-app",
-            "default": true
+            "default": true,
+            "package": "crm-nks-chat",
+            "versionName": "ver 0.1",
+            "versionNumber": "0.1.0.NEXT",
+            "dependencies": [
+                {
+                    "package": "crm-platform-base",
+                    "versionNumber": "0.146.0.LATEST"
+                },
+                {
+                    "package": "crm-platform-integration",
+                    "versionNumber": "0.71.0.LATEST"
+                },
+                {
+                    "package": "crm-nks-base-components",
+                    "versionNumber": "0.1.0.LATEST"
+                },
+                {
+                    "package": "crm-journal-utilities",
+                    "versionNumber": "0.13.0.LATEST"
+                },
+                {
+                    "package": "crm-shared-user-notification",
+                    "versionNumber": "0.3.0.LATEST"
+                },
+                {
+                    "package": "crm-shared-flowComponents",
+                    "versionNumber": "0.1.0.LATEST"
+                },
+                {
+                    "package": "crm-henvendelse",
+                    "versionNumber": "0.48.0.LATEST"
+                }
+            ]
         }
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
     "sourceApiVersion": "54.0",
-    "packageAliases": {}
+    "packageAliases": {
+        "crm-nks-chat": "0Ho7U000000000GSAQ",
+        "crm-henvendelse": "0Ho2o000000fxXfCAI",
+        "crm-journal-utilities": "0Ho2o000000fxXkCAI",
+        "crm-platform-base": "0Ho2o0000008ORmCAM",
+        "crm-shared-user-notification": "0Ho2o000000fxY4CAI",
+        "crm-shared-flowComponents": "0Ho2o000000fxYJCAY",
+        "crm-platform-integration": "0Ho2o0000008ORrCAM",
+        "crm-nks-base-components": "0Ho7U000000000LSAQ"
+    }
 }
