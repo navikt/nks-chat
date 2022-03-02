@@ -21,6 +21,5 @@
 
     handleAuthCompleted: function (component, event, helper) {
         helper.showLoginMsg(component, event);
-        helper.highlightChatTab(component);
     }
 });
