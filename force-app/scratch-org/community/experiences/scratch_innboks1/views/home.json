@@ -20,6 +20,14 @@
                     "renderPriority": "NEUTRAL",
                     "renditionMap": {},
                     "type": "component"
+                },
+                {
+                    "componentAttributes": {},
+                    "componentName": "c:scratchSimulateChatAuth",
+                    "id": "255548bb-25ef-4446-b1c3-3bfbc1db026f",
+                    "renderPriority": "NEUTRAL",
+                    "renditionMap": {},
+                    "type": "component"
                 }
             ],
             "id": "cd3225d7-6e7d-4be6-8fd6-5865528cba3b",

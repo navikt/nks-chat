@@ -15,7 +15,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>ChatAuthController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>ChatAuthController_Test</apexClass>
