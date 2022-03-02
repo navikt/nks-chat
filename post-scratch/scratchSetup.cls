@@ -2,6 +2,7 @@
 User usr = [SELECT Id FROM User WHERE Name = 'User User'];
 usr.UserPermissionsLiveAgentUser = true;
 usr.UserRoleId = [SELECT Id FROM UserRole WHERE Name = 'NKS' LIMIT 1]?.Id;
+usr.CRM_NAV_Ident__c = 'Z999999'; //Setting default nav ident for the scratch user
 update usr;
 
 Group scratchQueue = [SELECT Id FROM Group WHERE DeveloperName = 'Scratch_Chat_Queue'];
