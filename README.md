@@ -70,6 +70,15 @@ As some metadata have poor support for packaging and metadata deployment there a
 npm run scratchSetup
 ```
 
+Other uuseful commands included in this package:
+
+```
+#Activate api mock for all profiles
+npm run activateMock
+#Deactive mock for all profiles
+npm run activateMock
+```
+
 # Henvendelser
 
 Enten:
