@@ -64,6 +64,11 @@ As some metadata have poor support for packaging and metadata deployment there a
 3. Go to the experience site scratch_innboks and into builder. Fint the embedded service chat component and update the chat deployment to the one newly created.
 4. In the builder, open settings > Security and privacy. and Enable relaxed csp and allow the two sites that have been blocked from the live agent endpoints.
 5. Go to setup > Permission sets > Scratch Permission set and add access to the service presence statuses needed for chat.
+6. Run this command in the terminal
+
+```
+npm run scratchSetup
+```
 
 # Henvendelser
 
