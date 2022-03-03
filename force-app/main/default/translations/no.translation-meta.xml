@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <label/>
+        <name>CRM_Chat_Authentication_Init_Failed</name>
+    </customLabels>
+    <customLabels>
+        <label/>
+        <name>CRM_Chat_Authentication_Requested</name>
+    </customLabels>
+    <customLabels>
+        <label/>
+        <name>CRM_Chat_Authentication_Started</name>
+    </customLabels>
+    <customLabels>
+        <label/>
+        <name>CRM_Chat_Identity_Confirmed</name>
+    </customLabels>
+    <customLabels>
+        <label/>
+        <name>CRM_Chat_Identity_Confirmed_Disclaimer</name>
+    </customLabels>
+    <customLabels>
+        <label/>
+        <name>CRM_Chat_Unconfirmed_Identity_Warning</name>
+    </customLabels>
+    <customLabels>
+        <label/>
+        <name>NKS_Chat_Login_Message_EN</name>
+    </customLabels>
+    <customLabels>
+        <label/>
+        <name>NKS_Chat_Login_Message_NO</name>
+    </customLabels>
+    <reportTypes>
+        <description/>
+        <label/>
+        <name>Chat_Transcript</name>
+        <sections>
+            <label/>
+            <name>Chat Transcripts</name>
+        </sections>
+    </reportTypes>
+</Translations>
