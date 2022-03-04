@@ -76,6 +76,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>buttonIcon</name>
+                    <value>utility:lock</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>buttonLabel</name>
