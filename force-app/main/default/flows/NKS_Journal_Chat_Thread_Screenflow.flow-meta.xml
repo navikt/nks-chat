@@ -35,7 +35,7 @@
         </rules>
     </decisions>
     <interviewLabel>Journal Chat Thread {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Journal Chat Thread</label>
+    <label>Journal Chat Thread - Screenflow</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
