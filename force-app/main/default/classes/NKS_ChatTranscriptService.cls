@@ -38,24 +38,28 @@ global class NKS_ChatTranscriptService {
     @AuraEnabled
     public static void storeConversation(String chatId, String jsonConversation) {
         LiveChatTranscript chatTranscript = getChatDetails(chatId);
+        Thread__c chatThread;
+        if (chatTranscript.NKS_Authentication_Timestamp__c == null) {
+            return;
+        } else {
+            chatThread = getThreadDetails(chatId);
+        }
         List<Message> messageList = (List<Message>) JSON.deserialize(jsonConversation, List<Message>.class);
         messageList.sort();
         if (
-            chatTranscript.NKS_Authentication_Timestamp__c == null ||
-            (chatTranscript.NKS_Last_Message_Datetime__c ==
+            (chatThread.CRM_Latest_Message_Datetime__c ==
             Datetime.newInstance(Long.valueOf(messageList[messageList.size() - 1].timestamp)))
         ) {
             //Compare last message timestamp from thread to handle issues with multiple EndEvents
-            //If the chat was not authenticated, the messages cannot be related to end users
             return;
         }
         List<Message__c> threadMessages = new List<Message__c>();
 
         try {
-            threadMessages = converToThreadMessages(messageList, chatTranscript);
+            threadMessages = converToThreadMessages(messageList, chatTranscript, chatThread);
             if (threadMessages.size() > 0)
                 insert threadMessages;
-            updateThreadClosedate(chatTranscript.NKS_Thread__c, System.now());
+            updateThreadClosedate(chatThread.Id, System.now());
         } catch (Exception ex) {
             logger.exception(ex, CRM_ApplicationDomain.Domain.NKS);
             logger.publish();
@@ -71,18 +75,19 @@ global class NKS_ChatTranscriptService {
      **/
     private static List<Message__c> converToThreadMessages(
         List<Message> wrapperMessages,
-        LiveChatTranscript chatTrans
+        LiveChatTranscript chatTrans,
+        Thread__c chatThread
     ) {
         List<Message__c> returnMessages = new List<Message__c>();
-        Map<Datetime, Message__c> existingMessageMap = getExistingMessages(chatTrans.NKS_Thread__c);
+        Map<Datetime, Message__c> existingMessageMap = getExistingMessages(chatThread.Id);
         if (!hasAuthEvent(existingMessageMap.values(), chatTrans.NKS_Authentication_Timestamp__c))
             //If the authentication event has not been added to the thread we create the event
-            returnMessages.add(createAuthEventMessage(chatTrans));
+            returnMessages.add(createAuthEventMessage(chatTrans, chatThread));
 
         for (Integer i = wrapperMessages.size() - 1; i >= 0; i--) {
             //As message list is sorted we only add messages that does not already exist and stop when we hit an existing entry
             if (!existingMessageMap.containsKey(DateTime.newInstance(Long.valueOf(wrapperMessages[i].timestamp)))) {
-                returnMessages.add(convertToThreadMessage(wrapperMessages[i], chatTrans));
+                returnMessages.add(convertToThreadMessage(wrapperMessages[i], chatThread));
             } else {
                 break;
             }
@@ -146,12 +151,12 @@ global class NKS_ChatTranscriptService {
      * @param chatTrans
      * @return Message__c
      **/
-    private static Message__c createAuthEventMessage(LiveChatTranscript chatTrans) {
+    private static Message__c createAuthEventMessage(LiveChatTranscript chatTrans, Thread__c chatThread) {
         String authText = chatTrans.LiveChatButton?.WindowLanguage == 'en_US'
             ? 'Started authenticated chat: '
             : 'Startet innlogget chat: ';
         return new Message__c(
-            CRM_Thread__c = chatTrans.NKS_Thread__c,
+            CRM_Thread__c = chatThread.Id,
             CRM_Type__c = 'Event',
             CRM_Sent_date__c = chatTrans.NKS_Authentication_Timestamp__c,
             CRM_Read__c = true,
@@ -167,9 +172,9 @@ global class NKS_ChatTranscriptService {
      * @param chatTrans
      * @return List<Message__c>
      **/
-    private static Message__c convertToThreadMessage(Message wrapperMessage, LiveChatTranscript chatTrans) {
+    private static Message__c convertToThreadMessage(Message wrapperMessage, Thread__c chatThread) {
         Message__c convertedMessage = new Message__c();
-        convertedMessage.CRM_Thread__c = chatTrans.NKS_Thread__c;
+        convertedMessage.CRM_Thread__c = chatThread.Id;
         convertedMessage.CRM_Message_Text__c = wrapperMessage.content;
         convertedMessage.CRM_Type__c = wrapperMessage.getThreadMessageType();
         convertedMessage.CRM_Sent_date__c = DateTime.newInstance(Long.valueOf(wrapperMessage.timestamp));
@@ -179,12 +184,12 @@ global class NKS_ChatTranscriptService {
             //Agent name is designed to include the NAV ident in parenthesis i.e. (<NAV_IDENT>)
             String navIdent = wrapperMessage.name.substringBetween('(', ')');
             if (!navIdentUserMap.containsKey(navIdent)) {
-                logger.error('Could not find user record for agent', chatTrans, CRM_ApplicationDomain.Domain.NKS);
+                logger.error('Could not find user record for agent', chatThread, CRM_ApplicationDomain.Domain.NKS);
             } else {
                 convertedMessage.CRM_From_User__c = navIdentUserMap.get(navIdent);
             }
         } else {
-            convertedMessage.CRM_From_Contact__c = chatTrans.ContactId;
+            convertedMessage.CRM_From_Contact__c = chatThread.CRM_Contact__c;
         }
 
         return convertedMessage;
@@ -236,6 +241,15 @@ global class NKS_ChatTranscriptService {
                 NKS_Conversation_Stored__c
             FROM LiveChatTranscript
             WHERE Id = :chatId
+            FOR UPDATE
+        ];
+    }
+
+    private static Thread__c getThreadDetails(String chatId) {
+        return [
+            SELECT Id, CRM_Account__c, CRM_Contact__c, CRM_Latest_Message_Datetime__c, CRM_Related_Object__c
+            FROM Thread__c
+            WHERE CRM_Related_Object__c = :chatId
             FOR UPDATE
         ];
     }

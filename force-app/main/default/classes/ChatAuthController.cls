@@ -33,7 +33,7 @@ public without sharing class ChatAuthController {
         chatTrans.AccountId = accountId;
         chatTrans.ContactId = contactId;
         chatTrans.NKS_Authentication_Timestamp__c = DateTime.now();
-        chatTrans.NKS_Thread__c = createChatThread(chatTrans);
+        createChatThread(chatTrans);
 
         if (String.isNotBlank(accountId)) {
             Account personAcc = getPersonAccount(accountId);
@@ -52,7 +52,7 @@ public without sharing class ChatAuthController {
      * @param chatTrans
      * @return Id
      **/
-    private static Id createChatThread(LiveChatTranscript chatTrans) {
+    private static void createChatThread(LiveChatTranscript chatTrans) {
         Thread__c chatThread = new Thread__c(
             CRM_Thread_Type__c = 'CHAT',
             CRM_Account__c = chatTrans.AccountId,
@@ -62,7 +62,6 @@ public without sharing class ChatAuthController {
             CRM_Theme_Group__c = chatTrans.NKS_Theme_Group__c
         );
         insert chatThread;
-        return chatThread.Id;
     }
 
     private static LiveChatTranscript getChatTranscript(Id chatTranscriptId) {
