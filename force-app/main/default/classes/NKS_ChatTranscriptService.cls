@@ -202,13 +202,19 @@ global class NKS_ChatTranscriptService {
      * @return String
      **/
     private static String formatBotConversation(LiveChatTranscript chatTranscript) {
-        String conversationText = chatTranscript.LiveChatButton?.WindowLanguage == 'en_US' ? 'Conversation' : 'Samtale';
-        String returnText = '<div style="text-align: center">';
-        returnText += '<p align="center"><b>' + conversationText + ' - Frida</b></p>';
-        returnText += '</div><br>';
-        String message;
-
         String botConversation = chatTranscript.Case.Description;
+        return formatBotConversation(botConversation);
+    }
+
+    /**
+     * @description: Formats a a given bot conversation string
+     * @author Stian Ruud Schikora | 10-30-2020
+     * @param botConversation
+     * @return String
+     **/
+    public static String formatBotConversation(String botConversation) {
+        String returnText = '';
+        String message;
 
         //For long conversations string.split() has a chance to encounter regex exceptions. Using custom iterator instead
         BotConversation_Iterator conversationIterator = new BotConversation_Iterator(botConversation);
@@ -244,10 +250,11 @@ global class NKS_ChatTranscriptService {
     }
 
     private static Thread__c getThreadDetails(String chatId) {
+        Id convertedId = (Id) chatId;
         return [
             SELECT Id, CRM_Account__c, CRM_Contact__c, CRM_Latest_Message_Datetime__c, CRM_Related_Object__c
             FROM Thread__c
-            WHERE CRM_Related_Object__c = :chatId
+            WHERE CRM_Related_Object__c = :convertedId
             FOR UPDATE
         ];
     }
