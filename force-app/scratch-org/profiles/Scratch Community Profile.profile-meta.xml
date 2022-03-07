@@ -293,11 +293,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>LiveChatTranscript.NKS_Last_Message_Datetime__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>LiveChatTranscript.NKS_Ready_for_Anonymization__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -329,11 +324,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>LiveChatTranscript.NKS_Theme__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LiveChatTranscript.NKS_Thread__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>

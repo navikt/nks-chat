@@ -228,8 +228,6 @@ global class NKS_ChatTranscriptService {
             SELECT
                 AccountId,
                 ContactId,
-                NKS_Last_Message_Datetime__c,
-                NKS_Thread__c,
                 NKS_Agent_Greeting_Name__c,
                 Body,
                 NKS_Conversation__c,
