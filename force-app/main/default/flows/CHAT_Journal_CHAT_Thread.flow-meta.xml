@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Generate_Bot_Conversation</name>
+        <label>Generate Bot Conversation</label>
+        <locationX>182</locationX>
+        <locationY>518</locationY>
+        <actionName>CRM_JournalUtilities</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Validate_Subtheme</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>documentString</name>
+            <value>
+                <stringValue>INPUT</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requestType</name>
+            <value>
+                <stringValue>GENERATE_DOCUMENT</stringValue>
+            </value>
+        </inputParameters>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
         <description>Generates the document from the human chat session</description>
         <name>Generate_Chat_Document</name>
         <label>Generate Chat Document</label>
@@ -9,7 +34,7 @@
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Validate_Subtheme</targetReference>
+            <targetReference>Generate_Bot_Conversation</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -34,7 +59,7 @@
         <name>Post_Journal_Request</name>
         <label>Post Journal Request</label>
         <locationX>182</locationX>
-        <locationY>1334</locationY>
+        <locationY>1454</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -73,26 +98,47 @@
         <name>Assign_Journal_Documents</name>
         <label>Assign Journal Documents</label>
         <locationX>182</locationX>
-        <locationY>974</locationY>
+        <locationY>1094</locationY>
         <assignmentItems>
-            <assignToReference>Journal_Documents.dokumentvarianter</assignToReference>
+            <assignToReference>Chat_Journal_Documents.dokumentvarianter</assignToReference>
             <operator>Add</operator>
             <value>
                 <elementReference>Document_Variant_PDF</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Journal_Documents.tittel</assignToReference>
+            <assignToReference>Chat_Journal_Documents.tittel</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Document_Title</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Journal_Documents.brevkode</assignToReference>
+            <assignToReference>Chat_Journal_Documents.brevkode</assignToReference>
             <operator>Assign</operator>
             <value>
                 <stringValue>CRM_CHAT</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Bot_Journal_Documents.dokumentvarianter</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Bot_Conversation_Document_Variant</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Bot_Journal_Documents.tittel</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Chatsamtale med Frida</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Bot_Journal_Documents.brevkode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>CRM_BOT_CHAT</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -103,7 +149,7 @@
         <name>Assign_Journal_Entry_Default_data</name>
         <label>Assign Journal Entry Default data</label>
         <locationX>182</locationX>
-        <locationY>1790</locationY>
+        <locationY>1910</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.CRM_Journal_Date__c</assignToReference>
             <operator>Assign</operator>
@@ -117,10 +163,10 @@
     </assignments>
     <assignments>
         <description>Assigns needed values to document variant wrapper</description>
-        <name>Document_Variant_Assignment</name>
-        <label>Document Variant Assignment</label>
+        <name>Chat_Document_Variant_Assignment</name>
+        <label>Chat Document Variant Assignment</label>
         <locationX>182</locationX>
-        <locationY>854</locationY>
+        <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>Document_Variant_PDF.filtype</assignToReference>
             <operator>Assign</operator>
@@ -142,6 +188,27 @@
                 <stringValue>ARKIV</stringValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Bot_Conversation_Document_Variant.filtype</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>PDF</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Bot_Conversation_Document_Variant.fysiskDokument</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Generate_Bot_Conversation.documentString</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Bot_Conversation_Document_Variant.variantformat</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>ARKIV</stringValue>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Assign_Journal_Documents</targetReference>
         </connector>
@@ -151,7 +218,7 @@
         <name>Journal_Request_Assignment</name>
         <label>Journal Request Assignment</label>
         <locationX>182</locationX>
-        <locationY>1214</locationY>
+        <locationY>1334</locationY>
         <assignmentItems>
             <assignToReference>Journal_Request.tittel</assignToReference>
             <operator>Assign</operator>
@@ -184,7 +251,7 @@
             <assignToReference>Journal_Request.dokumenter</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Journal_Documents</elementReference>
+                <elementReference>Chat_Journal_Documents</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -252,7 +319,7 @@
         <name>Journal_Sak_Assignment</name>
         <label>Journal Sak Assignment</label>
         <locationX>182</locationX>
-        <locationY>1094</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>Journal_Sak.fagsakId</assignToReference>
             <operator>Assign</operator>
@@ -282,20 +349,20 @@
         <name>Set_Journal_Subtheme_Null</name>
         <label>Set Journal Subtheme Null</label>
         <locationX>270</locationX>
-        <locationY>638</locationY>
+        <locationY>758</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Subtheme__c</assignToReference>
             <operator>Assign</operator>
         </assignmentItems>
         <connector>
-            <targetReference>Document_Variant_Assignment</targetReference>
+            <targetReference>Chat_Document_Variant_Assignment</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Set_Post_Completed</name>
         <label>Set Post Completed</label>
         <locationX>50</locationX>
-        <locationY>1574</locationY>
+        <locationY>1694</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -325,7 +392,7 @@
         <name>Set_Post_Failed</name>
         <label>Set Post Failed</label>
         <locationX>314</locationX>
-        <locationY>1574</locationY>
+        <locationY>1694</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -348,7 +415,7 @@
         <name>Check_Post_State</name>
         <label>Check Post State</label>
         <locationX>182</locationX>
-        <locationY>1454</locationY>
+        <locationY>1574</locationY>
         <defaultConnector>
             <targetReference>Set_Post_Failed</targetReference>
         </defaultConnector>
@@ -374,7 +441,7 @@
         <name>DML_Check</name>
         <label>DML Check</label>
         <locationX>182</locationX>
-        <locationY>1910</locationY>
+        <locationY>2030</locationY>
         <defaultConnectorLabel>No DML</defaultConnectorLabel>
         <rules>
             <name>Do_DML</name>
@@ -397,7 +464,7 @@
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
         <locationX>182</locationX>
-        <locationY>518</locationY>
+        <locationY>638</locationY>
         <defaultConnector>
             <targetReference>Set_Journal_Subtheme_Null</targetReference>
         </defaultConnector>
@@ -413,7 +480,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Document_Variant_Assignment</targetReference>
+                <targetReference>Chat_Document_Variant_Assignment</targetReference>
             </connector>
             <label>Subtheme Was Set</label>
         </rules>
@@ -421,10 +488,7 @@
     <formulas>
         <name>Document_Title</name>
         <dataType>String</dataType>
-        <expression>IF({!JOURNALED_THREAD.CRM_isActive__c} == true,
-&apos;Pågående samtale med NAV - &apos; + {!THREAD_START_DATE},
-&apos;Samtale med NAV - &apos; + {!THREAD_CLOSE_DATE}
-)</expression>
+        <expression>&apos;Innlogget chat med NAV - &apos; + {!THREAD_CLOSE_DATE}</expression>
     </formulas>
     <formulas>
         <description>Formula to define the journal case type (Sakstype). If no Journal Case ID has been input, default is GENERELL_SAK</description>
@@ -525,7 +589,7 @@
         <name>Update_Journal_Entry</name>
         <label>Update Journal Entry</label>
         <locationX>50</locationX>
-        <locationY>2030</locationY>
+        <locationY>2150</locationY>
         <connector>
             <targetReference>Update_Thread</targetReference>
         </connector>
@@ -535,7 +599,7 @@
         <name>Update_Thread</name>
         <label>Update Thread</label>
         <locationX>50</locationX>
-        <locationY>2150</locationY>
+        <locationY>2270</locationY>
         <inputReference>JOURNALED_THREAD</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
@@ -546,10 +610,9 @@
             <targetReference>Get_Necessary_Record_Info</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
-        <description>Document variant wrapper for journal request</description>
-        <name>Document_Variant_PDF</name>
+        <name>Bot_Conversation_Document_Variant</name>
         <apexClass>CRM_Dokumentvarianter</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
@@ -557,9 +620,26 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>Wrapper class for list of documents to journal</description>
-        <name>Journal_Documents</name>
+        <name>Bot_Journal_Documents</name>
         <apexClass>CRM_Dokumenter</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Wrapper class for list of documents to journal</description>
+        <name>Chat_Journal_Documents</name>
+        <apexClass>CRM_Dokumenter</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Document variant wrapper for journal request</description>
+        <name>Document_Variant_PDF</name>
+        <apexClass>CRM_Dokumentvarianter</apexClass>
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
