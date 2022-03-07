@@ -76,6 +76,27 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>buttonIcon</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>buttonLabel</name>
+                    <value>Opprett Oppgave</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>flowName</name>
+                    <value>NKS_Chat_Send_NAV_Task</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>fullButtonWidth</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>nksFlowStarter</componentName>
+                <identifier>c_nksFlowStarter2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>buttonIcon</name>
                     <value>utility:lock</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
