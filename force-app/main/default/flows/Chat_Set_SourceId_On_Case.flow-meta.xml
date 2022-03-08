@@ -52,9 +52,9 @@
         <filterLogic>and</filterLogic>
         <filters>
             <field>CaseId</field>
-            <operator>NotEqualTo</operator>
+            <operator>IsChanged</operator>
             <value>
-                <stringValue/>
+                <booleanValue>true</booleanValue>
             </value>
         </filters>
         <object>LiveChatTranscript</object>
