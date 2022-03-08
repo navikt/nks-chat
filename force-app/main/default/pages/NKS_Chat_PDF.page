@@ -1,0 +1,57 @@
+<apex:page
+    standardController="Thread__c"
+    extensions="CRM_ThreadPdfController"
+    applyBodyTag="false"
+    standardStylesheets="false"
+    renderAs="PDF"
+>
+    <apex:stylesheet value="{!$Resource.Journal_PDF_Style}" />
+
+    <div class="document">
+        <div class="header">
+            <!-- HEADER CONTENT-->
+            <apex:image
+                url="{!URLFOR($Resource.stoLogos,
+                'navLogo.png')}"
+            />
+        </div>
+
+        <div class="content">
+            <h2>Journalført henvendelse</h2>
+
+            <span> <strong>Navn: </strong>{!thread__c.CRM_Account__r.Name} <br /> </span>
+            <span> <strong>Fødselsnummer: </strong>{!thread__c.CRM_Account__r.INT_PersonIdent__c} <br /> </span>
+            <span>
+                <b>Mottatt/Sendt: </b>
+                <apex:outputText value=" {!thread__c.CRM_Registered_Datetime_Formula__c}"> </apex:outputText>
+                <br />
+            </span>
+            <span> <b>Type: </b>Innlogget chat <br /> </span>
+            <br />
+
+            <span style="font-weight: 400; font-size: 16pt">Innhold:</span>
+            <div style="margin-top: 0.25em">
+                <apex:repeat value="{!threadMessages}" var="message">
+                    <div style="padding-bottom: 0.75em">
+                        <b>
+                            <apex:outputPanel rendered="{!message.CRM_External_Message__c == true}">
+                                {!message.CRM_From_Contact__r.Name}
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!message.CRM_External_Message__c == false}">
+                                NAV {!message.CRM_From_Ident_Formula__c}
+                            </apex:outputPanel>
+                            -
+                            <apex:outputText value=" {!message.CRM_Sent_date__c}"> </apex:outputText>
+                        </b>
+                        <p style="margin-top: 0.5em; white-space: pre-wrap">{!message.CRM_Message_Text__c}</p>
+                    </div>
+                </apex:repeat>
+            </div>
+        </div>
+
+        <div class="footer">
+            <!-- FOOTER CONTENT -->
+            <div>Side <span class="pagenumber" /> av <span class="pagecount" /></div>
+        </div>
+    </div>
+</apex:page>

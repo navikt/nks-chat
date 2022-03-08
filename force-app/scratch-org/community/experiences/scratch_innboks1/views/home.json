@@ -13,7 +13,7 @@
             "components": [
                 {
                     "componentAttributes": {
-                        "richTextValue": "<div>     <p><span style='font-size: 48px;'>Let's get started!</span></p>     <ol>         <li><span style='font-size: 18px;'>Unfamiliar with Build Your Own? Click Take a Tour in the Help menu.</span></li>         <li><span style='font-size: 18px;'>Want to add more pages? Take a look at the Pages menu.</span></li>         <li><span style='font-size: 18px;'>Want more components on your page? Drag and drop components from the Components panel.</span></li>         <li><span style='font-size: 18px;'>Want your users to see your company logo? Head on over to the Theme panel.</span></li>         <li><span style='font-size: 18px;'>Refine the look of your site with a custom theme layout. See the Experience Cloud Developer Guide.</span></li>     </ol> </div>"
+                        "richTextValue": "<p><span style=\"font-size: 48px;\">SCRATCH CHAT TESTING</span></p>"
                     },
                     "componentName": "forceCommunity:richTextInline",
                     "id": "9d26beac-c78a-42e8-ac97-d79ae8225bc9",
@@ -22,6 +22,21 @@
                     "type": "component"
                 },
                 {
+                    "componentAttributes": {},
+                    "componentName": "c:scratchSimulateChatAuth",
+                    "id": "255548bb-25ef-4446-b1c3-3bfbc1db026f",
+                    "renderPriority": "NEUTRAL",
+                    "renditionMap": {},
+                    "type": "component"
+                }
+            ],
+            "id": "cd3225d7-6e7d-4be6-8fd6-5865528cba3b",
+            "regionName": "content",
+            "type": "region"
+        },
+        {
+            "components": [
+                {
                     "componentAttributes": {
                         "allowPrepopulatePrechatFields": true,
                         "avatarImgURL": "",
@@ -29,19 +44,19 @@
                         "defaultMinimizedText": "Chat with an Expert",
                         "displayHelpButton": true,
                         "eswConfigurationJSON": {
-                            "baseCoreURL": "https://agility-inspiration-1922.cs128.my.salesforce.com",
+                            "baseCoreURL": "https://dream-saas-6065.cs129.my.salesforce.com",
                             "baseLiveAgentContentURL": "https://c.la2-c1cs-fra.salesforceliveagent.com/content",
                             "baseLiveAgentURL": "https://d.la2-c1cs-fra.salesforceliveagent.com/chat",
-                            "buttonId": "5733N0000004FOr",
-                            "deploymentId": "5723N0000004Dcj",
+                            "buttonId": "5733O0000004CbB",
+                            "deploymentId": "5723O0000004CpI",
                             "enabledFeatures": ["LiveAgent"],
                             "entryFeature": "LiveAgent",
-                            "eswConfigDevName": "Scratch_Embedded_Serivce",
-                            "eswConfigId": "04I3N00000000kJUAQ",
-                            "eswLiveAgentDevName": "EmbeddedServiceLiveAgent_Parent04I3N00000000kJUAQ_17f4552c183",
+                            "eswConfigDevName": "Scratch_Service_Deployment",
+                            "eswConfigId": "04I3O00000000N5UAI",
+                            "eswLiveAgentDevName": "EmbeddedServiceLiveAgent_Parent04I3O00000000N5UAI_17f497db48a",
                             "gslbBaseURL": "https://service.force.com",
                             "isOfflineCasesEnabled": "0",
-                            "orgId": "00D3N00000037zq"
+                            "orgId": "00D3O0000004wNQ"
                         },
                         "externalScripts": "",
                         "externalStyles": "",
@@ -62,11 +77,6 @@
                     "type": "component"
                 }
             ],
-            "id": "cd3225d7-6e7d-4be6-8fd6-5865528cba3b",
-            "regionName": "content",
-            "type": "region"
-        },
-        {
             "id": "4ee1264a-8fca-43a8-a203-97b345c01dd5",
             "regionName": "footer",
             "type": "region"
