@@ -1,7 +1,7 @@
 [
     {
         "content": "TEST CONTENT 1",
-        "name": "TestName1",
+        "name": "TestName1 (Z999999)",
         "recordId": "DUMMY",
         "timestamp": "0",
         "type": "Agent"

@@ -27,11 +27,16 @@ public class NKS_ChatTranscriptService_Test {
                 CRM_Related_Object__c = (String) UTIL_TestDataFactory.createRecordList(transcripts)[0].get('Id')
             )
         );
+
+        User testUser = [SELECT Id FROM User WHERE IsActive = TRUE AND AccountId = NULL LIMIT 1];
+        testUser.CRM_NAV_Ident__c = 'Z999999';
+        update testUser;
     }
 
     @isTest
     static void testStoreConversation() {
         LiveChatTranscript transcript = [SELECT Id, NKS_Conversation__c FROM LiveChatTranscript LIMIT 1];
+        User testUser = [SELECT Id FROM User WHERE CRM_NAV_Ident__c = 'Z999999'];
 
         StaticResource testConversation = [
             SELECT Id, Body
@@ -41,6 +46,8 @@ public class NKS_ChatTranscriptService_Test {
         String conversation = testConversation.Body.toString();
 
         Test.startTest();
+        NKS_ChatTranscriptService.navIdentUserMap.clear();
+        NKS_ChatTranscriptService.navIdentUserMap.put('Z999999', testUser.Id);
         NKS_ChatTranscriptService.storeConversation(transcript.Id, conversation);
         Test.stopTest();
 
