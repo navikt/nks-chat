@@ -1,0 +1,15 @@
+{
+    "LastName": "Chatster",
+    "FirstName": "Chatty",
+    "TimeZoneSidKey": "Europe/Paris",
+    "LocaleSidKey": "NO",
+    "EmailEncodingKey": "UTF-8",
+    "LanguageLocaleKey": "NO",
+    "profileName": "Standard User",
+    "permsets": ["NKS_Chat_Permissions"],
+    "department": "4703",
+    "CRM_NAV_Ident__c": "Z123456",
+    "UserPermissionsLiveAgentUser": true,
+    "UserPermissionsKnowledgeUser": true,
+    "generatePassword": true
+}

@@ -24,6 +24,10 @@
                     "versionNumber": "0.13.0.LATEST"
                 },
                 {
+                    "package": "crm-platform-oppgave",
+                    "versionNumber": "0.22.0.LATEST"
+                },
+                {
                     "package": "crm-shared-user-notification",
                     "versionNumber": "0.3.0.LATEST"
                 },
@@ -53,6 +57,7 @@
         "crm-nks-chat": "0Ho7U000000000GSAQ",
         "crm-henvendelse": "0Ho2o000000fxXfCAI",
         "crm-journal-utilities": "0Ho2o000000fxXkCAI",
+        "crm-platform-oppgave": "0Ho2o000000fxXzCAI",
         "crm-platform-base": "0Ho2o0000008ORmCAM",
         "crm-shared-user-notification": "0Ho2o000000fxY4CAI",
         "crm-shared-flowComponents": "0Ho2o000000fxYJCAY",
