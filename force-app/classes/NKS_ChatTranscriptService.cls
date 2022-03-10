@@ -196,7 +196,7 @@ global class NKS_ChatTranscriptService {
      * @param botConversation
      * @return String
      **/
-    private static String formatBotConversation(LiveChatTranscript chatTranscript) {
+    public static String formatBotConversation(LiveChatTranscript chatTranscript) {
         String conversationText = chatTranscript.LiveChatButton?.WindowLanguage == 'en_US' ? 'Conversation' : 'Samtale';
         String returnText = '<div style="text-align: center">';
         returnText += '<p align="center"><b>' + conversationText + ' - Frida</b></p>';
