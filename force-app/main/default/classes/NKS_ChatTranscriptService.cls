@@ -196,17 +196,6 @@ global class NKS_ChatTranscriptService {
     }
 
     /**
-     * @description: Appends conversation between frida ane end user to the log
-     * @author Stian Ruud Schikora | 10-30-2020
-     * @param botConversation
-     * @return String
-     **/
-    private static String formatBotConversation(LiveChatTranscript chatTranscript) {
-        String botConversation = chatTranscript.Case.Description;
-        return formatBotConversation(botConversation);
-    }
-
-    /**
      * @description: Formats a a given bot conversation string
      * @author Stian Ruud Schikora | 10-30-2020
      * @param botConversation

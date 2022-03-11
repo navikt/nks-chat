@@ -19,6 +19,6 @@ public with sharing class nksChatView {
         if (transcript.size() == 0) {
             return 'Det oppstod en feil';
         }
-        return NKS_ChatTranscriptService.formatBotConversation(transcript[0]);
+        return NKS_ChatTranscriptService.formatBotConversation(transcript[0].Case.Description);
     }
 }
