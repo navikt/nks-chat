@@ -79,7 +79,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>buttonLabel</name>
-                    <value>Opprett Oppgave</value>
+                    <value>Opprett oppgave på henvendelse</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>flowName</name>
