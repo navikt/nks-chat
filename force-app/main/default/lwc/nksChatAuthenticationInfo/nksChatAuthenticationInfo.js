@@ -86,7 +86,9 @@ export default class ChatAuthenticationOverview extends LightningElement {
         // Invoke onError empApi method
         onError((error) => {
             console.log('Received error from empApi: ', JSON.stringify(error));
-            //Check if the error is related to subscribe method or if we require to perorm a new subscribe/handshake
+            //Try to resubscribe if an error was caught
+            this.handleUnsubscribe();
+            this.handleSubscribe();
         });
     }
 
