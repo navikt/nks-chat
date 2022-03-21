@@ -269,7 +269,7 @@ global class NKS_ChatTranscriptService {
         private String recordId;
         private String timestamp;
         private String type;
-        private String language;
+        public String language;
 
         global Integer compareTo(Object compareTo) {
             Message curMessage = (Message) compareTo;
