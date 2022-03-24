@@ -22,7 +22,7 @@
             <span> <strong>Navn: </strong>{!thread__c.CRM_Account__r.Name} <br /> </span>
             <span> <strong>Fødselsnummer: </strong>{!thread__c.CRM_Account__r.INT_PersonIdent__c} <br /> </span>
             <span>
-                <b>Mottatt/Sendt: </b>
+                <b>Logget inn: </b>
                 <apex:outputText value=" {!thread__c.CRM_Registered_Datetime_Formula__c}"> </apex:outputText>
                 <br />
             </span>
