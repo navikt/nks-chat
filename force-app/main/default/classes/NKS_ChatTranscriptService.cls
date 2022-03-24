@@ -155,8 +155,8 @@ global class NKS_ChatTranscriptService {
      **/
     private static Message__c createAuthEventMessage(LiveChatTranscript chatTrans, Thread__c chatThread) {
         String authText = chatTrans.LiveChatButton?.WindowLanguage == 'en_US'
-            ? 'Started authenticated chat: '
-            : 'Startet innlogget chat: ';
+            ? 'Started authenticated chat'
+            : 'Startet innlogget chat';
         return new Message__c(
             CRM_Thread__c = chatThread.Id,
             CRM_Type__c = 'Event',
