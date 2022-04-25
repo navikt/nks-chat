@@ -3,3 +3,7 @@
     justify-self: start;
     border: 0px;
 }
+
+.contentholder {
+    max-width: 80em;
+}

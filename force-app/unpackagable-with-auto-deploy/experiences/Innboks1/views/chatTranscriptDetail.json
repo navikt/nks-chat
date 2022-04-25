@@ -26,13 +26,9 @@
                             "components": [
                                 {
                                     "componentAttributes": {
-                                        "alertopen": "asd",
-                                        "alerttext": "a",
-                                        "header": "Test",
-                                        "recordId": "{!recordId}",
-                                        "secondheader": "Testerton"
+                                        "recordId": "{!recordId}"
                                     },
-                                    "componentName": "c:crmMessagingCommunityThreadViewer",
+                                    "componentName": "c:nksChatView",
                                     "id": "0024650a-054e-4f5a-9795-aa0a095a3620",
                                     "renderPriority": "NEUTRAL",
                                     "renditionMap": {},

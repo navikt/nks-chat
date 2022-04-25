@@ -4,6 +4,10 @@ import getChatbotMessage from '@salesforce/apex/nksChatView.getChatbotMessage';
 import { publish, MessageContext } from 'lightning/messageService';
 import globalModalOpen from '@salesforce/messageChannel/globalModalOpen__c';
 
+///////////// Extra import
+import getmessages from '@salesforce/apex/CRM_MessageHelper.getMessagesFromThread';
+import getContactId from '@salesforce/apex/CRM_MessageHelper.getUserContactId';
+
 export default class NksChatView extends LightningElement {
     @api recordId;
     threadId;
@@ -62,5 +66,32 @@ export default class NksChatView extends LightningElement {
 
     get termsModal() {
         return this.template.querySelector('c-community-modal');
+    }
+
+    /////////////////////////////////////////////////////////////
+
+    @wire(getmessages, { threadId: '$threadId' }) //Calls apex and extracts messages related to this record
+    wiremessages(result) {
+        console.log('Heisann');
+        console.log(result);
+
+        if (result.error) {
+            this.error = result.error;
+        } else if (result.data) {
+            this.messages = result.data;
+        }
+    }
+
+    userContactId;
+    messages;
+
+    connectedCallback() {
+        getContactId({})
+            .then((contactId) => {
+                this.userContactId = contactId;
+            })
+            .catch((error) => {
+                //Apex error
+            });
     }
 }

@@ -10,15 +10,10 @@ public with sharing class nksChatView {
 
     @AuraEnabled(cacheable=true)
     public static String getChatbotMessage(Id chatId) {
-        List<LiveChatTranscript> transcript = [
-            SELECT Id, LiveChatButton.WindowLanguage, Case.Description
-            FROM LiveChatTranscript
-            WHERE Id = :chatId
-            LIMIT 1
-        ];
-        if (transcript.size() == 0) {
+        List<Case> caseRef = [SELECT Description FROM Case WHERE SourceId = :chatId LIMIT 1];
+        if (caseRef.size() == 0) {
             return 'Det oppstod en feil';
         }
-        return NKS_ChatTranscriptService.formatBotConversation(transcript[0].Case.Description);
+        return NKS_ChatTranscriptService.formatBotConversation(caseRef[0].Description);
     }
 }
