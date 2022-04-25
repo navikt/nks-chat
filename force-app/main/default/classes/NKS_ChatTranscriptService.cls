@@ -161,8 +161,7 @@ global class NKS_ChatTranscriptService {
             CRM_Thread__c = chatThread.Id,
             CRM_Type__c = 'Event',
             CRM_Sent_date__c = chatTrans.NKS_Authentication_Timestamp__c,
-            CRM_Read__c = true,
-            CRM_Read_Datetime__c = chatTrans.NKS_Authentication_Timestamp__c,
+            CRM_Read__c = false,
             CRM_Message_Text__c = authText
         );
     }
@@ -182,8 +181,7 @@ global class NKS_ChatTranscriptService {
             ? wrapperMessage.getTransfertext()
             : wrapperMessage.content;
         convertedMessage.CRM_Sent_date__c = DateTime.newInstance(Long.valueOf(wrapperMessage.timestamp));
-        convertedMessage.CRM_Read__c = true;
-        convertedMessage.CRM_Read_Datetime__c = convertedMessage.CRM_Sent_date__c;
+        convertedMessage.CRM_Read__c = false;
         if (wrapperMessage.isAgentMessage()) {
             //Agent name is designed to include the NAV ident in parenthesis i.e. (<NAV_IDENT>)
             String navIdent = wrapperMessage.name.substringBetween('(', ')');
