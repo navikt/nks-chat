@@ -85,6 +85,8 @@ global class NKS_ChatTranscriptService {
             returnMessages.add(createAuthEventMessage(chatTrans, chatThread));
 
         for (Integer i = wrapperMessages.size() - 1; i >= 0; i--) {
+            //Adding language attribute to the message
+            wrapperMessages[i].language = chatTrans.LiveChatButton?.WindowLanguage;
             //As message list is sorted we only add messages that does not already exist and stop when we hit an existing entry
             if (!existingMessageMap.containsKey(DateTime.newInstance(Long.valueOf(wrapperMessages[i].timestamp)))) {
                 returnMessages.add(convertToThreadMessage(wrapperMessages[i], chatThread));
@@ -174,8 +176,10 @@ global class NKS_ChatTranscriptService {
     private static Message__c convertToThreadMessage(Message wrapperMessage, Thread__c chatThread) {
         Message__c convertedMessage = new Message__c();
         convertedMessage.CRM_Thread__c = chatThread.Id;
-        convertedMessage.CRM_Message_Text__c = wrapperMessage.content;
         convertedMessage.CRM_Type__c = wrapperMessage.getThreadMessageType();
+        convertedMessage.CRM_Message_Text__c = wrapperMessage.getThreadMessageType() == 'Event'
+            ? wrapperMessage.getTransfertext()
+            : wrapperMessage.content;
         convertedMessage.CRM_Sent_date__c = DateTime.newInstance(Long.valueOf(wrapperMessage.timestamp));
         convertedMessage.CRM_Read__c = false;
         if (wrapperMessage.isAgentMessage()) {
@@ -191,17 +195,6 @@ global class NKS_ChatTranscriptService {
         }
 
         return convertedMessage;
-    }
-
-    /**
-     * @description: Appends conversation between frida ane end user to the log
-     * @author Stian Ruud Schikora | 10-30-2020
-     * @param botConversation
-     * @return String
-     **/
-    private static String formatBotConversation(LiveChatTranscript chatTranscript) {
-        String botConversation = chatTranscript.Case.Description;
-        return formatBotConversation(botConversation);
     }
 
     /**
@@ -263,6 +256,7 @@ global class NKS_ChatTranscriptService {
         private String recordId;
         private String timestamp;
         private String type;
+        private String language;
 
         global Integer compareTo(Object compareTo) {
             Message curMessage = (Message) compareTo;
@@ -276,6 +270,13 @@ global class NKS_ChatTranscriptService {
                 return 1;
             }
             return 0;
+        }
+
+        public String getTransfertext() {
+            String transferText = language == 'en_US' ? 'Transferred to {to}' : 'Overført til {to}';
+            transferText = transferText.replace('{to}', this.name);
+
+            return transferText;
         }
 
         /**
