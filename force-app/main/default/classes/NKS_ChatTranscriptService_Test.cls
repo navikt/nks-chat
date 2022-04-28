@@ -28,9 +28,9 @@ public class NKS_ChatTranscriptService_Test {
             )
         );
 
-        User testUser = [SELECT Id FROM User WHERE IsActive = TRUE AND AccountId = NULL LIMIT 1];
+        User testUser = new User();
         testUser.CRM_NAV_Ident__c = 'Z999999';
-        update testUser;
+        UTIL_TestDataFactory.createRecord(testUser);
     }
 
     @isTest
