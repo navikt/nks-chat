@@ -1,5 +1,6 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getThreadId from '@salesforce/apex/nksChatView.getThreadId';
+import markasread from '@salesforce/apex/CRM_MessageHelper.markAsRead';
 import getChatbotMessage from '@salesforce/apex/nksChatView.getChatbotMessage';
 import { publish, MessageContext } from 'lightning/messageService';
 import globalModalOpen from '@salesforce/messageChannel/globalModalOpen__c';
@@ -18,6 +19,19 @@ export default class NksChatView extends LightningElement {
     @wire(MessageContext)
     messageContext;
 
+    userContactId;
+    messages;
+
+    connectedCallback() {
+        getContactId({})
+            .then((contactId) => {
+                this.userContactId = contactId;
+            })
+            .catch((error) => {
+                //Apex error
+            });
+    }
+
     @wire(getThreadId, { chatId: '$recordId' })
     test({ error, data }) {
         if (error) {
@@ -25,6 +39,7 @@ export default class NksChatView extends LightningElement {
         }
         if (data) {
             this.threadId = data;
+            markasread({ threadId: this.threadId });
         }
     }
 
@@ -80,18 +95,5 @@ export default class NksChatView extends LightningElement {
         } else if (result.data) {
             this.messages = result.data;
         }
-    }
-
-    userContactId;
-    messages;
-
-    connectedCallback() {
-        getContactId({})
-            .then((contactId) => {
-                this.userContactId = contactId;
-            })
-            .catch((error) => {
-                //Apex error
-            });
     }
 }
