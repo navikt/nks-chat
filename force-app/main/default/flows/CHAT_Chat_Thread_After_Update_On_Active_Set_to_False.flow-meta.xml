@@ -7,17 +7,17 @@
         <locationX>440</locationX>
         <locationY>648</locationY>
         <assignmentItems>
-            <assignToReference>THREADS_TO_UPDATE</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Do_Journal.JOURNALED_THREAD</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
             <assignToReference>JOURNAL_ENTRIES_TO_UPDATE</assignToReference>
             <operator>Add</operator>
             <value>
                 <elementReference>Do_Journal.Journal_Entry_SF</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>THREAD_TO_UPDATE</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Do_Journal.JOURNALED_THREAD</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -37,7 +37,7 @@
             <targetReference>Do_Journal</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Update_Threads</targetReference>
+            <targetReference>Update_Thread</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -96,14 +96,14 @@
         <inputReference>JOURNAL_ENTRIES_TO_UPDATE</inputReference>
     </recordUpdates>
     <recordUpdates>
-        <name>Update_Threads</name>
-        <label>Update Threads</label>
+        <name>Update_Thread</name>
+        <label>Update Thread</label>
         <locationX>352</locationX>
         <locationY>864</locationY>
         <connector>
             <targetReference>Update_Journal_Entries</targetReference>
         </connector>
-        <inputReference>THREADS_TO_UPDATE</inputReference>
+        <inputReference>THREAD_TO_UPDATE</inputReference>
     </recordUpdates>
     <start>
         <locationX>50</locationX>
@@ -167,9 +167,9 @@
         <objectType>Journal_Entry__c</objectType>
     </variables>
     <variables>
-        <name>THREADS_TO_UPDATE</name>
+        <name>THREAD_TO_UPDATE</name>
         <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
+        <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Thread__c</objectType>
