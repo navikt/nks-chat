@@ -2,10 +2,10 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>54.0</apiVersion>
     <assignments>
-        <name>Update_Collections</name>
+        <name>Update_Collections_0</name>
         <label>Update Collections</label>
         <locationX>440</locationX>
-        <locationY>528</locationY>
+        <locationY>648</locationY>
         <assignmentItems>
             <assignToReference>THREADS_TO_UPDATE</assignToReference>
             <operator>Add</operator>
@@ -21,7 +21,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Do_Journal</targetReference>
+            <targetReference>Journal_Process_Loop</targetReference>
         </connector>
     </assignments>
     <interviewLabel>Chat Thread - After Update - On Active Set to False {!$Flow.CurrentDateTime}</interviewLabel>
@@ -34,7 +34,7 @@
         <collectionReference>Get_Journal_Entries</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Update_Collections</targetReference>
+            <targetReference>Do_Journal</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Threads</targetReference>
@@ -139,9 +139,9 @@
         <name>Do_Journal</name>
         <label>Do Journal</label>
         <locationX>440</locationX>
-        <locationY>648</locationY>
+        <locationY>528</locationY>
         <connector>
-            <targetReference>Journal_Process_Loop</targetReference>
+            <targetReference>Update_Collections_0</targetReference>
         </connector>
         <flowName>CHAT_Journal_CHAT_Thread</flowName>
         <inputAssignments>
