@@ -138,7 +138,7 @@ global class NKS_ChatTranscriptService {
      **/
     @future
     private static void updateThreadClosedate(String threadId, Datetime closeDate) {
-        update new Thread__c(Id = threadId, CRM_Closed_Date__c = closeDate);
+        update new Thread__c(Id = threadId, CRM_isActive__c = false, CRM_Closed_Date__c = closeDate);
     }
 
     /**

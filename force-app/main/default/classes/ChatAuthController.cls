@@ -57,7 +57,7 @@ public without sharing class ChatAuthController {
             CRM_Thread_Type__c = 'CHAT',
             CRM_Account__c = chatTrans.AccountId,
             CRM_Contact__c = chatTrans.ContactId,
-            CRM_isActive__c = false,
+            CRM_isActive__c = true,
             CRM_Related_Object__c = chatTrans.Id,
             CRM_Theme_Group__c = chatTrans.NKS_Theme_Group__c
         );
