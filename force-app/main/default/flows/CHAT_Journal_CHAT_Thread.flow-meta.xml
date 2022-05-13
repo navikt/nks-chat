@@ -131,7 +131,7 @@
             <assignToReference>Bot_Journal_Documents.tittel</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Chatsamtale med Frida</stringValue>
+                <elementReference>BOT_DOCUMENT_TITLE</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -310,6 +310,13 @@
                 <elementReference>Journal_Entry_SF.Subtheme__r.CRM_Code__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Journal_Request.dokumenter</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Bot_Journal_Documents</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Post_Journal_Request</targetReference>
         </connector>
@@ -485,6 +492,11 @@
             <label>Subtheme Was Set</label>
         </rules>
     </decisions>
+    <formulas>
+        <name>BOT_DOCUMENT_TITLE</name>
+        <dataType>String</dataType>
+        <expression>&apos;Chatsamtale med Frida - &apos; + {!THREAD_CLOSE_DATE}</expression>
+    </formulas>
     <formulas>
         <name>Document_Title</name>
         <dataType>String</dataType>
