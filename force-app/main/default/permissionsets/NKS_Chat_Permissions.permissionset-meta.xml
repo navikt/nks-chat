@@ -151,6 +151,10 @@
         <object>QuickText</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <pageAccesses>
+        <apexPage>NKS_Chat_PDF</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
     <userPermissions>
         <enabled>true</enabled>
         <name>ApiEnabled</name>
