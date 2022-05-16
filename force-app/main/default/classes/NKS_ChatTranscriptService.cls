@@ -1,12 +1,12 @@
 global class NKS_ChatTranscriptService {
     //INITIATE INTERNAL MAP OF NAV IDENT --> User ID
     @testVisible
-    private static Map<String, Id> navIdentUserMap {
+    private static Map<String, User> navIdentUserMap {
         get {
             if (navIdentUserMap == null) {
-                navIdentUserMap = new Map<String, Id>();
+                navIdentUserMap = new Map<String, User>();
                 for (User usr : [
-                    SELECT Id, CRM_NAV_Ident__c
+                    SELECT Id, CRM_NAV_Ident__c, Department
                     FROM User
                     WHERE
                         Id IN (
@@ -18,7 +18,7 @@ global class NKS_ChatTranscriptService {
                         AND CRM_NAV_Ident__c != NULL
                         AND CRM_NAV_Ident__c != ''
                 ]) {
-                    navIdentUserMap.put(usr.CRM_NAV_Ident__c, usr.Id);
+                    navIdentUserMap.put(usr.CRM_NAV_Ident__c, usr);
                 }
             }
             return navIdentUserMap;
@@ -182,7 +182,8 @@ global class NKS_ChatTranscriptService {
             if (!navIdentUserMap.containsKey(navIdent)) {
                 logger.error('Could not find user record for agent', chatThread, CRM_ApplicationDomain.Domain.NKS);
             } else {
-                convertedMessage.CRM_From_User__c = navIdentUserMap.get(navIdent);
+                convertedMessage.CRM_From_User__c = navIdentUserMap.get(navIdent).Id;
+                convertedMessage.CRM_From_NAV_Unit__c = navIdentUserMap.get(navIdent).Department;
             }
         } else {
             convertedMessage.CRM_From_Contact__c = chatThread.CRM_Contact__c;
