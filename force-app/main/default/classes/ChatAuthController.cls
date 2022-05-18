@@ -8,7 +8,7 @@ public without sharing class ChatAuthController {
             lct.CRM_Authentication_Status__c = status;
             recordsToUpdate.add(lct);
 
-            if (status == 'Completed') {
+            if (status == 'Completed' && String.isBlank(lct.AccountId)) {
                 handleChatAuthentication(lct);
 
                 if (String.isNotBlank(lct.CaseId)) {
@@ -65,7 +65,7 @@ public without sharing class ChatAuthController {
     }
 
     private static LiveChatTranscript getChatTranscript(Id chatTranscriptId) {
-        return [SELECT Id, CaseId, NKS_Theme_Group__c FROM LiveChatTranscript WHERE Id = :chatTranscriptId];
+        return [SELECT Id, CaseId, AccountId, NKS_Theme_Group__c FROM LiveChatTranscript WHERE Id = :chatTranscriptId];
     }
 
     /**
