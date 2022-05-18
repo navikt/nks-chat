@@ -60,7 +60,6 @@ export default class NksChatView extends LightningElement {
         this.modalOpen = true;
         this.termsModal.focusModal();
         publish(this.messageContext, globalModalOpen, { status: 'true' });
-        console.log(userId);
         getChatbotMessage({ chatId: this.recordId, userId: userId }).then((res) => {
             this.chatbotMessage = res;
         });
@@ -89,9 +88,6 @@ export default class NksChatView extends LightningElement {
 
     @wire(getmessages, { threadId: '$threadId' }) //Calls apex and extracts messages related to this record
     wiremessages(result) {
-        console.log('Heisann');
-        console.log(result);
-
         if (result.error) {
             this.error = result.error;
         } else if (result.data) {
