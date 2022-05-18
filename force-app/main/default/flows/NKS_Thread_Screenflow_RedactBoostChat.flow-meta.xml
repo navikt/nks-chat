@@ -23,13 +23,34 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordLookups>
+        <name>Live_Chat_Transcript</name>
+        <label>Live Chat Transcript</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Case</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Thread.CRM_Related_Object__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>LiveChatTranscript</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Thread</name>
         <label>Thread</label>
         <locationX>176</locationX>
         <locationY>158</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Case</targetReference>
+            <targetReference>Live_Chat_Transcript</targetReference>
         </connector>
         <faultConnector>
             <isGoTo>true</isGoTo>
@@ -51,7 +72,7 @@
         <name>Case</name>
         <label>Case</label>
         <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationY>398</locationY>
         <connector>
             <targetReference>Complete_flow</targetReference>
         </connector>
@@ -63,11 +84,17 @@
             <field>NKS_Henvendelse_BehandlingsId__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Thread.CRM_API_Reference__c</elementReference>
+                <elementReference>Live_Chat_Transcript.CaseId</elementReference>
             </value>
         </filters>
         <inputAssignments>
             <field>Description</field>
+            <value>
+                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText_NO</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>NKS_Conversation__c</field>
             <value>
                 <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText_NO</elementReference>
             </value>
@@ -79,7 +106,7 @@
         <name>Complete_flow</name>
         <label>Complete flow</label>
         <locationX>176</locationX>
-        <locationY>398</locationY>
+        <locationY>518</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -98,7 +125,7 @@
         <name>FaultScreen</name>
         <label>FaultScreen</label>
         <locationX>440</locationX>
-        <locationY>398</locationY>
+        <locationY>518</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
