@@ -4,6 +4,7 @@ import markasread from '@salesforce/apex/CRM_MessageHelper.markAsRead';
 import getChatbotMessage from '@salesforce/apex/nksChatView.getChatbotMessage';
 import { publish, MessageContext } from 'lightning/messageService';
 import globalModalOpen from '@salesforce/messageChannel/globalModalOpen__c';
+import userId from '@salesforce/user/Id';
 
 ///////////// Extra import
 import getmessages from '@salesforce/apex/CRM_MessageHelper.getMessagesFromThread';
@@ -59,7 +60,7 @@ export default class NksChatView extends LightningElement {
         this.modalOpen = true;
         this.termsModal.focusModal();
         publish(this.messageContext, globalModalOpen, { status: 'true' });
-        getChatbotMessage({ chatId: this.recordId }).then((res) => {
+        getChatbotMessage({ chatId: this.recordId, userId: userId }).then((res) => {
             this.chatbotMessage = res;
         });
     }
@@ -87,9 +88,6 @@ export default class NksChatView extends LightningElement {
 
     @wire(getmessages, { threadId: '$threadId' }) //Calls apex and extracts messages related to this record
     wiremessages(result) {
-        console.log('Heisann');
-        console.log(result);
-
         if (result.error) {
             this.error = result.error;
         } else if (result.data) {

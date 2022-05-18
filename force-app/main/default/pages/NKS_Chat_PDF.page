@@ -23,7 +23,7 @@
             <span> <strong>Fødselsnummer: </strong>{!thread__c.CRM_Account__r.INT_PersonIdent__c} <br /> </span>
             <span>
                 <b>Logget inn: </b>
-                <apex:outputText value=" {!thread__c.CRM_Registered_Datetime_Formula__c}"> </apex:outputText>
+                <apex:outputText value=" {!thread__c.CRM_Date_Time_Registered__c}"> </apex:outputText>
                 <br />
             </span>
             <span> <b>Type: </b>Innlogget chat <br /> </span>

@@ -47,7 +47,7 @@ public class NKS_ChatTranscriptService_Test {
 
         Test.startTest();
         NKS_ChatTranscriptService.navIdentUserMap.clear();
-        NKS_ChatTranscriptService.navIdentUserMap.put('Z999999', testUser.Id);
+        NKS_ChatTranscriptService.navIdentUserMap.put('Z999999', testUser);
         NKS_ChatTranscriptService.storeConversation(transcript.Id, conversation);
         Test.stopTest();
 
