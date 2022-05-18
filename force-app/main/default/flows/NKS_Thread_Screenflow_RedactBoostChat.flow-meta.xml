@@ -74,7 +74,7 @@
         <locationX>176</locationX>
         <locationY>398</locationY>
         <connector>
-            <targetReference>Complete_flow</targetReference>
+            <targetReference>nextScreen</targetReference>
         </connector>
         <faultConnector>
             <targetReference>FaultScreen</targetReference>
@@ -106,7 +106,7 @@
         <name>Complete_flow</name>
         <label>Complete flow</label>
         <locationX>176</locationX>
-        <locationY>518</locationY>
+        <locationY>638</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -135,6 +135,28 @@
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>nextScreen</name>
+        <label>nextScreen</label>
+        <locationX>176</locationX>
+        <locationY>518</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Complete_flow</targetReference>
+        </connector>
+        <fields>
+            <name>nextComponent</name>
+            <extensionName>c:fcFlowNextScreenNavigator</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>false</showFooter>
         <showHeader>false</showHeader>
     </screens>
     <start>
