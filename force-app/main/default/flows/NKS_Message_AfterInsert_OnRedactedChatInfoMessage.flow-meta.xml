@@ -34,13 +34,6 @@
             <field>CRM_Type__c</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>Message</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>CRM_Type__c</field>
-            <operator>EqualTo</operator>
-            <value>
                 <stringValue>Info</stringValue>
             </value>
         </filters>
