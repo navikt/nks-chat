@@ -40,7 +40,7 @@ public with sharing class nksChatView_Test {
     @isTest
     static void testGetChatbotMessage() {
         User user = [SELECT Id FROM User WHERE CRM_NAV_Ident__c = 'Z654923'];
-        LiveChatTranscript transcript = [SELECT Id FROM LiveChatTranscript WHERE accountId = :user.Id LIMIT 1];
+        LiveChatTranscript transcript = [SELECT Id FROM LiveChatTranscript LIMIT 1];
         Test.startTest();
         String chatConversation = nksChatView.getChatbotMessage(transcript.Id, user.Id);
         Test.stopTest();
