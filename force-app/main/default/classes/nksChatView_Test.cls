@@ -19,8 +19,7 @@ public with sharing class nksChatView_Test {
             CaseId = botCase.Id,
             NKS_Journal_Entry_ID__c = UTIL_TestDataFactory.generateRandomNumberString(10),
             CRM_Authentication_Status__c = 'Completed',
-            NKS_Authentication_Timestamp__c = Datetime.now(),
-            accountId = testUser.accountId
+            NKS_Authentication_Timestamp__c = Datetime.now()
         );
         UTIL_TestDataFactory.createRecord(
             new Thread__c(CRM_Related_Object__c = (String) UTIL_TestDataFactory.createRecord(transcript).get('Id'))
