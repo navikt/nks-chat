@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <quickActions>
+        <aspect>Master</aspect>
+        <label>Fullfør sladding</label>
+        <name>NKS_Complete_Chat_Redaction</name>
+    </quickActions>
+    <quickActions>
+        <aspect>Master</aspect>
+        <label>Sladd Frida samtalen</label>
+        <name>NKS_RedactFridaChat</name>
+    </quickActions>
+</CustomObjectTranslation>

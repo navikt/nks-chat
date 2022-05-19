@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Redact the Frida chat</description>
+    <flowDefinition>NKS_Thread_Screenflow_RedactBoostChat</flowDefinition>
+    <label>Redact Frida chat</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

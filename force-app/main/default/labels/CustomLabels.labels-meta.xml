@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>NKS_Chat_RedactionBoostReplacementText_NO</fullName>
+        <categories>Chat, NKS, STO, Redaction</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chat redaction Boost replacement text</shortDescription>
+        <value>Denne delen av samtalen har blitt slettet fordi den inneholdt informasjon som ikke kan behandles, forvaltes eller lagres av denne tjenesten.</value>
+    </labels>
+    <labels>
+        <fullName>NKS_Chat_RedactionMessageText_NO</fullName>
+        <categories>NKS, STO, Chat, Redaction</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Chat Redaction Message Text</shortDescription>
+        <value>Innhold i samtalen din har blitt slettet fordi den inneholdt informasjon som ikke kan behandles, forvaltes eller lagres av denne tjenesten.</value>
+    </labels>
+    <labels>
         <fullName>CRM_Chat_Authentication_Init_Failed</fullName>
         <categories>UI, Chat, Authentication</categories>
         <language>en_US</language>
