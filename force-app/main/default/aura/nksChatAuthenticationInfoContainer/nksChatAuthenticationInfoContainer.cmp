@@ -10,6 +10,9 @@
     <aura:attribute name="personFields" type="String" />
     <aura:attribute name="conversation" type="object[]" />
 
+    <!-- Map holding empApi subscriptions -->
+    <aura:attribute name="subscription" type="Map" />
+
     <!--Record DATA-->
     <aura:attribute name="chatRecord" type="Object" />
     <aura:attribute name="recordLoadError" type="String" />
@@ -17,6 +20,11 @@
     <lightning:conversationToolkitApi aura:id="chatToolkit" />
     <!-- Connecting to workspace API for i.e. workspace tab handling-->
     <lightning:workspaceAPI aura:id="workspace" />
+    <!-- Connecting to emp API for listening to events -->
+    <lightning:empApi aura:id="empApi" />
+
+    <!-- Call onInit function when the component loads -->
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
 
     <force:recordData
         aura:id="recordLoader"
