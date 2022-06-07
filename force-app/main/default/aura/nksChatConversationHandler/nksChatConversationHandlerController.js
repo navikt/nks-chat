@@ -25,7 +25,6 @@
             tabId: newTabId
         })
         .then(function (response) {
-            helper.subscribeEmpApi(component);
             helper.setTabLabelAndIcon(component, newTabId, response.recordId);
             });
     },
