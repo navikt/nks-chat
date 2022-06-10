@@ -1,5 +1,5 @@
 @isTest
-public class NKS_ChatTranscriptService_Test {
+private class NKS_ChatTranscriptService_Test {
     @TestSetup
     static void makeData() {
         String botConversation = '22:15:14 - bot:\n';
@@ -29,14 +29,14 @@ public class NKS_ChatTranscriptService_Test {
         );
 
         User testUser = new User();
-        testUser.CRM_NAV_Ident__c = 'Z999999';
+        testUser.CRM_NAV_Ident__c = 'Z999998';
         UTIL_TestDataFactory.createRecord(testUser);
     }
 
     @isTest
     static void testStoreConversation() {
         LiveChatTranscript transcript = [SELECT Id, NKS_Conversation__c FROM LiveChatTranscript LIMIT 1];
-        User testUser = [SELECT Id FROM User WHERE CRM_NAV_Ident__c = 'Z999999'];
+        User testUser = [SELECT Id FROM User WHERE CRM_NAV_Ident__c = 'Z999998'];
 
         StaticResource testConversation = [
             SELECT Id, Body
@@ -47,10 +47,21 @@ public class NKS_ChatTranscriptService_Test {
 
         Test.startTest();
         NKS_ChatTranscriptService.navIdentUserMap.clear();
-        NKS_ChatTranscriptService.navIdentUserMap.put('Z999999', testUser);
+        NKS_ChatTranscriptService.navIdentUserMap.put('Z999998', testUser);
         NKS_ChatTranscriptService.storeConversation(transcript.Id, conversation);
         Test.stopTest();
 
         System.assertEquals(1, [SELECT COUNT() FROM Thread__c WHERE CRM_Related_Object__c = :transcript.Id]);
+    }
+
+    @isTest
+    static void testGetChatTranscript() {
+        LiveChatTranscript transcript = [SELECT Id, NKS_Conversation__c FROM LiveChatTranscript LIMIT 1];
+        LiveChatTranscript result;
+        Test.startTest();
+        result = NKS_ChatTranscriptService.getChatTranscript(transcript.Id);
+        Test.stopTest();
+
+        System.assertNotEquals(null, result);
     }
 }

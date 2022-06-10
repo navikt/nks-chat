@@ -245,6 +245,19 @@ global class NKS_ChatTranscriptService {
         ];
     }
 
+    @AuraEnabled
+    public static LiveChatTranscript getChatTranscript(Id recordId) {
+        try {
+            return [
+                SELECT Name, LiveChatButtonId, LiveChatButton.MasterLabel, Case.CaseNumber, CRM_Authentication_Status__c
+                FROM LiveChatTranscript
+                WHERE Id = :recordId
+            ];
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
     global class Message implements Comparable {
         private String content;
         public String name;

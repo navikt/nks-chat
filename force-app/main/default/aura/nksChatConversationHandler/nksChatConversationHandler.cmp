@@ -1,7 +1,10 @@
 <aura:component
-    implements="flexipage:availableForAllPageTypes, force:hasRecordId, lightning:backgroundUtilityItem"
+    implements="flexipage:availableForAllPageTypes, lightning:backgroundUtilityItem"
     controller="NKS_ChatTranscriptService"
 >
     <lightning:conversationToolkitApi aura:id="chatToolkit" />
+    <lightning:workspaceAPI aura:id="workspace" />
+
     <aura:handler event="lightning:conversationChatEnded" action="{!c.handleChatEnded}" />
+    <aura:handler event="lightning:tabCreated" action="{! c.onTabCreated }" />
 </aura:component>
