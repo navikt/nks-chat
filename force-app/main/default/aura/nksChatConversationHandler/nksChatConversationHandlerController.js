@@ -1,9 +1,8 @@
 ({
-
-    onTabCreated : function(component,event,helper) {
+    onTabCreated: function (component, event, helper) {
         var newTabId = event.getParam('tabId');
         var workspace = component.find('workspace');
-        
+
         workspace.getAllTabInfo().then(function (response) {
             if (response.length === 1) {
                 workspace
@@ -21,11 +20,11 @@
         });
 
         workspace
-        .getTabInfo({
-            tabId: newTabId
-        })
-        .then(function (response) {
-            helper.setTabLabelAndIcon(component, newTabId, response.recordId);
+            .getTabInfo({
+                tabId: newTabId
+            })
+            .then(function (response) {
+                helper.setTabLabelAndIcon(component, newTabId, response.recordId);
             });
     },
 

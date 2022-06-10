@@ -9,7 +9,7 @@
             "dependencies": [
                 {
                     "package": "crm-platform-base",
-                    "versionNumber": "0.157.0.LATEST"
+                    "versionNumber": "0.158.0.LATEST"
                 },
                 {
                     "package": "crm-henvendelse-base",
@@ -40,8 +40,12 @@
                     "versionNumber": "0.2.0.LATEST"
                 },
                 {
+                    "package": "crm-henvendelse-base",
+                    "versionNumber": "0.8.0.LATEST"
+                },
+                {
                     "package": "crm-henvendelse",
-                    "versionNumber": "0.65.0.LATEST"
+                    "versionNumber": "0.66.0.LATEST"
                 },
                 {
                     "package": "crm-platform-access-control",
@@ -59,6 +63,7 @@
     "sourceApiVersion": "54.0",
     "packageAliases": {
         "crm-nks-chat": "0Ho7U000000000GSAQ",
+        "crm-henvendelse-base": "0Ho7U000000000kSAA",
         "crm-henvendelse": "0Ho2o000000fxXfCAI",
         "crm-henvendelse-base": "0Ho7U000000000kSAA",
         "crm-journal-utilities": "0Ho2o000000fxXkCAI",

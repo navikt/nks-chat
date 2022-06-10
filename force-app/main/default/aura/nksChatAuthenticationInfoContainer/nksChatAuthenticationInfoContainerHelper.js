@@ -17,7 +17,7 @@
     },
 
     //Set icon om console tab
-    setTabIcon:function(component, newTabId, iconName, iconAlt) {
+    setTabIcon: function (component, newTabId, iconName, iconAlt) {
         let workspace = component.find('workspace');
         workspace.setTabIcon({
             tabId: newTabId,
@@ -27,7 +27,7 @@
     },
 
     // Invokes the subscribe method on the empApi component
-    subscribeEmpApi:function(component) {
+    subscribeEmpApi: function (component) {
         // Get the empApi component
         const empApi = component.find('empApi');
         // Get the channel
@@ -36,41 +36,54 @@
         const replayId = -1;
 
         // Subscribe to an event
-        empApi.subscribe(channel, replayId, $A.getCallback(eventReceived => {this.onEmpApiEvent(component,eventReceived)}))
-        .then(subscription => {
-            // Save subscription to unsubscribe later
-            component.set('v.subscription', subscription);
-        });
+        empApi
+            .subscribe(
+                channel,
+                replayId,
+                $A.getCallback((eventReceived) => {
+                    this.onEmpApiEvent(component, eventReceived);
+                })
+            )
+            .then((subscription) => {
+                // Save subscription to unsubscribe later
+                component.set('v.subscription', subscription);
+            });
     },
 
     // Invokes the unsubscribe method on the empApi component
-    unsubscribeEmpApi : function(component) {
+    unsubscribeEmpApi: function (component) {
         // Get the empApi component
         const empApi = component.find('empApi');
         // Get the subscription that we saved when subscribing
         const subscription = component.get('v.subscription');
 
         // Unsubscribe from event
-        empApi.unsubscribe(subscription, $A.getCallback(unsubscribed => {
-          // Confirm that we have unsubscribed from the event channel
-          component.set('v.subscription', null);
-        }));
+        empApi.unsubscribe(
+            subscription,
+            $A.getCallback((unsubscribed) => {
+                // Confirm that we have unsubscribed from the event channel
+                component.set('v.subscription', null);
+            })
+        );
     },
 
     //When auth status changes update the tab icon
-    onEmpApiEvent:function(component,eventReceived) {
+    onEmpApiEvent: function (component, eventReceived) {
         const authStatus = eventReceived.data.sobject.CRM_Authentication_Status__c;
         const changedRecordId = eventReceived.data.sobject.Id;
         const recordId = component.get('v.recordId');
 
-        if(changedRecordId === recordId) {
-            component.find('workspace').getEnclosingTabId().then(tabId => {
-                if(authStatus === 'Completed') {
-                    this.setTabIcon(component,tabId,'utility:lock','Innlogget chat');
-                } else {
-                    this.setTabIcon(component,tabId,'standard:live_chat','Uinnlogget chat');
-                }
-            });
+        if (changedRecordId === recordId) {
+            component
+                .find('workspace')
+                .getEnclosingTabId()
+                .then((tabId) => {
+                    if (authStatus === 'Completed') {
+                        this.setTabIcon(component, tabId, 'utility:lock', 'Innlogget chat');
+                    } else {
+                        this.setTabIcon(component, tabId, 'standard:live_chat', 'Uinnlogget chat');
+                    }
+                });
         }
-    },
+    }
 });

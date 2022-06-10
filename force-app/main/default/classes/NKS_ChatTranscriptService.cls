@@ -245,7 +245,8 @@ global class NKS_ChatTranscriptService {
         ];
     }
 
-    @AuraEnabled public static LiveChatTranscript getChatTranscript(Id recordId) {
+    @AuraEnabled
+    public static LiveChatTranscript getChatTranscript(Id recordId) {
         try {
             return [
                 SELECT Name, LiveChatButtonId, LiveChatButton.MasterLabel, Case.CaseNumber, CRM_Authentication_Status__c

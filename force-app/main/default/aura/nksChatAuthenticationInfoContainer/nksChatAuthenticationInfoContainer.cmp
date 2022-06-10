@@ -24,7 +24,7 @@
     <lightning:empApi aura:id="empApi" />
 
     <!-- Call onInit function when the component loads -->
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
 
     <force:recordData
         aura:id="recordLoader"
