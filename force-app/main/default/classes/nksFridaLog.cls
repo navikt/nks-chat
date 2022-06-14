@@ -4,6 +4,6 @@ public without sharing class nksFridaLog {
         if (caseRef.size() == 0) {
             return 'Det oppstod en feil';
         }
-        return NKS_ChatTranscriptService.formatBotConversation(caseRef[0].Description);
+        return NKS_CaseBotConversationHandler.formatBotConversation(caseRef[0].Description);
     }
 }
