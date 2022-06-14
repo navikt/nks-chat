@@ -32,28 +32,26 @@
             <span style="font-weight: 400; font-size: 16pt">Innhold:</span>
             <div style="margin-top: 0.25em">
                 <apex:repeat value="{!threadMessages}" var="message">
-                    <apex:outputPanel rendered="{!message.CRM_Type__c == 'Message'}">
+                    <apex:outputPanel rendered="{!message.type == 'Message'}">
                         <div style="padding-bottom: 0.75em">
                             <b>
-                                <apex:outputPanel rendered="{!message.CRM_External_Message__c == true}">
-                                    {!message.CRM_From_Contact__r.Name}
+                                <apex:outputPanel rendered="{!message.externalMessage == true}">
+                                    {!message.fromName}
                                 </apex:outputPanel>
-                                <apex:outputPanel rendered="{!message.CRM_External_Message__c == false}">
-                                    NAV {!message.CRM_From_Ident_Formula__c}
+                                <apex:outputPanel rendered="{!message.externalMessage == false}">
+                                    NAV {!message.fromIdent}
                                 </apex:outputPanel>
                                 -
-                                <apex:outputText value=" {!message.CRM_Sent_date__c}"> </apex:outputText>
+                                <apex:outputText value=" {!message.sentDate}"> </apex:outputText>
                             </b>
-                            <p style="margin-top: 0.5em; white-space: pre-wrap">{!message.CRM_Message_Text__c}</p>
+                            <p style="margin-top: 0.5em; white-space: pre-wrap"><apex:outputText escape="false" value="{!message.messageText}"></apex:outputText></p>
                         </div>
                     </apex:outputPanel>
-                    <apex:outputPanel rendered="{!message.CRM_Type__c == 'Event'}">
+                    <apex:outputPanel rendered="{!message.type == 'Event'}">
                         <div style="padding-bottom: 1.75em; text-align: center">
                             <b>
-                                <apex:outputText value=" {!message.CRM_Sent_date__c}"> </apex:outputText>
-                                <span style="margin-top: 0.5em; white-space: pre-wrap"
-                                    >{!message.CRM_Message_Text__c}</span
-                                >
+                                <apex:outputText value=" {!message.sentDate}"> </apex:outputText>
+                                <span style="margin-top: 0.5em; white-space: pre-wrap"><apex:outputText escape="false" value="{!message.messageText}"></apex:outputText></span>
                             </b>
                         </div>
                     </apex:outputPanel>

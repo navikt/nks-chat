@@ -62,6 +62,6 @@ private class NKS_ChatTranscriptService_Test {
         result = NKS_ChatTranscriptService.getChatTranscript(transcript.Id);
         Test.stopTest();
 
-        System.assertNotEquals(null,result);
+        System.assertNotEquals(null, result);
     }
 }
