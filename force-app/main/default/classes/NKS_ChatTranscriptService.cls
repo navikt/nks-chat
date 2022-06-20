@@ -103,24 +103,6 @@ global class NKS_ChatTranscriptService {
     }
 
     /**
-     * @description: Iterates a list of chat messages on a thread and returns true if an event is included.
-     * @author Stian Ruud Schikora | 02-09-2022
-     * @param threadMessages
-     * @return Boolean
-     **/
-    private static Boolean hasAuthEvent(List<Message__c> threadMessages, Datetime authTimestamp) {
-        Boolean hasAuthEvent = false;
-        for (Message__c msg : threadMessages) {
-            if (msg.CRM_Type__c.equalsIgnoreCase('Event') && msg.CRM_Sent_date__c == authTimestamp) {
-                hasAuthEvent = true;
-                break;
-            }
-        }
-
-        return hasAuthEvent;
-    }
-
-    /**
      * @description: Returns all messages on a given thread
      * @author Stian Ruud Schikora | 02-09-2022
      * @param threadId
