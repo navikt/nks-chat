@@ -103,24 +103,6 @@ global class NKS_ChatTranscriptService {
     }
 
     /**
-     * @description: Iterates a list of chat messages on a thread and returns true if an event is included.
-     * @author Stian Ruud Schikora | 02-09-2022
-     * @param threadMessages
-     * @return Boolean
-     **/
-    private static Boolean hasAuthEvent(List<Message__c> threadMessages, Datetime authTimestamp) {
-        Boolean hasAuthEvent = false;
-        for (Message__c msg : threadMessages) {
-            if (msg.CRM_Type__c.equalsIgnoreCase('Event') && msg.CRM_Sent_date__c == authTimestamp) {
-                hasAuthEvent = true;
-                break;
-            }
-        }
-
-        return hasAuthEvent;
-    }
-
-    /**
      * @description: Returns all messages on a given thread
      * @author Stian Ruud Schikora | 02-09-2022
      * @param threadId
@@ -190,29 +172,6 @@ global class NKS_ChatTranscriptService {
         }
 
         return convertedMessage;
-    }
-
-    /**
-     * @description: Formats a a given bot conversation string
-     * @author Stian Ruud Schikora | 10-30-2020
-     * @param botConversation
-     * @return String
-     **/
-    public static String formatBotConversation(String botConversation) {
-        String returnText = '';
-        String message;
-
-        //For long conversations string.split() has a chance to encounter regex exceptions. Using custom iterator instead
-        BotConversation_Iterator conversationIterator = new BotConversation_Iterator(botConversation);
-        while (conversationIterator.hasNext()) {
-            message = '<p>' + conversationIterator.next().replaceAll('\r', '<br>').replaceAll('\n', '') + '</p>';
-            if (!conversationIterator.hasNext()) {
-                message = '<br>' + message;
-            }
-            returnText += message;
-        }
-
-        return returnText;
     }
 
     private static LiveChatTranscript getChatDetails(String chatId) {
@@ -298,33 +257,6 @@ global class NKS_ChatTranscriptService {
 
         private boolean isAgentMessage() {
             return type.equalsIgnoreCase('agent');
-        }
-    }
-
-    private class BotConversation_Iterator implements Iterator<String> {
-        private String conversation;
-        private Integer messageIndex;
-        private String message_rowDelimiter = '\r\n';
-
-        public BotConversation_Iterator(String fileData) {
-            conversation = fileData;
-            messageIndex = fileData.length();
-        }
-
-        public Boolean hasNext() {
-            return messageIndex >= 0;
-        }
-
-        public String next() {
-            Integer key = conversation.lastIndexOf(message_rowDelimiter, messageIndex);
-            if (key == -1)
-                key = 0;
-
-            String row = messageIndex == this.conversation.length()
-                ? conversation.subString(key, messageIndex)
-                : conversation.subString(key, messageIndex + 1);
-            messageIndex = key - 1;
-            return row;
         }
     }
 }
