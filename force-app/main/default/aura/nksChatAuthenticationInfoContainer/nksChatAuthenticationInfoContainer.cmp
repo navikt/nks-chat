@@ -8,6 +8,7 @@
     <aura:attribute name="accountFields" type="String" />
     <aura:attribute name="caseFields" type="String" />
     <aura:attribute name="personFields" type="String" />
+    <aura:attribute name="copyPersonFields" type="String" />
     <aura:attribute name="conversation" type="object[]" />
 
     <!-- Map holding empApi subscriptions -->
@@ -69,6 +70,7 @@
         caseFields="{!v.caseFields}"
         accountFields="{!v.accountFields}"
         personFields="{!v.personFields}"
+        copyPersonFields="{!v.copyPersonFields}"
         onrequestauthentication="{!c.requestAuthentication}"
         onauthenticationcomplete="{!c.handleAuthCompleted}"
         aura:id="chatAuthInfo"
