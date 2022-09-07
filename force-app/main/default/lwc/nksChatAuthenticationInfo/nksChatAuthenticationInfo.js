@@ -32,6 +32,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     @api accountFields; //Comma separated string with field names to display from the related account
     @api caseFields; //Comma separated string with field names to display from the related case
     @api personFields; //Comma separated string with field names to display from the related accounts person
+    @api copyPersonFields; //Comma separated string with field numbers to activate copy button
     @api councellorName;
     accountId; //Transcript AccountId
     caseId; //Transcript CaseId

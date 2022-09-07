@@ -53,6 +53,16 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>accountFields</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>caseFields</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>copyPersonFields</name>
+                    <value>2</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>loggingEnabled</name>
                     <value>false</value>
                 </componentInstanceProperties>
