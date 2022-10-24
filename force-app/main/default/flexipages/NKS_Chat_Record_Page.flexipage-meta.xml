@@ -46,6 +46,19 @@
                 <identifier>nksRecordInfo</identifier>
             </componentInstance>
         </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>tag</name>
+                    <value>h2</value>
+                </componentInstanceProperties><componentInstanceProperties>
+                    <name>text</name>
+                    <value>{!$Label.NAV_Unit_Subheader_More_Actions}</value>
+                </componentInstanceProperties>
+                <componentName>nksInvisibleContentForSr</componentName>
+                <identifier>c_nksInvisibleContentForSr</identifier>
+            </componentInstance>
+        </itemInstances>
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
