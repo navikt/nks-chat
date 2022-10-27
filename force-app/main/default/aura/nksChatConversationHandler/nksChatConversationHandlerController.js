@@ -39,12 +39,7 @@
             .then((res) => {
                 const eventTab = res.find((content) => content.recordId === eventFullID);
                 if (!eventTab) return;
-                const tabId = eventTab.tabId;
-                workspace.setTabHighlighted({
-                    tabId: tabId,
-                    highlighted: true,
-                    options: { state: 'success' }
-                });
+                helper.setTabColor(workspace, eventTab.tabId, 'success');
             })
             .catch((error) => {
                 //Errors require manual handling.

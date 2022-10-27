@@ -48,6 +48,10 @@
                         label: `${label}${caseNumber ? ` ${caseNumber}` : ''}`
                     });
                 }
+                //Set tab color
+                if (data.getReturnValue().Status === 'Completed') {
+                    this.setTabColor(workspace, tabId, 'success');
+                }
             }
         });
         $A.enqueueAction(action);
@@ -58,6 +62,14 @@
             tabId: newTabId,
             icon: iconName,
             iconAlt: iconAlt
+        });
+    },
+
+    setTabColor: function (workspace, tabId, state) {
+        workspace.setTabHighlighted({
+            tabId: tabId,
+            highlighted: true,
+            options: { state: state }
         });
     },
 
