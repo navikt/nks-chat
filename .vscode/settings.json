@@ -28,5 +28,10 @@
         "**/.sfdx": true,
         "**/.vscode": true,
         "**/.idea": true
-    }
+    },
+    "unpackagable.location": "",
+    "scratch.default.permissionsets": [
+        "Scratch_Permissions",
+        "NKS_Chat_Permissions"
+    ]
 }
