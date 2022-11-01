@@ -31,6 +31,19 @@
     handleChatEnded: function (component, event, helper) {
         const chatToolkit = component.find('chatToolkit');
         const eventRecordId = event.getParam('recordId');
+        const workspace = component.find('workspace');
+        const eventFullID = helper.convertId15To18(eventRecordId);
+
+        workspace
+            .getAllTabInfo()
+            .then((res) => {
+                const eventTab = res.find((content) => content.recordId === eventFullID);
+                if (!eventTab) return;
+                helper.setTabColor(workspace, eventTab.tabId, 'success');
+            })
+            .catch((error) => {
+                //Errors require manual handling.
+            });
 
         chatToolkit
             .getChatLog({

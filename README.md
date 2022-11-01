@@ -61,16 +61,20 @@ As some metadata have poor support for packaging and metadata deployment there a
 2. Create a embedded service deployment and configuration
     - Go to setup > .. Embedded Service Deployments and click new deployment, chose embedded chat and and deploy to default experience site
     - Under chat settings click start and and then save with the prefilled config.
-3. Go to the experience site scratch_innboks and into builder. Fint the embedded service chat component and update the chat deployment to the one newly created.
-4. In the builder, open settings > Security and privacy. and Enable relaxed csp and allow the two sites that have been blocked from the live agent endpoints.
-5. Go to setup > Permission sets > Scratch Permission set and add access to the service presence statuses needed for chat.
-6. Run this command in the terminal
+3. Go to the experience site scratch_innboks and into builder. Find the embedded service chat component and update the chat deployment to the one newly created.
+4. In the builder, open settings > Security and privacy and Enable relaxed csp (if not already enabled). Then under the CSP Errors section allow the two sites that have been blocked from the live agent endpoints.
+5. Navigate to the workspace of scratch-innboks. The easiest way to get there is the hamburger in the top left of the builder. Go to Administration > Members and add customer profile Scratch Community Profile and save.
+6. Go to setup > Permission sets > Scratch Permission set and add access to the service presence statuses needed for chat.
+7. Run this command in the terminal
 
 ```
 npm run scratchSetup
 ```
 
-Other uuseful commands included in this package:
+7. To start a chat find the Harry Potter Account and the use the Log In to Experience as User action.
+8. To receive a chat go to an app with omni-console enabled, such as the scratch app, and change your omni-channel presence to Tilgjengelig for chat.
+
+Other useful commands included in this package:
 
 ```
 #Activate api mock for all profiles
