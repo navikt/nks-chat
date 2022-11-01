@@ -208,7 +208,13 @@ global class NKS_ChatTranscriptService {
     public static LiveChatTranscript getChatTranscript(Id recordId) {
         try {
             return [
-                SELECT Name, LiveChatButtonId, LiveChatButton.MasterLabel, Case.CaseNumber, CRM_Authentication_Status__c
+                SELECT
+                    Name,
+                    LiveChatButtonId,
+                    LiveChatButton.MasterLabel,
+                    Case.CaseNumber,
+                    CRM_Authentication_Status__c,
+                    Status
                 FROM LiveChatTranscript
                 WHERE Id = :recordId
             ];
