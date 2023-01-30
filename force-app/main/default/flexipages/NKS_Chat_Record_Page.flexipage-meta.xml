@@ -24,7 +24,7 @@
                     <value>3</value>
                 </componentInstanceProperties>
                 <componentName>force:highlightsPanel</componentName>
-                <identifier>force_highlightsPanelPilot</identifier>
+                <identifier>force_highlightsPanel</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -46,7 +46,7 @@
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentName>nksPersonHeader</componentName>
-                <identifier>nksPersonHeaderPilot</identifier>
+                <identifier>nksPersonHeader</identifier>
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.CRM_Authentication_Status__c}</leftValue>
