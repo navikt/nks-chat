@@ -24,7 +24,14 @@
                     <value>3</value>
                 </componentInstanceProperties>
                 <componentName>force:highlightsPanel</componentName>
-                <identifier>force_highlightsPanelPilot</identifier>
+                <identifier>force_highlightsPanel</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.NKS_Beta}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -46,12 +53,18 @@
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentName>nksPersonHeader</componentName>
-                <identifier>nksPersonHeaderPilot</identifier>
+                <identifier>nksPersonHeader</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CRM_Authentication_Status__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>Completed</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$Permission.CustomPermission.NKS_Beta}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
@@ -109,7 +122,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>text</name>
-                    <value>{!$Label.NAV_Unit_Subheader_more_actions}</value>
+                    <value>{!$Label.NAV_Unit_Subheader_More_Actions}</value>
                 </componentInstanceProperties>
                 <componentName>nksInvisibleContentForSr</componentName>
                 <identifier>c_nksInvisibleContentForSr</identifier>
