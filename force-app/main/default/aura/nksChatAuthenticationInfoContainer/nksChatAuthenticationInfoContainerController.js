@@ -30,7 +30,7 @@
             .sendMessage({
                 recordId: recordId,
                 message: {
-                    text: 'Init:Auth:' + authUrl + recordId
+                    text: 'Klikk på lenken under for å logge inn. ' + authUrl + recordId
                 }
             })
             .then(function (result) {
