@@ -22,7 +22,6 @@
                 <componentName>nksPersonHeader</componentName>
                 <identifier>nksPersonHeader</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.CRM_Authentication_Status__c}</leftValue>
                         <operator>EQUAL</operator>
