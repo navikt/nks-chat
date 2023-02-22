@@ -1,0 +1,14 @@
+<aura:component
+    implements="lightning:availableForFlowScreens, flexipage:availableForRecordHome, force:hasRecordId"
+    access="global"
+    controller="NKS_SurveyController"
+>
+    <aura:attribute name="record" type="Object" />
+    <force:recordData layoutType="FULL" recordId="{!v.recordId}" fields="CaseId" targetFields="{!v.record}" />
+
+    <lightning:conversationToolkitAPI aura:id="conversationKit" />
+    <aura:handler event="lightning:conversationAgentSend" action="{! c.onAgentSend}" />
+    <!--
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    -->
+</aura:component>
