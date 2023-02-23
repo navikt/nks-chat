@@ -1,7 +1,7 @@
 <aura:component
     implements="lightning:availableForFlowScreens, flexipage:availableForRecordHome, force:hasRecordId"
     access="global"
-    controller="NKS_SurveyController"
+    controller="ChatSurveyController"
 >
     <aura:attribute name="record" type="Object" />
     <force:recordData layoutType="FULL" recordId="{!v.recordId}" fields="CaseId" targetFields="{!v.record}" />
