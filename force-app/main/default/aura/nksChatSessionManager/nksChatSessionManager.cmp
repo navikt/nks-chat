@@ -8,7 +8,4 @@
 
     <lightning:conversationToolkitAPI aura:id="conversationKit" />
     <aura:handler event="lightning:conversationAgentSend" action="{! c.onAgentSend}" />
-    <!--
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    -->
 </aura:component>

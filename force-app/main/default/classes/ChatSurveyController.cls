@@ -5,8 +5,8 @@ public with sharing class ChatSurveyController {
         String surveyId;
         String surveyUrl;
 
-        communityId = [SELECT Id FROM Network WHERE Name = 'TilbakemeldingAura'].Id;
-        surveyId = [SELECT Id FROM Survey WHERE Name = 'nks_service_survey'].Id;
+        communityId = [SELECT Id FROM Network WHERE Name = 'TilbakemeldingAura' LIMIT 1].Id;
+        surveyId = [SELECT Id FROM Survey WHERE DeveloperName = 'nks_service_survey' LIMIT 1].Id;
 
         try {
             List<SurveyInvitation> surveyInvitations = [SELECT id FROM SurveyInvitation WHERE Case__c = :caseId];
