@@ -1,4 +1,4 @@
-public with sharing class NKS_SurveyController {
+public with sharing class ChatSurveyController {
     @AuraEnabled
     public static String createSurveyInvitation(String caseId) {
         String communityId;
