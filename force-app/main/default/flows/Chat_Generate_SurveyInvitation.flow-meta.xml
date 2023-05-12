@@ -113,8 +113,8 @@
             <label>Is Reserved</label>
         </rules>
     </decisions>
-    <interviewLabel>Chat - Generate Survey {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Chat - Generate Survey</label>
+    <interviewLabel>Chat - Generate SurveyInvitation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Chat - Generate SurveyInvitation</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
