@@ -2,16 +2,23 @@ public without sharing class Chat_SurveyHelper {
     /**
      * @description Function to get InvitationLink for a Case related to Chat
      * @param String chatKey
-     * @return String InvitationLink
+     * @return String surveyInvitationLink
      */
     @AuraEnabled(cacheable=true)
     public static String getSurveyLink(String chatKey) {
-        Id caseId = [SELECT CaseId FROM LiveChatTranscript WHERE ChatKey = :chatKey].CaseId;
-        return [SELECT InvitationLink FROM SurveyInvitation WHERE Name = :caseId LIMIT 1]?.InvitationLink;
+        try {
+            Id caseId = [SELECT CaseId FROM LiveChatTranscript WHERE ChatKey = :chatKey LIMIT 1]?.CaseId;
+            SurveyInvitation surveyInvitation = [
+                SELECT InvitationLink
+                FROM SurveyInvitation
+                WHERE Name = :caseId
+                LIMIT 1
+            ];
+            return surveyInvitation.InvitationLink;
+        } catch (QueryException e) {
+            throw new AuraHandledException(
+                'An error has occurred on getting LiveChatTranscript or SurveyInvitation: ' + e.getMessage()
+            );
+        }
     }
-
-    // TO Do
-    /**
-     * @description Function to check if user has already respond to Survey.
-     */
 }

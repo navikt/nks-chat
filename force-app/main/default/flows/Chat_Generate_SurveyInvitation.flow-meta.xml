@@ -192,7 +192,7 @@
         <inputAssignments>
             <field>NKS_Survey_Theme__c</field>
             <value>
-                <elementReference>$Record.LiveChatButton.Queue.Name</elementReference>
+                <elementReference>$Record.NKS_Chat_Queue__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
