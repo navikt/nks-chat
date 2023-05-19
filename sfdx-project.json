@@ -56,10 +56,6 @@
                 },
                 {
                     "package": "crm-nks-survey",
-                    "versionNumber": "0.5.0.LATEST"
-                },
-                {
-                    "package": "crm-nks-survey",
                     "versionNumber": "0.6.0.2"
                 }
             ]
