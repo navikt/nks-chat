@@ -15,8 +15,9 @@ public with sharing class Chat_SurveyHelperTest {
         try {
             surveyLink = Chat_SurveyHelper.getSurveyLink('testKey');
         } catch (Exception e) {
+            System.assertEquals(e.getTypeName(), 'QueryException');
         }
         Test.stopTest();
-        System.assertEquals('', surveyLink);
+        System.assertEquals(null, surveyLink);
     }
 }
