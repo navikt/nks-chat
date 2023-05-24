@@ -8,7 +8,7 @@
             "dependencies": [
                 {
                     "package": "crm-platform-base",
-                    "versionNumber": "0.189.0.LATEST"
+                    "versionNumber": "0.194.0.LATEST"
                 },
                 {
                     "package": "crm-platform-reporting",
@@ -56,7 +56,7 @@
                 },
                 {
                     "package": "crm-nks-survey",
-                    "versionNumber": "0.6.0.2"
+                    "versionNumber": "0.7.0.LATEST"
                 }
             ]
         }
