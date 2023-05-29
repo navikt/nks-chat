@@ -23,7 +23,7 @@
         <inputParameters>
             <name>surveyDeveloperName</name>
             <value>
-                <stringValue>nks_service_survey</stringValue>
+                <stringValue>nks_chat_survey</stringValue>
             </value>
         </inputParameters>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -183,10 +183,10 @@
         <locationY>1247</locationY>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Name</field>
+            <field>Case__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Get_Case.Id</elementReference>
+                <elementReference>$Record.CaseId</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -212,10 +212,17 @@
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Status</field>
-            <operator>EqualTo</operator>
+            <field>CaseId</field>
+            <operator>NotEqualTo</operator>
             <value>
-                <stringValue>Completed</stringValue>
+                <stringValue></stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>CRM_Authentication_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue></stringValue>
             </value>
         </filters>
         <object>LiveChatTranscript</object>
