@@ -8,7 +8,7 @@
         <actionName>NKS_SurveyController</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Update_Survey_Invitation</targetReference>
+            <targetReference>Check_If_SurveyInvitationId_Is_Null</targetReference>
         </connector>
         <faultConnector>
             <targetReference>Log_Error</targetReference>
@@ -26,12 +26,15 @@
                 <stringValue>nks_chat_survey</stringValue>
             </value>
         </inputParameters>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputParameters>
+            <assignToReference>surveyInvitationId</assignToReference>
+            <name>output</name>
+        </outputParameters>
     </actionCalls>
     <actionCalls>
         <name>Log_Error</name>
         <label>Log Error</label>
-        <locationX>534</locationX>
+        <locationX>864</locationX>
         <locationY>1247</locationY>
         <actionName>LoggerUtility</actionName>
         <actionType>apex</actionType>
@@ -61,7 +64,7 @@
         <inputParameters>
             <name>logMessage</name>
             <value>
-                <stringValue>An error has occurred on generating SurveyInvitationLink</stringValue>
+                <stringValue>An error has occurred on generating/updating SurveyInvitationLink</stringValue>
             </value>
         </inputParameters>
     </actionCalls>
@@ -111,6 +114,28 @@
                 </rightValue>
             </conditions>
             <label>Is Reserved</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_If_SurveyInvitationId_Is_Null</name>
+        <label>Check If SurveyInvitationId Is Null</label>
+        <locationX>204</locationX>
+        <locationY>1247</locationY>
+        <defaultConnector>
+            <targetReference>Update_Survey_Invitation</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>isNull</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>surveyInvitationId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>isNull</label>
         </rules>
     </decisions>
     <interviewLabel>Chat - Generate SurveyInvitation {!$Flow.CurrentDateTime}</interviewLabel>
@@ -179,8 +204,12 @@
     <recordUpdates>
         <name>Update_Survey_Invitation</name>
         <label>Update Survey Invitation</label>
-        <locationX>204</locationX>
-        <locationY>1247</locationY>
+        <locationX>336</locationX>
+        <locationY>1367</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Log_Error</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Case__c</field>
@@ -230,4 +259,11 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Draft</status>
+    <variables>
+        <name>surveyInvitationId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>
