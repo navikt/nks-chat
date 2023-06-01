@@ -9,15 +9,15 @@ public with sharing class Chat_SurveyHelperTest {
             CRM_Authentication_Status__c = 'Completed',
             NKS_Authentication_Timestamp__c = Datetime.now()
         );
-        String surveyLink = '';
+        String surveyInvitationLink = '';
 
         Test.startTest();
         try {
-            surveyLink = Chat_SurveyHelper.getSurveyLink('testKey');
+            surveyInvitationLink = Chat_SurveyHelper.getSurveyInvitationLink('testKey');
         } catch (Exception e) {
             System.assertEquals(e.getTypeName(), 'QueryException');
         }
         Test.stopTest();
-        System.assertEquals(null, surveyLink);
+        System.assertEquals(null, surveyInvitationLink);
     }
 }
