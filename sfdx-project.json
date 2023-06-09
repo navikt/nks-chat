@@ -16,11 +16,11 @@
                 },
                 {
                     "package": "crm-platform-integration",
-                    "versionNumber": "0.99.0.LATEST"
+                    "versionNumber": "0.86.0.LATEST"
                 },
                 {
                     "package": "crm-nks-base-components",
-                    "versionNumber": "0.30.0.LATEST"
+                    "versionNumber": "0.27.0.LATEST"
                 },
                 {
                     "package": "crm-journal-utilities",
