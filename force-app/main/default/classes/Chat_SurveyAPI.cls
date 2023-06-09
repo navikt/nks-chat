@@ -1,6 +1,10 @@
 @RestResource(urlMapping='/LiveChatTranscript/')
 global with sharing class Chat_SurveyAPI {
     private static LoggerUtility logger = new LoggerUtility('Chat API');
+    /**
+     * @description Function to get SurveyInvitationLink via REST API
+     * @author Sara Mohammadi | 01.06.2023
+     */
     @HttpGet
     global static void getSurveyInvitationLink() {
         String chatKey = RestContext.request.params.get('ChatKey');
