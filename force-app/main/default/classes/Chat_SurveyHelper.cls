@@ -8,8 +8,12 @@ public without sharing class Chat_SurveyHelper {
     public static String getSurveyInvitationLink(String chatKey) {
         String surveyInvitationLink = '';
         try {
-            Id caseId = [SELECT CaseId FROM LiveChatTranscript WHERE ChatKey = :chatKey LIMIT 1]?.CaseId;
-            surveyInvitationLink = [SELECT InvitationLink FROM SurveyInvitation WHERE Case__c = :caseId LIMIT 1]
+            surveyInvitationLink = [
+                SELECT InvitationLink
+                FROM SurveyInvitation
+                WHERE Case__c IN (SELECT CaseId FROM LiveChatTranscript WHERE ChatKey = :chatKey)
+                LIMIT 1
+            ]
             ?.InvitationLink;
         } catch (QueryException e) {
             System.debug('An error has occurred on getting LiveChatTranscript or SurveyInvitation: ' + e.getMessage());
