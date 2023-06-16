@@ -227,7 +227,9 @@ global class NKS_ChatTranscriptService {
         private String content;
         public String name;
         private String recordId;
+        @Testvisible
         private String timestamp;
+        @Testvisible
         private String type;
         public String language;
 
@@ -260,7 +262,7 @@ global class NKS_ChatTranscriptService {
         public String getThreadMessageType() {
             return type.equalsIgnoreCase('OperatorTransferred') ? 'Event' : 'Message';
         }
-
+        @TestVisible
         private boolean isAgentMessage() {
             return type.equalsIgnoreCase('agent');
         }

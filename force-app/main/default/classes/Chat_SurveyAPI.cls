@@ -12,7 +12,10 @@ global with sharing class Chat_SurveyAPI {
         RestResponse response = RestContext.response;
         response.addHeader('Content-Type', 'application/json');
 
-        // Gets the X-Correlation header for an incoming request
+        /**
+         * Gets the X-Correlation header for an incoming request
+         * CorrelationI (Transit ID): unique identifier value for requests and messages using as reference to a particular transaction
+         */
         String correlationId = request.headers.containsKey('X-Correlation-ID')
             ? request.headers.get('X-Correlation-ID')
             : null;
