@@ -23,7 +23,7 @@
         <inputParameters>
             <name>surveyDeveloperName</name>
             <value>
-                <stringValue>nks_service_survey</stringValue>
+                <stringValue>nks_chat_survey</stringValue>
             </value>
         </inputParameters>
         <outputParameters>
