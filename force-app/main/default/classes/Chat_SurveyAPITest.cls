@@ -4,7 +4,7 @@ public with sharing class Chat_SurveyAPITest {
     static void testGetSurveyInvitationLink() {
         RestRequest request = new RestRequest();
         RestResponse response = new RestResponse();
-        request.requestURI = System.Url.getOrgDomainUrl() + '/api/getSurveyInvitationLink';
+        request.requestURI = System.Url.getOrgDomainUrl() + '/services/apexrest/LiveChatTranscript/';
         request.httpMethod = 'GET';
         request.addParameter('ChatKey', '12345');
         RestContext.request = request;
