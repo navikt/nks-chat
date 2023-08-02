@@ -13,21 +13,14 @@
             }, 1000);
         }
     },
-    closeTab: function (component, event) {
-        console.log('HippyMNe');
+    closeTab: function (component, eventRecordId) {
         const workspaceAPI = component.find('workspace');
-        // const eventRecordId = event.getParam('recordId');
-        const eventRecordId = '5703O000000AEqN';
-
-        const eventFullID = this.convertId15To18(eventRecordId);
-        console.log(eventRecordId);
         workspaceAPI
             .getAllTabInfo()
             .then((res) => {
-                const eventTab = res.find((content) => content.recordId === eventFullID);
+                const eventTab = res.find((content) => content.recordId === eventRecordId);
                 if (!eventTab) return;
                 workspaceAPI.closeTab({ tabId: eventTab.tabId });
-                this.closeTaber(workspaceAPI, eventTab.tabId);
             })
             .catch((error) => {
                 //Errors require manual handling.

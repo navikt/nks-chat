@@ -3,10 +3,8 @@
 
     <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
 
-    <aura:attribute name="timer" type="integer" default="5" />
-
-    <lightning:button class="slds-button_brand" variant="brand" onclick="{!c.testButton}" label="Test button" />
-    <lightning:button class="slds-button_brand" variant="brand" onclick="{!c.eventFire}" label="Another Test button" />
+    <aura:attribute name="timer" type="integer" default="150" />
+    <aura:attribute name="chatEnded" type="boolean" default="false" />
 
     <aura:if isTrue="{!v.chatEnded}">
         <div class="slds-card">
