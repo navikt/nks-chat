@@ -1,0 +1,17 @@
+<aura:component implements="flexipage:availableForAllPageTypes, force:hasRecordId" controller="NKS_ChatAfterWork">
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
+
+    <aura:attribute name="timer" type="integer" default="5" />
+
+    <lightning:button class="slds-button_brand" variant="brand" onclick="{!c.testButton}" label="Test button" />
+    <lightning:button class="slds-button_brand" variant="brand" onclick="{!c.eventFire}" label="Another Test button" />
+
+    <aura:if isTrue="{!v.chatEnded}">
+        <div class="slds-card">
+            Remaining time
+            <p>{!v.timer}</p>
+        </div>
+    </aura:if>
+</aura:component>
