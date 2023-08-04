@@ -4,12 +4,16 @@
     <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
 
     <aura:attribute name="timer" type="integer" default="150" />
-    <aura:attribute name="chatEnded" type="boolean" default="false" />
+    <aura:attribute name="percentageTimer" type="integer" default="100" />
+    <aura:attribute name="showTimer" type="boolean" default="false" />
 
-    <aura:if isTrue="{!v.chatEnded}">
-        <div class="slds-card">
-            Remaining time
-            <p>{!v.timer}</p>
-        </div>
-    </aura:if>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+
+    <!-- <aura:if isTrue="{!v.showTimer}"> -->
+    <div class="slds-card">
+        Remaining time
+        <p>{!v.timer}</p>
+        <lightning:progressBar value="{! v.percentageTimer }" />
+    </div>
+    <!-- </aura:if> -->
 </aura:component>

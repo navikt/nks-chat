@@ -1,10 +1,13 @@
 ({
     startTimer: function (component, event) {
-        const chatEnded = component.get('v.chatEnded');
-        if (!chatEnded) {
+        const showTimer = component.get('v.showTimer');
+        if (!showTimer) {
+            component.set('v.showTimer', true);
+            component.set('v.maxTimer', component.get('v.timer'));
             const intervalId = setInterval(() => {
                 let tempTimer = component.get('v.timer') - 1;
                 component.set('v.timer', tempTimer);
+                component.set('v.percentageTimer', (tempTimer * 100) / component.get('v.maxTimer'));
                 if (tempTimer <= 0) {
                     console.log('done');
                     clearInterval(intervalId);
