@@ -5,9 +5,5 @@
         if (recordId === eventRecordId) {
             helper.startTimer(component, eventRecordId);
         }
-    },
-    onInit: function (component, event, helper) {
-        console.log('Sup');
-        helper.startTimer(component, component.get('v.recordId'));
     }
 });
