@@ -4,6 +4,7 @@
     <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
 
     <aura:attribute name="timer" type="integer" default="150" />
+    <aura:attribute name="maxTimer" type="integer" />
     <aura:attribute name="percentageTimer" type="integer" default="100" />
     <aura:attribute name="showTimer" type="boolean" default="false" />
 
@@ -14,6 +15,7 @@
         Remaining time
         <p>{!v.timer}</p>
         <lightning:progressBar value="{! v.percentageTimer }" />
+        <lightning:progressRing value="{!v.percentageTimer }" variant="warning" direction="drain" />
     </div>
     <!-- </aura:if> -->
 </aura:component>
