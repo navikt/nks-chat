@@ -12,7 +12,7 @@
         <div class="slds-card slds-p-around_x-small">
             <p class="slds-text-title_bold">Automatisk etterarbeid</p>
             <div class="slds-p-bottom_medium">
-                <p>Chatfanen lukkes automatisk etter {!v.maxTimer} tid. Ikke mulig for forlengelse.</p>
+                <p>Chatfanen lukkes automatisk etter {!v.maxTimer} sekunder. Ikke mulighet for forlengelse.</p>
             </div>
             <div>
                 <lightning:progressBar value="{! v.percentageTimer }" />
