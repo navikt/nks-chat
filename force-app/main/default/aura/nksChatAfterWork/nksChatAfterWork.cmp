@@ -1,4 +1,4 @@
-<aura:component implements="flexipage:availableForAllPageTypes, force:hasRecordId">
+<aura:component implements="flexipage:availableForAllPageTypes, force:hasRecordId" controller="NKS_ChatAfterWork">
     <lightning:workspaceAPI aura:id="workspace" />
 
     <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
