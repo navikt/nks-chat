@@ -1,0 +1,32 @@
+<aura:component implements="flexipage:availableForAllPageTypes, force:hasRecordId" controller="NKS_ChatAfterWork">
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <aura:attribute name="betaAccess" type="boolean" default="false" />
+    <aura:attribute name="timer" type="integer" default="150" />
+    <aura:attribute name="maxTimer" type="integer" />
+    <aura:attribute name="percentageTimer" type="integer" default="100" />
+    <aura:attribute name="showTimer" type="boolean" />
+
+    <aura:if isTrue="{!v.showTimer}">
+        <div class="slds-card slds-p-around_x-small">
+            <p class="slds-text-title_bold">Automatisk etterarbeid</p>
+            <div class="slds-p-bottom_medium">
+                <p>Chatfanen lukkes automatisk etter {!v.maxTimer} sekunder. Ikke mulighet for forlengelse.</p>
+            </div>
+            <div>
+                <lightning:progressBar value="{! v.percentageTimer }" />
+                <lightning:layout horizontalAlign="spread">
+                    <lightning:layoutItem>
+                        <p>0</p>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem>
+                        <p>{!v.maxTimer}</p>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>
