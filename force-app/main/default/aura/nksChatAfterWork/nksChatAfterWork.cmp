@@ -12,7 +12,7 @@
 
     <aura:if isTrue="{!v.showTimer}">
         <div class="slds-card slds-p-around_x-small">
-            <p class="slds-text-title_bold">Automatisk etterarbeid</p>
+            <p class="slds-text-title_bold">Automatisk lukking</p>
             <div class="slds-p-bottom_medium">
                 <p>Chatfanen lukkes automatisk etter {!v.maxTimer} sekunder. Ikke mulighet for forlengelse.</p>
             </div>

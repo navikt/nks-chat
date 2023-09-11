@@ -1,6 +1,5 @@
 ({
     doInit: function (component, event, helper) {
-        console.log('Very poggers aa');
         var action = component.get('c.hasBetaAccess');
         action.setCallback(this, function (response) {
             var state = response.getState();
