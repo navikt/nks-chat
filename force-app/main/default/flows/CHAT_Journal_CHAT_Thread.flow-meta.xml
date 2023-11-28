@@ -230,7 +230,7 @@
             <assignToReference>Journal_Request.kanal</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>NAV_NO</stringValue>
+                <stringValue>NAV_NO_CHAT</stringValue>
             </value>
         </assignmentItems>
         <assignmentItems>
