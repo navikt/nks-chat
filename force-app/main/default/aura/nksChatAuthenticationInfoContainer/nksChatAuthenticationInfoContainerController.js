@@ -31,7 +31,7 @@
                 recordId: recordId,
                 message: {
                     text:
-                        'Trykk for å logge inn på nav.no og gi veilederen tilgang til saken din. s' + authUrl + recordId
+                        'Trykk for å logge inn på nav.no og gi veilederen tilgang til saken din. ' + authUrl + recordId
                 }
             })
             .then(function (result) {
