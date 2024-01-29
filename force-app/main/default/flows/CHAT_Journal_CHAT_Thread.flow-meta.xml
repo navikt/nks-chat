@@ -4,7 +4,7 @@
         <name>Generate_Bot_Conversation</name>
         <label>Generate Bot Conversation</label>
         <locationX>182</locationX>
-        <locationY>638</locationY>
+        <locationY>566</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -30,7 +30,7 @@
         <name>Generate_Chat_Document</name>
         <label>Generate Chat Document</label>
         <locationX>182</locationX>
-        <locationY>518</locationY>
+        <locationY>458</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -59,7 +59,7 @@
         <name>Post_Journal_Request</name>
         <label>Post Journal Request</label>
         <locationX>182</locationX>
-        <locationY>1574</locationY>
+        <locationY>1406</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -98,7 +98,7 @@
         <name>Assign_Journal_Documents</name>
         <label>Assign Journal Documents</label>
         <locationX>182</locationX>
-        <locationY>1214</locationY>
+        <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>Chat_Journal_Documents.dokumentvarianter</assignToReference>
             <operator>Add</operator>
@@ -149,7 +149,7 @@
         <name>Assign_Journal_Entry_Default_data</name>
         <label>Assign Journal Entry Default data</label>
         <locationX>182</locationX>
-        <locationY>2030</locationY>
+        <locationY>1814</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.CRM_Journal_Date__c</assignToReference>
             <operator>Assign</operator>
@@ -166,7 +166,7 @@
         <name>Chat_Document_Variant_Assignment</name>
         <label>Chat Document Variant Assignment</label>
         <locationX>182</locationX>
-        <locationY>1094</locationY>
+        <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>Document_Variant_PDF.filtype</assignToReference>
             <operator>Assign</operator>
@@ -218,7 +218,7 @@
         <name>Journal_Request_Assignment</name>
         <label>Journal Request Assignment</label>
         <locationX>182</locationX>
-        <locationY>1454</locationY>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>Journal_Request.tittel</assignToReference>
             <operator>Assign</operator>
@@ -230,7 +230,7 @@
             <assignToReference>Journal_Request.kanal</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>NAV_NO</stringValue>
+                <stringValue>NAV_NO_CHAT</stringValue>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -326,7 +326,7 @@
         <name>Journal_Sak_Assignment</name>
         <label>Journal Sak Assignment</label>
         <locationX>182</locationX>
-        <locationY>1334</locationY>
+        <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>Journal_Sak.fagsakId</assignToReference>
             <operator>Assign</operator>
@@ -356,7 +356,7 @@
         <name>Set_Journal_Subtheme_Null</name>
         <label>Set Journal Subtheme Null</label>
         <locationX>270</locationX>
-        <locationY>878</locationY>
+        <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Subtheme__c</assignToReference>
             <operator>Assign</operator>
@@ -369,7 +369,7 @@
         <name>Set_Post_Completed</name>
         <label>Set Post Completed</label>
         <locationX>50</locationX>
-        <locationY>1814</locationY>
+        <locationY>1622</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -399,7 +399,7 @@
         <name>Set_Post_Failed</name>
         <label>Set Post Failed</label>
         <locationX>314</locationX>
-        <locationY>1814</locationY>
+        <locationY>1622</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -422,7 +422,7 @@
         <name>Check_Post_State</name>
         <label>Check Post State</label>
         <locationX>182</locationX>
-        <locationY>1694</locationY>
+        <locationY>1514</locationY>
         <defaultConnector>
             <targetReference>Set_Post_Failed</targetReference>
         </defaultConnector>
@@ -448,7 +448,7 @@
         <name>DML_Check</name>
         <label>DML Check</label>
         <locationX>182</locationX>
-        <locationY>2150</locationY>
+        <locationY>1922</locationY>
         <defaultConnectorLabel>No DML</defaultConnectorLabel>
         <rules>
             <name>Do_DML</name>
@@ -471,7 +471,7 @@
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
         <locationX>182</locationX>
-        <locationY>758</locationY>
+        <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Set_Journal_Subtheme_Null</targetReference>
         </defaultConnector>
@@ -495,12 +495,12 @@
     <formulas>
         <name>BOT_DOCUMENT_TITLE</name>
         <dataType>String</dataType>
-        <expression>&apos;Chatsamtale med Frida - &apos; + {!THREAD_CLOSE_DATE}</expression>
+        <expression>&apos;Chatsamtale med Frida - &apos; + {!THREAD_CLOSE_DATE} + &apos; - &apos; + {!JOURNALED_THREAD.CRM_Theme_Name__c}</expression>
     </formulas>
     <formulas>
         <name>Document_Title</name>
         <dataType>String</dataType>
-        <expression>&apos;Innlogget chat med NAV - &apos; + {!THREAD_CLOSE_DATE}</expression>
+        <expression>&apos;Innlogget chat med NAV - &apos; + {!THREAD_CLOSE_DATE} + &apos; - &apos; + {!JOURNALED_THREAD.CRM_Theme_Name__c}</expression>
     </formulas>
     <formulas>
         <description>Formula to define the journal case type (Sakstype). If no Journal Case ID has been input, default is GENERELL_SAK</description>
@@ -552,7 +552,7 @@
         <name>Get_Account_Info</name>
         <label>Get Account Info</label>
         <locationX>182</locationX>
-        <locationY>278</locationY>
+        <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Case</targetReference>
@@ -574,7 +574,7 @@
         <name>Get_Case</name>
         <label>Get Case</label>
         <locationX>182</locationX>
-        <locationY>398</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Generate_Chat_Document</targetReference>
@@ -598,7 +598,7 @@
         <name>Get_Necessary_Record_Info</name>
         <label>Get Necessary Record Info</label>
         <locationX>182</locationX>
-        <locationY>158</locationY>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Account_Info</targetReference>
@@ -621,12 +621,13 @@
         <queriedFields>CRM_isActive__c</queriedFields>
         <queriedFields>CRM_Date_Time_Registered__c</queriedFields>
         <queriedFields>CRM_Related_Object__c</queriedFields>
+        <queriedFields>CRM_Theme_Name__c</queriedFields>
     </recordLookups>
     <recordUpdates>
         <name>Update_Journal_Entry</name>
         <label>Update Journal Entry</label>
         <locationX>50</locationX>
-        <locationY>2270</locationY>
+        <locationY>2030</locationY>
         <connector>
             <targetReference>Update_Thread</targetReference>
         </connector>
@@ -636,7 +637,7 @@
         <name>Update_Thread</name>
         <label>Update Thread</label>
         <locationX>50</locationX>
-        <locationY>2390</locationY>
+        <locationY>2138</locationY>
         <inputReference>JOURNALED_THREAD</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
