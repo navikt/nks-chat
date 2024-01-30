@@ -28,7 +28,7 @@ export default class NksChatView extends LightningElement {
             .then((contactId) => {
                 this.userContactId = contactId;
             })
-            .catch((error) => {
+            .catch(() => {
                 //Apex error
             });
     }

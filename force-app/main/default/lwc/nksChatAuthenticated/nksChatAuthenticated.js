@@ -13,6 +13,7 @@ export default class AuthenticationCompletedHandler extends LightningElement {
                 console.log(error);
             });
 
+        // eslint-disable-next-line @lwc/lwc/no-async-operation, @locker/locker/distorted-window-set-timeout
         setTimeout(function () {
             window.close();
         }, 5000);

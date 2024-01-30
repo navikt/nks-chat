@@ -4,6 +4,7 @@
         if (!showTimer) {
             component.set('v.showTimer', true);
             component.set('v.maxTimer', component.get('v.timer'));
+            // eslint-disable-next-line @locker/locker/distorted-window-set-interval, @lwc/lwc/no-async-operation
             const intervalId = setInterval(() => {
                 let tempTimer = component.get('v.timer') - 1;
                 component.set('v.timer', tempTimer);
@@ -25,12 +26,12 @@
                 if (!eventTab) return;
                 workspaceAPI.closeTab({ tabId: eventTab.tabId });
             })
-            .catch((error) => {
+            .catch(() => {
                 //Errors require manual handling.
             });
     },
     convertId15To18: function (Id) {
-        if (Id.length == 15) {
+        if (Id.length === 15) {
             var addon = '';
             for (var block = 0; block < 3; block++) {
                 var loop = 0;
