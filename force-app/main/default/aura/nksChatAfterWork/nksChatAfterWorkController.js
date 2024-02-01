@@ -32,7 +32,7 @@
             helper.startTimer(component, eventRecordId);
         }
     },
-    pauseTimer: function (component) {
-        component.set('v.paused', !component.get('v.paused'));
+    stopTimer: function (component) {
+        component.set('v.stopped', true);
     }
 });
