@@ -1,4 +1,4 @@
-import { LightningElement, api, wire, track } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import { subscribe, unsubscribe, onError } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getChatInfo from '@salesforce/apex/ChatAuthController.getChatInfo';
@@ -68,7 +68,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     get authenticationComplete() {
-        return this.currentAuthenticationStatus == 'Completed';
+        return this.currentAuthenticationStatus === 'Completed';
     }
 
     get isEmpSubscribed() {
@@ -104,8 +104,10 @@ export default class ChatAuthenticationOverview extends LightningElement {
             this.personId = data.PERSONID;
             this.chatLanguage = data.CHAT_LANGUAGE;
 
-            this.nmbOfSecurityMeasures = parseInt(data.NMB_SECURITY_MEASURES);
+            this.nmbOfSecurityMeasures = parseInt(data.NMB_SECURITY_MEASURES, 10);
+            // eslint-disable-next-line eqeqeq
             this.isNavEmployee = 'true' == data.IS_NAV_EMPLOYEE;
+            // eslint-disable-next-line eqeqeq
             this.isConfidential = 'true' == data.IS_CONFIDENTIAL;
 
             //If the authentication is not completed, subscribe to the push topic to receive events
@@ -165,7 +167,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
             console.log('Unsubscribed: ', JSON.stringify(response));
             // Response is true for successful unsubscribe
         })
-            .then((success) => {
+            .then(() => {
                 //Successfull unsubscribe
                 this.log('Successful unsubscribe');
             })
@@ -213,7 +215,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     //Call from aura parent after a successful message to init auth process
     setAuthStatusRequested() {
         setStatusRequested({ chatTranscriptId: this.recordId })
-            .then((result) => {
+            .then(() => {
                 this.log('Successful update');
             })
             .catch((error) => {

@@ -20,7 +20,7 @@
     },
 
     //Handles event from LWC to init the auth process using the conversation toolkit API
-    requestAuthentication: function (component, event, helper) {
+    requestAuthentication: function (component, event) {
         const chatToolkit = component.find('chatToolkit');
         const recordId = component.get('v.recordId');
         const authInfoCmp = component.find('chatAuthInfo');

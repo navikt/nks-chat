@@ -18,7 +18,7 @@
                 helper.storeClosedChatTabId(component, eventTab.tabId, eventFullID);
                 helper.startTimer(component);
             })
-            .catch((error) => {
+            .catch(() => {
                 //Errors require manual handling.
             });
     }

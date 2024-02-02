@@ -1,5 +1,5 @@
 ({
-    doInit: function (component, event, helper) {
+    doInit: function (component) {
         var action = component.get('c.hasBetaAccess');
         action.setCallback(this, function (response) {
             var state = response.getState();
