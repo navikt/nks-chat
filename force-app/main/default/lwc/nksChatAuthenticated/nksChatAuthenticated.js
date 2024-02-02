@@ -20,6 +20,7 @@ export default class AuthenticationCompletedHandler extends LightningElement {
     }
 
     getUrlParamValue(url, key) {
+        // eslint-disable-next-line compat/compat
         return new URL(url).searchParams.get(key);
     }
 }
