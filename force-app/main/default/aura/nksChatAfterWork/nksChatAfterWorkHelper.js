@@ -6,11 +6,11 @@
             component.set('v.maxTimer', component.get('v.timer'));
             // eslint-disable-next-line @locker/locker/distorted-window-set-interval, @lwc/lwc/no-async-operation
             const intervalId = setInterval(() => {
+                if (component.get('v.stopped')) clearInterval(intervalId);
                 let tempTimer = component.get('v.timer') - 1;
                 component.set('v.timer', tempTimer);
                 component.set('v.percentageTimer', (tempTimer * 100) / component.get('v.maxTimer'));
                 if (tempTimer <= 0) {
-                    console.log('done');
                     clearInterval(intervalId);
                     this.closeTab(component, event);
                 }

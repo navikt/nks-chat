@@ -31,5 +31,8 @@
         if (recordId === eventRecordId && component.get('v.betaAccess')) {
             helper.startTimer(component, eventRecordId);
         }
+    },
+    stopTimer: function (component) {
+        component.set('v.stopped', true);
     }
 });
