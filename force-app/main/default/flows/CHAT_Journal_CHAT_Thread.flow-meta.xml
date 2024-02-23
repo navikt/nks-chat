@@ -290,13 +290,6 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Journal_Request.avsenderMottaker.navn</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Person_Full_Name</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
             <assignToReference>Journal_Request.tema</assignToReference>
             <operator>Assign</operator>
             <value>
@@ -315,6 +308,13 @@
             <operator>Add</operator>
             <value>
                 <elementReference>Bot_Journal_Documents</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Journal_Request.eksternReferanseId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>externalReference</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -503,16 +503,15 @@
         <expression>&apos;Innlogget chat med NAV - &apos; + {!THREAD_CLOSE_DATE} + &apos; - &apos; + {!JOURNALED_THREAD.CRM_Theme_Name__c}</expression>
     </formulas>
     <formulas>
+        <name>externalReference</name>
+        <dataType>String</dataType>
+        <expression>{!JOURNALED_THREAD.Id} + {!Journal_Entry_SF.Theme__c} + {!Journal_Sak.fagsakId}</expression>
+    </formulas>
+    <formulas>
         <description>Formula to define the journal case type (Sakstype). If no Journal Case ID has been input, default is GENERELL_SAK</description>
         <name>Journal_Case_Type</name>
         <dataType>String</dataType>
         <expression>IF(ISBLANK({!Journal_Entry_SF.NAV_Case_Reference__c}), &apos;GENERELL_SAK&apos;, &apos;FAGSAK&apos;)</expression>
-    </formulas>
-    <formulas>
-        <description>Formula to generate name convention on journal required format (For persons)</description>
-        <name>Person_Full_Name</name>
-        <dataType>String</dataType>
-        <expression>{!Get_Account_Info.CRM_Person__r.INT_LastName__c} &amp; &apos;, &apos; &amp; {!Get_Account_Info.CRM_Person__r.INT_FirstName__c} &amp; &apos; &apos; &amp;{!Get_Account_Info.CRM_Person__r.INT_MiddleName__c}</expression>
     </formulas>
     <formulas>
         <description>Formula to generate a text for when the thread was closed.</description>
