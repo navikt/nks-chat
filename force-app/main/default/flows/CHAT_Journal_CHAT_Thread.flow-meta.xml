@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Generate_Bot_Conversation</name>
         <label>Generate Bot Conversation</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>566</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
@@ -29,7 +29,7 @@
         <description>Generates the document from the human chat session</description>
         <name>Generate_Chat_Document</name>
         <label>Generate Chat Document</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>458</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
@@ -58,7 +58,7 @@
         <description>Calls journal utils to perform the API post action</description>
         <name>Post_Journal_Request</name>
         <label>Post Journal Request</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>1406</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
@@ -97,7 +97,7 @@
         <description>Add document variants to document list and assign document title</description>
         <name>Assign_Journal_Documents</name>
         <label>Assign Journal Documents</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>Chat_Journal_Documents.dokumentvarianter</assignToReference>
@@ -148,8 +148,8 @@
     <assignments>
         <name>Assign_Journal_Entry_Default_data</name>
         <label>Assign Journal Entry Default data</label>
-        <locationX>182</locationX>
-        <locationY>1814</locationY>
+        <locationX>380</locationX>
+        <locationY>2114</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.CRM_Journal_Date__c</assignToReference>
             <operator>Assign</operator>
@@ -162,10 +162,33 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Set_Journal_Entry_ID</name>
+        <label>Set Journal Entry ID</label>
+        <locationX>182</locationX>
+        <locationY>1922</locationY>
+        <assignmentItems>
+            <assignToReference>Journal_Entry_SF.Journal_Entry_ID__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Post_Journal_Request.journalpostId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>JOURNALED_THREAD.CRM_Journal_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Journal Completed</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Journal_Entry_Default_data</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <description>Assigns needed values to document variant wrapper</description>
         <name>Chat_Document_Variant_Assignment</name>
         <label>Chat Document Variant Assignment</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>Document_Variant_PDF.filtype</assignToReference>
@@ -217,7 +240,7 @@
         <description>Assigns needed values to the journal requests and adds the document list.</description>
         <name>Journal_Request_Assignment</name>
         <label>Journal Request Assignment</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>Journal_Request.tittel</assignToReference>
@@ -290,13 +313,6 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Journal_Request.avsenderMottaker.navn</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Person_Full_Name</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
             <assignToReference>Journal_Request.tema</assignToReference>
             <operator>Assign</operator>
             <value>
@@ -317,6 +333,13 @@
                 <elementReference>Bot_Journal_Documents</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Journal_Request.eksternReferanseId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>externalReference</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Post_Journal_Request</targetReference>
         </connector>
@@ -325,7 +348,7 @@
         <description>Assigns necessary values to the Sak wrapper for journal entry.</description>
         <name>Journal_Sak_Assignment</name>
         <label>Journal Sak Assignment</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>Journal_Sak.fagsakId</assignToReference>
@@ -355,7 +378,7 @@
     <assignments>
         <name>Set_Journal_Subtheme_Null</name>
         <label>Set Journal Subtheme Null</label>
-        <locationX>270</locationX>
+        <locationX>468</locationX>
         <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Subtheme__c</assignToReference>
@@ -368,8 +391,8 @@
     <assignments>
         <name>Set_Post_Completed</name>
         <label>Set Post Completed</label>
-        <locationX>50</locationX>
-        <locationY>1622</locationY>
+        <locationX>314</locationX>
+        <locationY>1730</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -377,28 +400,30 @@
                 <stringValue>Completed</stringValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Set_Journal_Entry_ID</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Post_Duplicate</name>
+        <label>Set Post Duplicate</label>
+        <locationX>50</locationX>
+        <locationY>1730</locationY>
         <assignmentItems>
-            <assignToReference>Journal_Entry_SF.Journal_Entry_ID__c</assignToReference>
+            <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Post_Journal_Request.journalpostId</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>JOURNALED_THREAD.CRM_Journal_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Journal Completed</stringValue>
+                <stringValue>Duplicate</stringValue>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Assign_Journal_Entry_Default_data</targetReference>
+            <targetReference>Set_Journal_Entry_ID</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Set_Post_Failed</name>
         <label>Set Post Failed</label>
-        <locationX>314</locationX>
+        <locationX>578</locationX>
         <locationY>1622</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
@@ -419,9 +444,34 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Check_if_Journal_Entry_was_duplicate</name>
+        <label>Check if Journal Entry was duplicate</label>
+        <locationX>182</locationX>
+        <locationY>1622</locationY>
+        <defaultConnector>
+            <targetReference>Set_Post_Completed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Was_duplicate</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Post_Journal_Request.duplicate</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Post_Duplicate</targetReference>
+            </connector>
+            <label>Was duplicate</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Post_State</name>
         <label>Check Post State</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>1514</locationY>
         <defaultConnector>
             <targetReference>Set_Post_Failed</targetReference>
@@ -438,7 +488,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Set_Post_Completed</targetReference>
+                <targetReference>Check_if_Journal_Entry_was_duplicate</targetReference>
             </connector>
             <label>Success</label>
         </rules>
@@ -447,8 +497,8 @@
         <description>Decision to determine if the dml should be performed directly in the flow or handled by a parent calling this.</description>
         <name>DML_Check</name>
         <label>DML Check</label>
-        <locationX>182</locationX>
-        <locationY>1922</locationY>
+        <locationX>380</locationX>
+        <locationY>2222</locationY>
         <defaultConnectorLabel>No DML</defaultConnectorLabel>
         <rules>
             <name>Do_DML</name>
@@ -470,7 +520,7 @@
         <description>Check if the subtheme has been set for the journal entry from the parent calling the flow. If not this is strictly set to null</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Set_Journal_Subtheme_Null</targetReference>
@@ -503,16 +553,15 @@
         <expression>&apos;Innlogget chat med NAV - &apos; + {!THREAD_CLOSE_DATE} + &apos; - &apos; + {!JOURNALED_THREAD.CRM_Theme_Name__c}</expression>
     </formulas>
     <formulas>
+        <name>externalReference</name>
+        <dataType>String</dataType>
+        <expression>{!JOURNALED_THREAD.Id} + {!Journal_Entry_SF.Theme__c} + {!Journal_Sak.fagsakId}</expression>
+    </formulas>
+    <formulas>
         <description>Formula to define the journal case type (Sakstype). If no Journal Case ID has been input, default is GENERELL_SAK</description>
         <name>Journal_Case_Type</name>
         <dataType>String</dataType>
         <expression>IF(ISBLANK({!Journal_Entry_SF.NAV_Case_Reference__c}), &apos;GENERELL_SAK&apos;, &apos;FAGSAK&apos;)</expression>
-    </formulas>
-    <formulas>
-        <description>Formula to generate name convention on journal required format (For persons)</description>
-        <name>Person_Full_Name</name>
-        <dataType>String</dataType>
-        <expression>{!Get_Account_Info.CRM_Person__r.INT_LastName__c} &amp; &apos;, &apos; &amp; {!Get_Account_Info.CRM_Person__r.INT_FirstName__c} &amp; &apos; &apos; &amp;{!Get_Account_Info.CRM_Person__r.INT_MiddleName__c}</expression>
     </formulas>
     <formulas>
         <description>Formula to generate a text for when the thread was closed.</description>
@@ -551,7 +600,7 @@
         <description>Get necessary account information to post a journal entry</description>
         <name>Get_Account_Info</name>
         <label>Get Account Info</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -573,7 +622,7 @@
         <description>Query the case related to the chat transcript for getting the bot conversation</description>
         <name>Get_Case</name>
         <label>Get Case</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -597,7 +646,7 @@
         <description>Query the info needed from record and relations to submit a journal entry</description>
         <name>Get_Necessary_Record_Info</name>
         <label>Get Necessary Record Info</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -626,8 +675,8 @@
     <recordUpdates>
         <name>Update_Journal_Entry</name>
         <label>Update Journal Entry</label>
-        <locationX>50</locationX>
-        <locationY>2030</locationY>
+        <locationX>248</locationX>
+        <locationY>2330</locationY>
         <connector>
             <targetReference>Update_Thread</targetReference>
         </connector>
@@ -636,13 +685,13 @@
     <recordUpdates>
         <name>Update_Thread</name>
         <label>Update Thread</label>
-        <locationX>50</locationX>
-        <locationY>2138</locationY>
+        <locationX>248</locationX>
+        <locationY>2438</locationY>
         <inputReference>JOURNALED_THREAD</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
-        <locationX>56</locationX>
+        <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Necessary_Record_Info</targetReference>
