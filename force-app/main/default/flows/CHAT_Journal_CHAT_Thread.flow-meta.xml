@@ -162,29 +162,6 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Set_Journal_Entry_ID</name>
-        <label>Set Journal Entry ID</label>
-        <locationX>182</locationX>
-        <locationY>1922</locationY>
-        <assignmentItems>
-            <assignToReference>Journal_Entry_SF.Journal_Entry_ID__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Post_Journal_Request.journalpostId</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>JOURNALED_THREAD.CRM_Journal_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Journal Completed</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Journal_Entry_Default_data</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <description>Assigns needed values to document variant wrapper</description>
         <name>Chat_Document_Variant_Assignment</name>
         <label>Chat Document Variant Assignment</label>
@@ -376,6 +353,29 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Set_Journal_Entry_ID</name>
+        <label>Set Journal Entry ID</label>
+        <locationX>182</locationX>
+        <locationY>1922</locationY>
+        <assignmentItems>
+            <assignToReference>Journal_Entry_SF.Journal_Entry_ID__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Post_Journal_Request.journalpostId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>JOURNALED_THREAD.CRM_Journal_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Journal Completed</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Journal_Entry_Default_data</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Set_Journal_Subtheme_Null</name>
         <label>Set Journal Subtheme Null</label>
         <locationX>468</locationX>
@@ -555,7 +555,7 @@
     <formulas>
         <name>externalReference</name>
         <dataType>String</dataType>
-        <expression>{!JOURNALED_THREAD.Id} + {!Journal_Entry_SF.Theme__c} + {!Journal_Sak.fagsakId}</expression>
+        <expression>{!JOURNALED_THREAD.Id} + {!Journal_Entry_SF.Theme__c} + SUBSTITUTE({!Journal_Sak.fagsakId}, &quot;/&quot;, &quot;:&quot;)</expression>
     </formulas>
     <formulas>
         <description>Formula to define the journal case type (Sakstype). If no Journal Case ID has been input, default is GENERELL_SAK</description>
