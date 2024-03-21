@@ -1,0 +1,294 @@
+<template>
+    <div class="slds-border_bottom">
+        <article class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:messaging_user" size="small"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <span class="slds-text-heading_small slds-truncate">Chat</span>
+                        </h2>
+                    </div>
+                    <div class="slds-no-flex">
+                        <template if:false={isLoading}>
+                            <template if:true={authenticationComplete}>
+                                <!--
+                            <div class="slds-notify_alert slds-theme_success">
+                                <lightning-layout>
+                                    <div class="slds-var-p-right_small">
+                                        <lightning-icon icon-name="utility:success" size="x-small" variant="inverse">
+                                        </lightning-icon>
+                                    </div>
+                                    <h2 role="alert">{labels.IDENTITY_CONFIRMED_DISCLAIMER}</h2>
+                                </lightning-layout>
+                            </div>
+                        -->
+                                <span class="slds-badge slds-theme_success"
+                                    >{labels.IDENTITY_CONFIRMED_DISCLAIMER}</span
+                                >
+                            </template>
+                            <template if:false={authenticationComplete}>
+                                <!--
+                            <div class="slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                                <lightning-layout>
+                                    <div class="slds-var-p-right_small">
+                                        <lightning-icon icon-name="utility:warning" size="x-small"> </lightning-icon>
+                                    </div>
+                                    <h2 role="alert">{labels.UNCONFIRMED_IDENTITY_WARNING}</h2>
+                                </lightning-layout>
+                            </div>
+                            -->
+                                <span class="slds-badge slds-theme_warning">{labels.UNCONFIRMED_IDENTITY_WARNING}</span>
+                            </template>
+                        </template>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+                <template if:true={isLoading}>
+                    <div class="slds-var-p-top_small slds-var-p-bottom_small">
+                        <lightning-spinner size="medium" title="Getting authentication status"> </lightning-spinner>
+                    </div>
+                </template>
+                <template if:false={isLoading}>
+                    <div class="">
+                        <template if:false={authenticationRequested}>
+                            <div class="slds-var-p-top_small">
+                                <template if:true={sendingAuthRequest}>
+                                    <lightning-spinner size="small" title="Sending authentication request">
+                                    </lightning-spinner>
+                                </template>
+                                <lightning-button
+                                    label="Send autentiseringsforespørsel"
+                                    disabled={cannotInitAuth}
+                                    variant="neutral"
+                                    onclick={requestAuthentication}
+                                    role="button"
+                                    style="display: grid; width: 100%"
+                                >
+                                </lightning-button>
+                            </div>
+                        </template>
+                        <template if:true={authenticationRequested}>
+                            <template if:false={authenticationComplete}>
+                                <nav aria-label="Autentiseringsstatus">
+                                    <div class="slds-progress slds-progress_vertical">
+                                        <ol class="slds-progress__list" role="list">
+                                            <li class="slds-progress__item slds-is-completed" role="listitem">
+                                                <span
+                                                    class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success"
+                                                    title="Complete"
+                                                >
+                                                    <lightning-icon
+                                                        icon-name="utility:success"
+                                                        size="x-small"
+                                                    ></lightning-icon>
+                                                </span>
+                                                <div
+                                                    class="slds-progress__item_content slds-grid slds-grid_align-spread"
+                                                >
+                                                    {labels.AUTH_REQUESTED}
+                                                </div>
+                                            </li>
+
+                                            <template if:true={authenticationStarted}>
+                                                <li class="slds-progress__item slds-is-completed" role="listitem">
+                                                    <span
+                                                        class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success"
+                                                        title="Complete"
+                                                    >
+                                                        <lightning-icon
+                                                            icon-name="utility:success"
+                                                            size="x-small"
+                                                        ></lightning-icon>
+                                                    </span>
+                                                    <div
+                                                        class="slds-progress__item_content slds-grid slds-grid_align-spread"
+                                                    >
+                                                        {labels.AUTH_STARTED}
+                                                    </div>
+                                                </li>
+                                            </template>
+
+                                            <template if:false={authenticationStarted}>
+                                                <li
+                                                    class="slds-progress__item slds-is-active"
+                                                    role="listitem"
+                                                    aria-current="true"
+                                                >
+                                                    <div class="slds-progress__marker"></div>
+                                                    <div
+                                                        class="slds-progress__item_content slds-grid slds-grid_align-spread"
+                                                    >
+                                                        {labels.AUTH_STARTED}
+                                                    </div>
+                                                </li>
+                                            </template>
+
+                                            <template if:true={authenticationComplete}>
+                                                <li class="slds-progress__item slds-is-completed" role="listitem">
+                                                    <span
+                                                        class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success"
+                                                        title="Complete"
+                                                    >
+                                                        <lightning-icon
+                                                            icon-name="utility:success"
+                                                            size="x-small"
+                                                        ></lightning-icon>
+                                                    </span>
+                                                    <div
+                                                        class="slds-progress__item_content slds-grid slds-grid_align-spread"
+                                                    >
+                                                        {labels.IDENTITY_CONFIRMED}
+                                                    </div>
+                                                </li>
+                                            </template>
+                                            <template if:false={authenticationComplete}>
+                                                <li class="slds-progress__item" role="listitem">
+                                                    <div class="slds-progress__marker"></div>
+                                                    <div
+                                                        class="slds-progress__item_content slds-grid slds-grid_align-spread"
+                                                    >
+                                                        {labels.IDENTITY_CONFIRMED}
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </ol>
+                                    </div>
+                                </nav>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </article>
+
+        <!--
+        <template if:true={isLoading}>
+            <div class="slds-var-p-top_small slds-var-p-bottom_small">
+                <lightning-spinner size="medium" title="Getting authentication status"> </lightning-spinner>
+            </div>
+        </template>
+        <template if:false={isLoading}>
+            <div class="slds-var-p-left_medium slds-var-p-right_medium">
+                <template if:true={authenticationComplete}>
+                    <div class="slds-notify_alert slds-theme_success">
+                        <lightning-layout>
+                            <div class="slds-var-p-right_small">
+                                <lightning-icon icon-name="utility:success" size="x-small" variant="inverse">
+                                </lightning-icon>
+                            </div>
+                            <h2 role="alert">{labels.IDENTITY_CONFIRMED_DISCLAIMER}</h2>
+                        </lightning-layout>
+                    </div>
+                </template>
+                <template if:false={authenticationComplete}>
+                    <div class="slds-notify_alert slds-theme_alert-texture slds-theme_warning">
+                        <lightning-layout>
+                            <div class="slds-var-p-right_small">
+                                <lightning-icon icon-name="utility:warning" size="x-small"> </lightning-icon>
+                            </div>
+                            <h2 role="alert">{labels.UNCONFIRMED_IDENTITY_WARNING}</h2>
+                        </lightning-layout>
+                    </div>
+                </template>
+                <template if:false={authenticationRequested}>
+                    <div class="slds-var-p-top_small">
+                        <template if:true={sendingAuthRequest}>
+                            <lightning-spinner size="small" title="Sending authentication request"> </lightning-spinner>
+                        </template>
+                        <lightning-button
+                            label="Send autentiseringsforespørsel"
+                            disabled={cannotInitAuth}
+                            variant="neutral"
+                            onclick={requestAuthentication}
+                            role="button"
+                            style="display: grid; width: 100%"
+                        >
+                        </lightning-button>
+                    </div>
+                </template>
+                <template if:true={authenticationRequested}>
+                    <template if:false={authenticationComplete}>
+                        <nav aria-label="Autentiseringsstatus">
+                            <div class="slds-progress slds-progress_vertical">
+                                <ol class="slds-progress__list" role="list">
+                                    <li class="slds-progress__item slds-is-completed" role="listitem">
+                                        <span
+                                            class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success"
+                                            title="Complete"
+                                        >
+                                            <lightning-icon icon-name="utility:success" size="x-small"></lightning-icon>
+                                        </span>
+                                        <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                            {labels.AUTH_REQUESTED}
+                                        </div>
+                                    </li>
+
+                                    <template if:true={authenticationStarted}>
+                                        <li class="slds-progress__item slds-is-completed" role="listitem">
+                                            <span
+                                                class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success"
+                                                title="Complete"
+                                            >
+                                                <lightning-icon
+                                                    icon-name="utility:success"
+                                                    size="x-small"
+                                                ></lightning-icon>
+                                            </span>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                {labels.AUTH_STARTED}
+                                            </div>
+                                        </li>
+                                    </template>
+
+                                    <template if:false={authenticationStarted}>
+                                        <li
+                                            class="slds-progress__item slds-is-active"
+                                            role="listitem"
+                                            aria-current="true"
+                                        >
+                                            <div class="slds-progress__marker"></div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                {labels.AUTH_STARTED}
+                                            </div>
+                                        </li>
+                                    </template>
+
+                                    <template if:true={authenticationComplete}>
+                                        <li class="slds-progress__item slds-is-completed" role="listitem">
+                                            <span
+                                                class="slds-icon_container slds-icon-utility-success slds-progress__marker slds-progress__marker_icon slds-progress__marker_icon-success"
+                                                title="Complete"
+                                            >
+                                                <lightning-icon
+                                                    icon-name="utility:success"
+                                                    size="x-small"
+                                                ></lightning-icon>
+                                            </span>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                {labels.IDENTITY_CONFIRMED}
+                                            </div>
+                                        </li>
+                                    </template>
+
+                                    <template if:false={authenticationComplete}>
+                                        <li class="slds-progress__item" role="listitem">
+                                            <div class="slds-progress__marker"></div>
+                                            <div class="slds-progress__item_content slds-grid slds-grid_align-spread">
+                                                {labels.IDENTITY_CONFIRMED}
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ol>
+                            </div>
+                        </nav>
+                    </template>
+                </template>
+            </div>
+        </template>
+        -->
+    </div>
+</template>
