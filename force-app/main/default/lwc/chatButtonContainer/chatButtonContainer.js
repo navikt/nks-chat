@@ -11,9 +11,7 @@ export default class ChatButtonContainer extends LightningElement {
     showRedact = false;
     showJournal = false;
     showCreateNavTask = false;
-    redact = SEND_TO_REDACTION_LABEL;
-    createNavTask = CREATE_NAV_TASK_LABEL;
-    journal = JOURNAL_LABEL;
+    labels = { SEND_TO_REDACTION_LABEL, CREATE_NAV_TASK_LABEL, JOURNAL_LABEL };
     label;
 
     get inputVariables() {
@@ -34,23 +32,9 @@ export default class ChatButtonContainer extends LightningElement {
     }
 
     handleShowFlows() {
-        if (this.label === this.redact) {
-            this.showRedact = true;
-            this.showJournal = false;
-            this.showCreateNavTask = false;
-        }
-
-        if (this.label === this.createNavTask) {
-            this.showCreateNavTask = true;
-            this.showRedact = false;
-            this.showJournal = false;
-        }
-
-        if (this.label === this.journal) {
-            this.showJournal = true;
-            this.showCreateNavTask = false;
-            this.showRedact = false;
-        }
+        this.showRedact = this.label === this.labels.SEND_TO_REDACTION_LABEL;
+        this.showCreateNavTask = this.label === this.labels.CREATE_NAV_TASK_LABEL;
+        this.showJournal = this.label === this.labels.JOURNAL_LABEL;
     }
 
     handleStatusChange(event) {

@@ -3,17 +3,25 @@
         <lightning-layout-item class="slds-size_12-of-12 slds-var-p-top_medium">
             <lightning-layout style="float: right">
                 <lightning-layout-item class="slds-var-p-right_small">
-                    <lightning-button label={journal} variant="brand-outline" onclick={toggleFlow}></lightning-button>
-                </lightning-layout-item>
-                <lightning-layout-item class="slds-var-p-right_small">
                     <lightning-button
-                        label={createNavTask}
+                        label={labels.JOURNAL_LABEL}
                         variant="brand-outline"
                         onclick={toggleFlow}
                     ></lightning-button>
                 </lightning-layout-item>
                 <lightning-layout-item class="slds-var-p-right_small">
-                    <lightning-button label={redact} variant="brand-outline" onclick={toggleFlow}></lightning-button>
+                    <lightning-button
+                        label={labels.CREATE_NAV_TASK_LABEL}
+                        variant="brand-outline"
+                        onclick={toggleFlow}
+                    ></lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-var-p-right_small">
+                    <lightning-button
+                        label={labels.SEND_TO_REDACTION_LABEL}
+                        variant="brand-outline"
+                        onclick={toggleFlow}
+                    ></lightning-button>
                 </lightning-layout-item>
             </lightning-layout>
         </lightning-layout-item>
