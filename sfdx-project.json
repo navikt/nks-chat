@@ -28,7 +28,7 @@
                 },
                 {
                     "package": "crm-journal-utilities",
-                    "versionNumber": "0.28.0.LATEST"
+                    "versionNumber": "0.29.0.2"
                 },
                 {
                     "package": "crm-shared-flowComponents",
