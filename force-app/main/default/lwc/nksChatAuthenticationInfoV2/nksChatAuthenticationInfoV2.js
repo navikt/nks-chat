@@ -6,9 +6,7 @@ import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusReq
 import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
 import getCouncellorName from '@salesforce/apex/ChatAuthController.getCouncellorName';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
-import AUTH_REQUESTED from '@salesforce/label/c.CRM_Chat_Authentication_Requested';
 import AUTH_STARTED from '@salesforce/label/c.CRM_Chat_Authentication_Started';
-import IDENTITY_CONFIRMED from '@salesforce/label/c.CRM_Chat_Identity_Confirmed';
 import UNCONFIRMED_IDENTITY_WARNING from '@salesforce/label/c.CRM_Chat_Unconfirmed_Identity_Warning';
 import IDENTITY_CONFIRMED_DISCLAIMER from '@salesforce/label/c.CRM_Chat_Identity_Confirmed_Disclaimer';
 import AUTH_INIT_FAILED from '@salesforce/label/c.CRM_Chat_Authentication_Init_Failed';
@@ -18,25 +16,14 @@ import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
 export default class ChatAuthenticationOverview extends LightningElement {
     @api recordId;
     @api loggingEnabled;
-    @api objectApiName;
-    @api accountFields;
-    @api caseFields;
-    @api personFields;
-    @api copyPersonFields;
     @api councellorName;
 
     labels = {
-        AUTH_REQUESTED,
         AUTH_STARTED,
-        IDENTITY_CONFIRMED,
         UNCONFIRMED_IDENTITY_WARNING,
         IDENTITY_CONFIRMED_DISCLAIMER,
         AUTH_INIT_FAILED
     };
-
-    accountId;
-    caseId;
-    personId;
     currentAuthenticationStatus;
     sendingAuthRequest = false;
     activeConversation;
@@ -44,10 +31,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     chatAuthUrl;
     subscription = {};
     loginEvtSent = false;
-    nmbOfSecurityMeasures = 0;
-    isNavEmployee = false;
-    isConfidential = false;
-    startTime;
 
     get isLoading() {
         return this.currentAuthenticationStatus ? false : true;
@@ -92,16 +75,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
             this.log(data);
             this.currentAuthenticationStatus = data.AUTH_STATUS;
             this.activeConversation = data.CONVERSATION_STATUS === 'InProgress';
-            this.accountId = data.ACCOUNTID;
-            this.caseId = data.CASEID;
-            this.personId = data.PERSONID;
             this.chatLanguage = data.CHAT_LANGUAGE;
-
-            this.nmbOfSecurityMeasures = parseInt(data.NMB_SECURITY_MEASURES, 10);
-            // eslint-disable-next-line eqeqeq
-            this.isNavEmployee = 'true' == data.IS_NAV_EMPLOYEE;
-            // eslint-disable-next-line eqeqeq
-            this.isConfidential = 'true' == data.IS_CONFIDENTIAL;
 
             if (this.currentAuthenticationStatus !== 'Completed' && !this.isLoading && !this.isEmpSubscribed) {
                 this.handleSubscribe();
@@ -130,7 +104,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
             if (eventRecordId === _this.recordId) {
                 _this.currentAuthenticationStatus = response.data.sobject.CRM_Authentication_Status__c;
                 if (_this.authenticationComplete) {
-                    _this.accountId = response.data.sobject.AccountId;
                     if (!_this.loginEvtSent) _this.sendLoginEvent();
                     getRecordNotifyChange([{ recordId: _this.recordId }]);
                     _this.handleUnsubscribe();

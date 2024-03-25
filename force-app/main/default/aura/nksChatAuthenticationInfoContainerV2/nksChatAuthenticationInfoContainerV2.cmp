@@ -30,10 +30,6 @@
     <c:nksChatAuthenticationInfoV2
         recordId="{!v.recordId}"
         loggingEnabled="{!v.loggingEnabled}"
-        caseFields="{!v.caseFields}"
-        accountFields="{!v.accountFields}"
-        personFields="{!v.personFields}"
-        copyPersonFields="{!v.copyPersonFields}"
         onrequestauthentication="{!c.requestAuthentication}"
         onauthenticationcomplete="{!c.handleAuthCompleted}"
         aura:id="chatAuthInfo"
