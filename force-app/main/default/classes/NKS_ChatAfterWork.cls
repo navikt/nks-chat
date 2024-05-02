@@ -1,10 +1,5 @@
 public with sharing class NKS_ChatAfterWork {
     @AuraEnabled
-    public static Boolean hasBetaAccess() {
-        return FeatureManagement.checkPermission('NKS_Beta');
-    }
-
-    @AuraEnabled
     public static Id reportThreatClick() {
         try {
             ReportingData__c rData = new ReportingData__c();

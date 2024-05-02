@@ -1,29 +1,4 @@
 ({
-    doInit: function (component) {
-        var action = component.get('c.hasBetaAccess');
-        action.setCallback(this, function (response) {
-            var state = response.getState();
-            if (state === 'SUCCESS') {
-                component.set('v.betaAccess', response.getReturnValue());
-
-                // You would typically fire a event here to trigger
-                // client-side notification that the server-side
-                // action is complete
-            } else if (state === 'INCOMPLETE') {
-                // do something
-            } else if (state === 'ERROR') {
-                var errors = response.getError();
-                if (errors) {
-                    if (errors[0] && errors[0].message) {
-                        console.log('Error message: ' + errors[0].message);
-                    }
-                } else {
-                    console.log('Unknown error');
-                }
-            }
-        });
-        $A.enqueueAction(action);
-    },
     handleChatEnded: function (component, event, helper) {
         var type = event.getParam('type');
         if (type === 'startTimer') {
