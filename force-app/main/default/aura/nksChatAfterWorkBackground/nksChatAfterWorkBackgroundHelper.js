@@ -24,11 +24,10 @@
     removeClosedChatTabId: function (component, tabId, helper) {
         const tabs = component.get('v.closedChatList');
         const index = tabs.findIndex((tab) => tab.tab === tabId);
+        if (index === -1) return;
         const recordId = tabs[index].recordId;
-        if (index > -1) {
-            tabs.splice(index, 1);
-            component.set('v.closedChatList', tabs);
-        }
+        tabs.splice(index, 1);
+        component.set('v.closedChatList', tabs);
         helper.removeThreatReport(component, recordId, helper);
     },
 
