@@ -200,7 +200,7 @@ public without sharing class ChatAuthController {
     }
 
     @AuraEnabled
-    public static string getCouncellorName(String recordId) {
+    public static string getCounselorName(String recordId) {
         Id ownerId = [SELECT OwnerId FROM LiveChatTranscript WHERE Id = :recordId LIMIT 1]?.OwnerId;
         String fullname = [SELECT NKS_FullName__c FROM User WHERE Id = :ownerId LIMIT 1]?.NKS_FullName__c;
         return fullname;

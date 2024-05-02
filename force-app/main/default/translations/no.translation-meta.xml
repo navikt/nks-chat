@@ -1,43 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <customLabels>
-        <label/>
+        <label>Kunne ikke igangsette autentisering. Hvis problemet vedvarer, kontakt din
+            administrator.</label>
         <name>CRM_Chat_Authentication_Init_Failed</name>
     </customLabels>
     <customLabels>
-        <label/>
+        <label>Autentiseringsforespørsel sendt</label>
         <name>CRM_Chat_Authentication_Requested</name>
     </customLabels>
     <customLabels>
-        <label/>
+        <label>Venter på at brukeren logger inn</label>
         <name>CRM_Chat_Authentication_Started</name>
     </customLabels>
     <customLabels>
-        <label/>
+        <label>Identitet bekreftet</label>
         <name>CRM_Chat_Identity_Confirmed</name>
     </customLabels>
     <customLabels>
-        <label/>
+        <label>Brukeren har bekreftet sin identitet</label>
         <name>CRM_Chat_Identity_Confirmed_Disclaimer</name>
     </customLabels>
     <customLabels>
-        <label/>
+        <label>Vær oppmerksom - brukeren har ikke bekreftet sin identitet</label>
         <name>CRM_Chat_Unconfirmed_Identity_Warning</name>
     </customLabels>
     <customLabels>
-        <label/>
-        <name>NKS_Chat_Login_Message_EN</name>
+        <label>Du er nå i en innlogget chat med NAV, du snakker med</label>
+        <name>NKS_Chat_Initiate_Message</name>
     </customLabels>
     <customLabels>
-        <label/>
-        <name>NKS_Chat_Login_Message_NO</name>
+        <label>Vi veileder deg etter forvaltningsloven § 11. Av hensyn til personvern, ber vi deg om
+            å kun gi oss opplysninger som gjelder det du kontakter oss om. Veilederen har allerede
+            tilgang til saken din. Samtalen blir lagret og kan ikke endres senere. Når samtalen er
+            avsluttet, finner du chatloggen på Ditt NAV og den vil være tilgjengelig for NAV i
+            videre saksgang. Du kan lese mer om hvordan NAV behandler dine personopplysninger her:
+            https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten</label>
+        <name>NKS_Chat_Login_Message</name>
+    </customLabels>
+    <customLabels>
+        <label>Denne delen av samtalen har blitt slettet fordi den inneholdt informasjon som ikke
+            kan behandles, forvaltes eller lagres av denne tjenesten.</label>
+        <name>NKS_Chat_RedactionBoostReplacementText</name>
+    </customLabels>
+    <customLabels>
+        <label>Innhold i samtalen din har blitt slettet fordi den inneholdt informasjon som ikke kan
+            behandles, forvaltes eller lagres av denne tjenesten.</label>
+        <name>NKS_Chat_RedactionMessageText</name>
+    </customLabels>
+    <customLabels>
+        <label>Send autentiseringsforespørsel</label>
+        <name>NKS_Chat_Send_Authentication_Request</name>
     </customLabels>
     <reportTypes>
-        <description/>
-        <label/>
+        <description><!-- Chat Transcript -->
+        </description>
+        <label><!-- Chat Transcript -->
+        </label>
         <name>Chat_Transcript</name>
         <sections>
-            <label/>
+            <label><!-- Chat Transcripts -->
+            </label>
             <name>Chat Transcripts</name>
         </sections>
     </reportTypes>

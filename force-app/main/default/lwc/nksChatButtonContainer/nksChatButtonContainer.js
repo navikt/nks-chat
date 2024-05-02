@@ -1,17 +1,18 @@
 import { LightningElement, api } from 'lwc';
 import CREATE_NAV_TASK_LABEL from '@salesforce/label/c.NKS_Create_NAV_Task';
 import JOURNAL_LABEL from '@salesforce/label/c.NKS_Journal';
-import SEND_TO_REDACTION_LABEL from '@salesforce/label/c.Set_To_Redaction';
+import SEND_TO_REDACTION_LABEL from '@salesforce/label/c.NKS_Set_To_Redaction';
 import { publishToAmplitude } from 'c/amplitude';
 
 export default class ChatButtonContainer extends LightningElement {
     @api recordId;
 
     showFlow = false;
-    showRedact = false;
-    showJournal = false;
-    showCreateNavTask = false;
-    labels = { SEND_TO_REDACTION_LABEL, CREATE_NAV_TASK_LABEL, JOURNAL_LABEL };
+    labels = {
+        sendToRedaction: SEND_TO_REDACTION_LABEL,
+        createNavTask: CREATE_NAV_TASK_LABEL,
+        journal: JOURNAL_LABEL
+    };
     label;
 
     get inputVariables() {
@@ -24,17 +25,22 @@ export default class ChatButtonContainer extends LightningElement {
         ];
     }
 
+    get showRedact() {
+        return this.showFlow && this.label === this.labels.SEND_TO_REDACTION_LABEL;
+    }
+
+    get showCreateNavTask() {
+        return this.showFlow && this.label === this.labels.CREATE_NAV_TASK_LABEL;
+    }
+
+    get showJournal() {
+        return this.showFlow && this.label === this.labels.JOURNAL_LABEL;
+    }
+
     toggleFlow(event) {
         this.showFlow = !this.showFlow;
         this.label = event.target.label;
-        this.handleShowFlows();
         publishToAmplitude('Chat', { type: this.label + ' pressed' });
-    }
-
-    handleShowFlows() {
-        this.showRedact = this.label === this.labels.SEND_TO_REDACTION_LABEL;
-        this.showCreateNavTask = this.label === this.labels.CREATE_NAV_TASK_LABEL;
-        this.showJournal = this.label === this.labels.JOURNAL_LABEL;
     }
 
     handleStatusChange(event) {

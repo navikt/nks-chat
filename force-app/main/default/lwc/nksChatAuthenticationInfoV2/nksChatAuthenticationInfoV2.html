@@ -1,65 +1,62 @@
 <template>
-    <div class="slds-border_bottom">
-        <article class="slds-card">
-            <div class="slds-card__header slds-grid">
-                <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                    <div class="slds-media__figure">
-                        <lightning-icon icon-name="standard:messaging_user" size="small"></lightning-icon>
+    <div class="slds-border_bottom slds-var-p-around_medium">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="standard:messaging_user" size="small"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <h2 class="slds-card__header-title">
+                    <span class="slds-text-heading_small slds-truncate">Chat</span>
+                </h2>
+            </div>
+            <div class="slds-no-flex">
+                <template lwc:if={isLoading}>
+                    <div class="slds-var-p-top_small slds-var-p-bottom_small">
+                        <lightning-spinner size="medium" title="Getting authentication status"> </lightning-spinner>
                     </div>
-                    <div class="slds-media__body">
-                        <h2 class="slds-card__header-title">
-                            <span class="slds-text-heading_small slds-truncate">Chat</span>
-                        </h2>
-                    </div>
-                    <div class="slds-no-flex">
-                        <template if:true={isLoading}>
-                            <div class="slds-var-p-top_small slds-var-p-bottom_small">
-                                <lightning-spinner size="medium" title="Getting authentication status">
-                                </lightning-spinner>
+                </template>
+                <template lwc:else>
+                    <template lwc:if={authenticationComplete}>
+                        <lightning-badge
+                            class="slds-theme_success badge"
+                            label={labels.identityConfirmedDisclaimer}
+                        ></lightning-badge>
+                    </template>
+                    <template lwc:else>
+                        <lightning-badge
+                            class="slds-theme_warning badge"
+                            label={labels.unconfirmedIdentityWarning}
+                        ></lightning-badge>
+                    </template>
+                    <template lwc:if={authenticationRequested}>
+                        <template lwc:if={authenticationStarted}></template>
+                        <template lwc:else>
+                            <div class="slds-var-p-top_small">
+                                <lightning-badge
+                                    class="slds-align_absolute-center badge customBadge"
+                                    label={labels.authStarted}
+                                ></lightning-badge>
                             </div>
                         </template>
-                        <template if:false={isLoading}>
-                            <template if:true={authenticationComplete}>
-                                <span class="slds-badge slds-theme_success badge"
-                                    >{labels.IDENTITY_CONFIRMED_DISCLAIMER}</span
-                                >
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-var-p-top_small">
+                            <template lwc:if={sendingAuthRequest}>
+                                <lightning-spinner size="medium" title="Sending authentication request">
+                                </lightning-spinner>
                             </template>
-                            <template if:false={authenticationComplete}>
-                                <span class="slds-badge slds-theme_warning badge"
-                                    >{labels.UNCONFIRMED_IDENTITY_WARNING}</span
-                                >
-                            </template>
-                            <template if:false={authenticationComplete}>
-                                <template if:true={authenticationRequested}>
-                                    <template if:false={authenticationStarted}>
-                                        <div class="slds-var-p-top_small">
-                                            <span class="slds-badge slds-align_absolute-center customBadge">
-                                                {labels.AUTH_STARTED}</span
-                                            >
-                                        </div>
-                                    </template>
-                                </template>
-                            </template>
-                            <template if:false={authenticationRequested}>
-                                <div class="slds-var-p-top_small">
-                                    <template if:true={sendingAuthRequest}>
-                                        <lightning-spinner size="medium" title="Sending authentication request">
-                                        </lightning-spinner>
-                                    </template>
-                                    <button
-                                        class="slds-button slds-button_neutral button"
-                                        title="Send autentiseringsforespørsel"
-                                        disabled={cannotInitAuth}
-                                        onclick={requestAuthentication}
-                                    >
-                                        Send autentiseringsforespørsel
-                                    </button>
-                                </div>
-                            </template>
-                        </template>
-                    </div>
-                </header>
+                            <button
+                                class="slds-button slds-button_neutral button"
+                                title={labels.sendAuthRequest}
+                                disabled={cannotInitAuth}
+                                onclick={requestAuthentication}
+                            >
+                                {labels.sendAuthRequest}
+                            </button>
+                        </div>
+                    </template>
+                </template>
             </div>
-        </article>
+        </header>
     </div>
 </template>

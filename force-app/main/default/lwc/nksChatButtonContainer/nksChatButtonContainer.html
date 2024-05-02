@@ -26,47 +26,41 @@
             </lightning-layout>
         </lightning-layout-item>
         <lightning-layout-item class="slds-size_12-of-12 slds-var-p-top_medium">
-            <template if:true={showRedact}>
-                <template if:true={showFlow}>
-                    <div class="slds-var-m-top_xx-small">
-                        <lightning-card>
-                            <lightning-flow
-                                flow-api-name="NKS_Chat_Send_to_Redaction_Screenflow"
-                                flow-input-variables={inputVariables}
-                                onstatuschange={handleStatusChange}
-                            >
-                            </lightning-flow>
-                        </lightning-card>
-                    </div>
-                </template>
+            <template lwc:if={showRedact}>
+                <div class="slds-var-m-top_xx-small">
+                    <lightning-card>
+                        <lightning-flow
+                            flow-api-name="NKS_Chat_Send_to_Redaction_Screenflow"
+                            flow-input-variables={inputVariables}
+                            onstatuschange={handleStatusChange}
+                        >
+                        </lightning-flow>
+                    </lightning-card>
+                </div>
             </template>
-            <template if:true={showCreateNavTask}>
-                <template if:true={showFlow}>
-                    <div class="slds-var-m-top_xx-small">
-                        <lightning-card>
-                            <lightning-flow
-                                flow-api-name="NKS_Chat_Send_NAV_Task"
-                                flow-input-variables={inputVariables}
-                                onstatuschange={handleStatusChange}
-                            >
-                            </lightning-flow>
-                        </lightning-card>
-                    </div>
-                </template>
+            <template lwc:if={showCreateNavTask}>
+                <div class="slds-var-m-top_xx-small">
+                    <lightning-card>
+                        <lightning-flow
+                            flow-api-name="NKS_Chat_Send_NAV_Task"
+                            flow-input-variables={inputVariables}
+                            onstatuschange={handleStatusChange}
+                        >
+                        </lightning-flow>
+                    </lightning-card>
+                </div>
             </template>
-            <template if:true={showJournal}>
-                <template if:true={showFlow}>
-                    <div class="slds-var-m-top_xx-small">
-                        <lightning-card>
-                            <lightning-flow
-                                flow-api-name="NKS_Journal_Chat_Thread_Screenflow"
-                                flow-input-variables={inputVariables}
-                                onstatuschange={handleStatusChange}
-                            >
-                            </lightning-flow>
-                        </lightning-card>
-                    </div>
-                </template>
+            <template lwc:if={showJournal}>
+                <div class="slds-var-m-top_xx-small">
+                    <lightning-card>
+                        <lightning-flow
+                            flow-api-name="NKS_Journal_Chat_Thread_Screenflow"
+                            flow-input-variables={inputVariables}
+                            onstatuschange={handleStatusChange}
+                        >
+                        </lightning-flow>
+                    </lightning-card>
+                </div>
             </template>
         </lightning-layout-item>
     </lightning-layout>

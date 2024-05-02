@@ -90,13 +90,13 @@
         <inputAssignments>
             <field>Description</field>
             <value>
-                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText_NO</elementReference>
+                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>NKS_Conversation__c</field>
             <value>
-                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText_NO</elementReference>
+                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -131,7 +131,9 @@
         <allowPause>false</allowPause>
         <fields>
             <name>SomethingWentWrong</name>
-            <fieldText>&lt;p&gt;Noe gikk galt ved sladding av Boost samtalen.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Feilmelding:&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldText>
+                &lt;p&gt;Noe gikk galt ved sladding av Boost
+                samtalen.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Feilmelding:&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>

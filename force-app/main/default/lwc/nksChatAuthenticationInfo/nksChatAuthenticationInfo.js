@@ -4,7 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getChatInfo from '@salesforce/apex/ChatAuthController.getChatInfo';
 import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusRequested';
 import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
-import getCouncellorName from '@salesforce/apex/ChatAuthController.getCouncellorName';
+import getCounselorName from '@salesforce/apex/ChatAuthController.getCounselorName';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 
 //#### LABEL IMPORTS ####
@@ -14,8 +14,9 @@ import IDENTITY_CONFIRMED from '@salesforce/label/c.CRM_Chat_Identity_Confirmed'
 import UNCONFIRMED_IDENTITY_WARNING from '@salesforce/label/c.CRM_Chat_Unconfirmed_Identity_Warning';
 import IDENTITY_CONFIRMED_DISCLAIMER from '@salesforce/label/c.CRM_Chat_Identity_Confirmed_Disclaimer';
 import AUTH_INIT_FAILED from '@salesforce/label/c.CRM_Chat_Authentication_Init_Failed';
-import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
-import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
+import LOGIN_MESSAGE from '@salesforce/label/c.NKS_Chat_Login_Message';
+import INITIATE_MESSAGE from '@salesforce/label/c.NKS_Chat_Initiate_Message';
+import SEND_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Send_Authentication_Request';
 
 export default class ChatAuthenticationOverview extends LightningElement {
     labels = {
@@ -24,7 +25,10 @@ export default class ChatAuthenticationOverview extends LightningElement {
         IDENTITY_CONFIRMED,
         UNCONFIRMED_IDENTITY_WARNING,
         IDENTITY_CONFIRMED_DISCLAIMER,
-        AUTH_INIT_FAILED
+        AUTH_INIT_FAILED,
+        LOGIN_MESSAGE,
+        INITIATE_MESSAGE,
+        SEND_AUTH_REQUEST
     };
     @api loggingEnabled; //Determines if console logging is enabled for the component
     @api recordId;
@@ -33,7 +37,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     @api caseFields; //Comma separated string with field names to display from the related case
     @api personFields; //Comma separated string with field names to display from the related accounts person
     @api copyPersonFields; //Comma separated string with field numbers to activate copy button
-    @api councellorName;
+
     accountId; //Transcript AccountId
     caseId; //Transcript CaseId
     personId; //Transcript Account PersonId
@@ -177,23 +181,11 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     sendLoginEvent() {
-        getCouncellorName({ recordId: this.recordId }).then((data) => {
-            this.councellorName = data;
-            //Message defaults to norwegian
-            const loginMessage =
-                this.chatLanguage === 'en_US'
-                    ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                      this.councellorName +
-                      '. ' +
-                      CHAT_LOGIN_MSG_EN
-                    : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                      this.councellorName +
-                      '. ' +
-                      CHAT_LOGIN_MSG_NO;
-
+        getCounselorName({ recordId: this.recordId }).then((data) => {
+            const message = `${this.labels.INITIATE_MESSAGE} ${data}. ${this.labels.LOGIN_MESSAGE}`;
             //Sending event handled by parent to to trigger default chat login message
             const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                detail: { loginMessage }
+                detail: { message }
             });
             this.dispatchEvent(authenticationCompleteEvt);
             this.loginEvtSent = true;

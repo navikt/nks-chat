@@ -1,14 +1,13 @@
-.badge {
+.badge,
+button {
     width: 100%;
 }
 
 .button {
-    border-radius: 0.938rem;
-    width: 100%;
+    --slds-c-button-radius-border: 15rem;
 }
 
 .customBadge {
-    width: 100%;
-    background-color: #ffb24914;
-    border: #ffb249 solid 2px;
+    --slds-c-badge-color-background: #ffb24914;
+    --slds-c-badge-color-border: #ffb249;
 }
