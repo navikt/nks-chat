@@ -22,8 +22,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Chat Authentication Init Failed</shortDescription>
-        <value>Could not initiate authentication. If the problem persists, contact your
-            administrator.</value>
+        <value>Could not initiate authentication. If the problem persists, contact your administrator.</value>
     </labels>
     <labels>
         <fullName>CRM_Chat_Authentication_Requested</fullName>
