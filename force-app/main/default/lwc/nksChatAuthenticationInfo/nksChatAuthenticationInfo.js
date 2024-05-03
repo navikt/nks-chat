@@ -182,10 +182,10 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     sendLoginEvent() {
         getCounselorName({ recordId: this.recordId }).then((data) => {
-            const message = `${this.labels.INITIATE_MESSAGE} ${data}. ${this.labels.LOGIN_MESSAGE}`;
+            const loginMessage = `${this.labels.INITIATE_MESSAGE} ${data}. ${this.labels.LOGIN_MESSAGE}`;
             //Sending event handled by parent to to trigger default chat login message
             const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                detail: { message }
+                detail: { loginMessage }
             });
             this.dispatchEvent(authenticationCompleteEvt);
             this.loginEvtSent = true;

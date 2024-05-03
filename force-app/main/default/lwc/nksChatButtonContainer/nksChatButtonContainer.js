@@ -26,15 +26,15 @@ export default class ChatButtonContainer extends LightningElement {
     }
 
     get showRedact() {
-        return this.showFlow && this.label === this.labels.SEND_TO_REDACTION_LABEL;
+        return this.showFlow && this.label === this.labels.sendToRedaction;
     }
 
     get showCreateNavTask() {
-        return this.showFlow && this.label === this.labels.CREATE_NAV_TASK_LABEL;
+        return this.showFlow && this.label === this.labels.createNavTask;
     }
 
     get showJournal() {
-        return this.showFlow && this.label === this.labels.JOURNAL_LABEL;
+        return this.showFlow && this.label === this.labels.journal;
     }
 
     toggleFlow(event) {

@@ -6,8 +6,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Chat redaction Boost replacement text</shortDescription>
-        <value>This part of the conversation has been deleted because it contained information that
-            cannot be processed, managed or stored by this service.</value>
+        <value>This part of the conversation has been deleted because it contained information that cannot be processed, managed or stored by this service.</value>
     </labels>
     <labels>
         <fullName>NKS_Chat_RedactionMessageText</fullName>
@@ -15,8 +14,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Chat Redaction Message Text</shortDescription>
-        <value>The content of your conversation has been deleted because it contained information
-            that cannot be processed, managed or stored by this service.</value>
+        <value>The content of your conversation has been deleted because it contained information that cannot be processed, managed or stored by this service.</value>
     </labels>
     <labels>
         <fullName>CRM_Chat_Authentication_Init_Failed</fullName>
@@ -81,13 +79,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Chat Login Message</shortDescription>
-        <value>We advise you according to forvaltningsloven §11. To ensure your right to privacy, we
-            ask you to only provide information regarding your case. The counsellor already has
-            access to your case. The transcript will be stored and cannot be amended after
-            completion. When the chat is over, you will find the transcript on Ditt NAV and it will
-            be available to NAV for future case handling. You can read more about how NAV processes
-            your personal data here (Norwegian):
-            https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten</value>
+        <value>We advise you according to forvaltningsloven §11. To ensure your right to privacy, we ask you to only provide information regarding your case. The counsellor already has access to your case. The transcript will be stored and cannot be amended after completion. When the chat is over, you will find the transcript on Ditt NAV and it will be available to NAV for future case handling. You can read more about how NAV processes your personal data here (Norwegian): https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten</value>
     </labels>
 
     <labels>
