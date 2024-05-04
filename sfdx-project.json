@@ -15,32 +15,36 @@
                     "versionNumber": "0.38.0.LATEST"
                 },
                 {
-                    "package": "crm-henvendelse-base",
-                    "versionNumber": "0.18.0.LATEST"
-                },
-                {
                     "package": "crm-platform-integration",
                     "versionNumber": "0.110.0.LATEST"
                 },
                 {
                     "package": "crm-nks-base-components",
-                    "versionNumber": "0.49.0.1"
+                    "versionNumber": "0.49.0.LATEST"
                 },
                 {
                     "package": "crm-journal-utilities",
-                    "versionNumber": "0.28.0.LATEST"
+                    "versionNumber": "0.27.0.LATEST"
+                },
+                {
+                    "package": "crm-platform-oppgave",
+                    "versionNumber": "0.22.0.LATEST"
+                },
+                {
+                    "package": "crm-shared-user-notification",
+                    "versionNumber": "0.22.0.LATEST"
                 },
                 {
                     "package": "crm-shared-flowComponents",
                     "versionNumber": "0.4.0.LATEST"
                 },
                 {
-                    "package": "crm-platform-oppgave",
-                    "versionNumber": "0.51.0.LATEST"
+                    "package": "crm-henvendelse-base",
+                    "versionNumber": "0.18.0.LATEST"
                 },
                 {
-                    "package": "crm-shared-user-notification",
-                    "versionNumber": "0.22.0.LATEST"
+                    "package": "crm-henvendelse",
+                    "versionNumber": "0.84.0.LATEST"
                 },
                 {
                     "package": "crm-platform-access-control",
@@ -48,11 +52,7 @@
                 },
                 {
                     "package": "crm-community-base",
-                    "versionNumber": "0.92.0.LATEST"
-                },
-                {
-                    "package": "crm-henvendelse",
-                    "versionNumber": "0.122.0.LATEST"
+                    "versionNumber": "0.88.0.LATEST"
                 },
                 {
                     "package": "crm-nks-survey",
@@ -63,7 +63,7 @@
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "60.0",
+    "sourceApiVersion": "59.0",
     "packageAliases": {
         "crm-nks-chat": "0Ho7U000000000GSAQ",
         "crm-henvendelse-base": "0Ho7U000000000kSAA",
