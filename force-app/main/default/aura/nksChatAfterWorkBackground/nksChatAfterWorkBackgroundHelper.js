@@ -50,12 +50,11 @@
     removeThreatReport: function (component, recordId, helper) {
         const threatReports = component.get('v.threatReportList');
         const index = threatReports.findIndex((reporting) => reporting.recordId === recordId);
+        if (index === -1) return;
         const reportingId = threatReports[index].reportingId;
         const time = Date.now() - threatReports[index].time;
-        if (index > -1) {
-            threatReports.splice(index, 1);
-            component.set('v.threatReportList', threatReports);
-        }
+        threatReports.splice(index, 1);
+        component.set('v.threatReportList', threatReports);
         helper.updateThreatTime(component, reportingId, time);
     },
     updateThreatTime: function (component, reportingId, time) {
