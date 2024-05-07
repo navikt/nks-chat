@@ -4,7 +4,7 @@
         if (type === 'startTimer') {
             var recordId = component.get('v.recordId');
             var eventRecordId = event.getParam('recordId');
-            if (recordId === eventRecordId && component.get('v.betaAccess')) {
+            if (recordId === eventRecordId) {
                 helper.startTimer(component, eventRecordId);
             }
         }

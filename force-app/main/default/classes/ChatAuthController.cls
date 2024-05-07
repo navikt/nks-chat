@@ -205,4 +205,44 @@ public without sharing class ChatAuthController {
         String fullname = [SELECT NKS_FullName__c FROM User WHERE Id = :ownerId LIMIT 1]?.NKS_FullName__c;
         return fullname;
     }
+
+    @AuraEnabled
+    public static void logoutFromChatSession(Id chatTranscriptId) {
+        try {
+            LiveChatTranscript lct = getChatTranscript(chatTranscriptId);
+
+            if (String.isNotBlank(lct.AccountId)) {
+                deleteUserSession(lct.AccountId);
+            }
+        } catch (Exception ex) {
+            LoggerUtility logger = new LoggerUtility('Logout');
+            logger.critical(
+                'Could not delete AuthSession while logging out user. \n' + ex.getMessage(),
+                null,
+                CRM_ApplicationDomain.Domain.CRM
+            );
+            logger.publish();
+            throw new AuraHandledException(ex.getTypeName() + ' : ' + 'Failed to delete user session from chat');
+        }
+    }
+
+    private static void deleteUserSession(Id accountId) {
+        try {
+            delete [
+                SELECT Id
+                FROM AuthSession
+                WHERE
+                    UsersId IN (SELECT Id FROM User WHERE AccountId = :accountId)
+                    AND LoginType = 'Chatter Communities External User Third Party SSO'
+            ];
+        } catch (Exception e) {
+            LoggerUtility logger = new LoggerUtility('Logout');
+            logger.critical(
+                'Could not delete AuthSession while logging out user. \n' + e.getMessage(),
+                null,
+                CRM_ApplicationDomain.Domain.CRM
+            );
+            logger.publish();
+        }
+    }
 }
