@@ -13,6 +13,7 @@ import AUTH_INIT_FAILED from '@salesforce/label/c.CRM_Chat_Authentication_Init_F
 import LOGIN_MESSAGE from '@salesforce/label/c.NKS_Chat_Login_Message';
 import INITIATE_MESSAGE from '@salesforce/label/c.NKS_Chat_Initiate_Message';
 import SEND_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Send_Authentication_Request';
+import SET_TO_REDACTION_LABEL from '@salesforce/label/c.NKS_Set_To_Redaction';
 
 const STATUSES = {
     NOT_STARTED: 'Not Started',
@@ -32,7 +33,8 @@ export default class ChatAuthenticationOverview extends LightningElement {
         authInitFailed: AUTH_INIT_FAILED,
         loginMessage: LOGIN_MESSAGE,
         initiateMessage: INITIATE_MESSAGE,
-        sendAuthRequest: SEND_AUTH_REQUEST
+        sendAuthRequest: SEND_AUTH_REQUEST,
+        setToRedaction: SET_TO_REDACTION_LABEL
     };
 
     currentAuthenticationStatus;

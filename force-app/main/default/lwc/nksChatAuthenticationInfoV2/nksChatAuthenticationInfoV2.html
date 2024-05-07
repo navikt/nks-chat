@@ -1,5 +1,11 @@
 <template>
-    <div class="slds-border_bottom slds-var-p-around_medium">
+    <c-nks-button-container-top
+        record-id={recordId}
+        channel-name="Chat"
+        flow-api-name="NKS_Chat_Send_to_Redaction_Screenflow"
+        flow-button-label={labels.setToRedaction}
+    ></c-nks-button-container-top>
+    <div class="slds-border_bottom slds-border_top slds-var-p-around_medium">
         <header class="slds-media slds-media_center slds-has-flexi-truncate">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="standard:messaging_user" size="small"></lightning-icon>
@@ -22,13 +28,7 @@
                             label={labels.identityConfirmedDisclaimer}
                         ></lightning-badge>
                     </template>
-                    <template lwc:else>
-                        <lightning-badge
-                            class="slds-theme_warning badge"
-                            label={labels.unconfirmedIdentityWarning}
-                        ></lightning-badge>
-                    </template>
-                    <template lwc:if={authenticationRequested}>
+                    <template lwc:elseif={authenticationRequested}>
                         <template lwc:if={authenticationStarted}></template>
                         <template lwc:else>
                             <div class="slds-var-p-top_small">
