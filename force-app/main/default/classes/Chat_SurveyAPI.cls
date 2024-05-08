@@ -26,8 +26,7 @@ global with sharing class Chat_SurveyAPI {
             response.statusCode = 200;
             response.responseBody = Blob.valueOf(JSON.serializePretty(surveyInvitationLink));
             if (Test.isRunningTest() && chatKey == 'test') {
-                CalloutException e = new CalloutException('This is a constructed exception!');
-                throw e;
+                throw new CalloutException('This is a test exception!');
             }
         } catch (Exception ex) {
             response.statusCode = 500;
