@@ -226,6 +226,7 @@ public without sharing class ChatAuthController {
         }
     }
 
+    @TestVisible
     private static void deleteUserSession(Id accountId) {
         try {
             delete [

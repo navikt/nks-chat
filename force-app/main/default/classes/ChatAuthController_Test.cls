@@ -87,4 +87,35 @@ public class ChatAuthController_Test {
 
         System.assert(String.isNotBlank(fullname));
     }
+
+    @isTest
+    static void testLogoutFromChatSession() {
+        LiveChatTranscript chatTranscript = [SELECT Id FROM LiveChatTranscript LIMIT 1];
+
+        Test.startTest();
+        ChatAuthController.logoutFromChatSession(chatTranscript.Id);
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testLogoutFromChatSessionException() {
+        LiveChatVisitor visitor = [SELECT Id FROM LiveChatVisitor LIMIT 1];
+
+        Test.startTest();
+        try {
+            ChatAuthController.logoutFromChatSession(visitor.Id);
+        } catch (Exception ex) {
+            System.assertEquals(new AuraHandledException('Test').getTypeName(), ex.getTypeName());
+        }
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testDeleteUserSession() {
+        LiveChatTranscript chatTranscript = [SELECT Id, AccountId FROM LiveChatTranscript LIMIT 1];
+
+        Test.startTest();
+        ChatAuthController.deleteUserSession(chatTranscript.AccountId);
+        Test.stopTest();
+    }
 }
