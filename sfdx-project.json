@@ -31,16 +31,16 @@
                     "versionNumber": "0.27.0.LATEST"
                 },
                 {
+                    "package": "crm-shared-flowComponents",
+                    "versionNumber": "0.4.0.LATEST"
+                },
+                {
                     "package": "crm-platform-oppgave",
                     "versionNumber": "0.51.0.LATEST"
                 },
                 {
                     "package": "crm-shared-user-notification",
                     "versionNumber": "0.22.0.LATEST"
-                },
-                {
-                    "package": "crm-shared-flowComponents",
-                    "versionNumber": "0.4.0.LATEST"
                 },
                 {
                     "package": "crm-platform-access-control",
