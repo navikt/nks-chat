@@ -19,10 +19,6 @@
                     "versionNumber": "0.99.0.LATEST"
                 },
                 {
-                    "package": "crm-sf-saf",
-                    "versionNumber": "0.23.0.LATEST"
-                },
-                {
                     "package": "crm-shared-user-notification",
                     "versionNumber": "0.23.0.LATEST"
                 },
@@ -43,20 +39,16 @@
                     "versionNumber": "0.2.0.LATEST"
                 },
                 {
-                    "package": "crm-nks-integration",
-                    "versionNumber": "0.63.0.LATEST"
-                },
-                {
-                    "package": "crm-nks-base-components",
-                    "versionNumber": "0.45.0.LATEST"
-                },
-                {
                     "package": "crm-henvendelse-base",
                     "versionNumber": "0.16.0.LATEST"
                 },
                 {
                     "package": "crm-henvendelse",
                     "versionNumber": "0.84.0.LATEST"
+                },
+                {
+                    "package": "crm-sf-saf",
+                    "versionNumber": "0.23.0.LATEST"
                 },
                 {
                     "package": "crm-platform-access-control",
@@ -69,6 +61,14 @@
                 {
                     "package": "crm-nks-survey",
                     "versionNumber": "0.10.0.LATEST"
+                },
+                {
+                    "package": "crm-nks-integration",
+                    "versionNumber": "0.63.0.LATEST"
+                },
+                {
+                    "package": "crm-nks-base-components",
+                    "versionNumber": "0.45.0.LATEST"
                 }
             ]
         }
