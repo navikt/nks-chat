@@ -8,7 +8,11 @@
             "dependencies": [
                 {
                     "package": "crm-platform-base",
-                    "versionNumber": "0.212.0.LATEST"
+                    "versionNumber": "0.218.0.LATEST"
+                },
+                                {
+                    "package": "crm-platform-access-control",
+                    "versionNumber": "0.113.0.LATEST"
                 },
                 {
                     "package": "crm-platform-reporting",
@@ -42,6 +46,10 @@
                     "package": "crm-thread-view",
                     "versionNumber": "0.2.0.LATEST"
                 },
+                                {
+                    "package": "crm-community-base",
+                    "versionNumber": "0.88.0.LATEST"
+                },
                 {
                     "package": "crm-henvendelse",
                     "versionNumber": "0.123.0.LATEST"
@@ -49,14 +57,6 @@
                 {
                     "package": "crm-sf-saf",
                     "versionNumber": "0.23.0.LATEST"
-                },
-                {
-                    "package": "crm-platform-access-control",
-                    "versionNumber": "0.113.0.LATEST"
-                },
-                {
-                    "package": "crm-community-base",
-                    "versionNumber": "0.88.0.LATEST"
                 },
                 {
                     "package": "crm-nks-survey",
