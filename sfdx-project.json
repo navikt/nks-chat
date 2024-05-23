@@ -4,11 +4,19 @@
             "path": "force-app",
             "default": true,
             "package": "crm-nks-chat",
-            "versionNumber": "0.30.0.NEXT",
+            "versionNumber": "0.31.0.NEXT",
             "dependencies": [
                 {
                     "package": "crm-platform-base",
                     "versionNumber": "0.218.0.LATEST"
+                },
+                {
+                    "package": "crm-platform-access-control",
+                    "versionNumber": "0.113.0.LATEST"
+                },
+                {
+                    "package": "crm-henvendelse-base",
+                    "versionNumber": "0.18.0.LATEST"
                 },
                 {
                     "package": "crm-henvendelse-base",
@@ -19,32 +27,24 @@
                     "versionNumber": "0.109.0.LATEST"
                 },
                 {
-                    "package": "crm-platform-reporting",
-                    "versionNumber": "0.37.0.LATEST"
-                },
-                {
-                    "package": "crm-nks-base-components",
-                    "versionNumber": "0.51.0.3"
-                },
-                {
-                    "package": "crm-journal-utilities",
-                    "versionNumber": "0.27.0.LATEST"
+                    "package": "crm-shared-user-notification",
+                    "versionNumber": "0.23.0.LATEST"
                 },
                 {
                     "package": "crm-shared-flowComponents",
                     "versionNumber": "0.4.0.LATEST"
                 },
                 {
+                    "package": "crm-journal-utilities",
+                    "versionNumber": "0.27.0.LATEST"
+                },
+                {
                     "package": "crm-platform-oppgave",
                     "versionNumber": "0.51.0.LATEST"
                 },
                 {
-                    "package": "crm-shared-user-notification",
-                    "versionNumber": "0.22.0.LATEST"
-                },
-                {
-                    "package": "crm-platform-access-control",
-                    "versionNumber": "0.113.0.LATEST"
+                    "package": "crm-thread-view",
+                    "versionNumber": "0.2.0.LATEST"
                 },
                 {
                     "package": "crm-community-base",
@@ -55,8 +55,20 @@
                     "versionNumber": "0.123.0.LATEST"
                 },
                 {
+                    "package": "crm-sf-saf",
+                    "versionNumber": "0.23.0.LATEST"
+                },
+                {
                     "package": "crm-nks-survey",
                     "versionNumber": "0.10.0.LATEST"
+                },
+                {
+                    "package": "crm-nks-integration",
+                    "versionNumber": "0.64.0.LATEST"
+                },
+                {
+                    "package": "crm-nks-base-components",
+                    "versionNumber": "0.52.0.LATEST"
                 }
             ]
         }
@@ -75,6 +87,9 @@
         "crm-platform-reporting": "0Ho2o0000008OSfCAM",
         "crm-shared-flowComponents": "0Ho2o000000fxYJCAY",
         "crm-platform-integration": "0Ho2o0000008ORrCAM",
+        "crm-sf-saf": "0Ho7U0000000001SAA",
+        "crm-thread-view": "0Ho7U000000000zSAA",
+        "crm-nks-integration": "0Ho2o000000fxX6CAI",
         "crm-nks-base-components": "0Ho7U000000000LSAQ",
         "crm-community-base": "0Ho2o0000008OSzCAM",
         "crm-platform-access-control": "0Ho2o0000008OR3CAM",

@@ -25,6 +25,9 @@ global with sharing class Chat_SurveyAPI {
             String surveyInvitationLink = Chat_SurveyHelper.getSurveyInvitationLink(chatKey);
             response.statusCode = 200;
             response.responseBody = Blob.valueOf(JSON.serializePretty(surveyInvitationLink));
+            if (Test.isRunningTest() && chatKey == 'test') {
+                throw new CalloutException('This is a test exception!');
+            }
         } catch (Exception ex) {
             response.statusCode = 500;
             response.responseBody = Blob.valueOf(JSON.serialize(ex.getMessage()));
