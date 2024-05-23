@@ -101,7 +101,7 @@
         <inputAssignments>
             <name>messageRedactionText</name>
             <value>
-                <elementReference>$Label.NKS_Chat_RedactionMessageText</elementReference>
+                <elementReference>$Label.NKS_Chat_RedactionMessageText_NO</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

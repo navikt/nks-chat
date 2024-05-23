@@ -90,13 +90,13 @@
         <inputAssignments>
             <field>Description</field>
             <value>
-                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText</elementReference>
+                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText_NO</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>NKS_Conversation__c</field>
             <value>
-                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText</elementReference>
+                <elementReference>$Label.NKS_Chat_RedactionBoostReplacementText_NO</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
