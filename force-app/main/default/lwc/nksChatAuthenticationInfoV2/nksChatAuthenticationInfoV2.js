@@ -36,7 +36,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
         CHAT_GETTING_AUTH_STATUS,
         CHAT_SENDING_AUTH_REQUEST
     };
-
     currentAuthenticationStatus;
     sendingAuthRequest = false;
     activeConversation;
@@ -148,16 +147,15 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     sendLoginEvent() {
         getCounselorName({ recordId: this.recordId }).then((data) => {
-            this.councellorName = data;
             //Message defaults to norwegian
             const loginMessage =
                 this.chatLanguage === 'en_US'
                     ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                      this.councellorName +
+                      data +
                       '. ' +
                       this.labels.CHAT_LOGIN_MSG_EN
                     : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                      this.councellorName +
+                      data +
                       '. ' +
                       this.labels.CHAT_LOGIN_MSG_NO;
 

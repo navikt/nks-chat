@@ -52,7 +52,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     chatAuthUrl;
     subscription = {}; //Unique empAPI subscription for the component instance
     loginEvtSent = false;
-
     nmbOfSecurityMeasures = 0;
     isNavEmployee = false;
     isConfidential = false;
@@ -60,7 +59,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     //#### GETTERS ####
 
     get isLoading() {
-        return this.currentAuthenticationStatus ? false : true;
+        return !this.currentAuthenticationStatus;
     }
 
     get cannotInitAuth() {
@@ -186,16 +185,15 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     sendLoginEvent() {
         getCounselorName({ recordId: this.recordId }).then((data) => {
-            this.councellorName = data;
             //Message defaults to norwegian
             const loginMessage =
                 this.chatLanguage === 'en_US'
                     ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                      this.councellorName +
+                      data +
                       '. ' +
                       this.labels.CHAT_LOGIN_MSG_EN
                     : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                      this.councellorName +
+                      data +
                       '. ' +
                       this.labels.CHAT_LOGIN_MSG_NO;
 
