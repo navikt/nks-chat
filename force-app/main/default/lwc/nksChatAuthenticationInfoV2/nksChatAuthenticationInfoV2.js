@@ -7,13 +7,12 @@ import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusReq
 import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
 import getCounselorName from '@salesforce/apex/ChatAuthController.getCounselorName';
 import AUTH_STARTED from '@salesforce/label/c.CRM_Chat_Authentication_Started';
-import UNCONFIRMED_IDENTITY_WARNING from '@salesforce/label/c.CRM_Chat_Unconfirmed_Identity_Warning';
 import IDENTITY_CONFIRMED_DISCLAIMER from '@salesforce/label/c.CRM_Chat_Identity_Confirmed_Disclaimer';
-import AUTH_INIT_FAILED from '@salesforce/label/c.CRM_Chat_Authentication_Init_Failed';
-import LOGIN_MESSAGE from '@salesforce/label/c.NKS_Chat_Login_Message';
-import INITIATE_MESSAGE from '@salesforce/label/c.NKS_Chat_Initiate_Message';
 import SEND_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Send_Authentication_Request';
 import SET_TO_REDACTION_LABEL from '@salesforce/label/c.NKS_Set_To_Redaction';
+import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
+import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
+import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
 
 const STATUSES = {
     NOT_STARTED: 'Not Started',
@@ -27,14 +26,13 @@ export default class ChatAuthenticationOverview extends LightningElement {
     @api loggingEnabled;
 
     labels = {
-        authStarted: AUTH_STARTED,
-        unconfirmedIdentityWarning: UNCONFIRMED_IDENTITY_WARNING,
-        identityConfirmedDisclaimer: IDENTITY_CONFIRMED_DISCLAIMER,
-        authInitFailed: AUTH_INIT_FAILED,
-        loginMessage: LOGIN_MESSAGE,
-        initiateMessage: INITIATE_MESSAGE,
-        sendAuthRequest: SEND_AUTH_REQUEST,
-        setToRedaction: SET_TO_REDACTION_LABEL
+        AUTH_STARTED,
+        IDENTITY_CONFIRMED_DISCLAIMER,
+        SEND_AUTH_REQUEST,
+        SET_TO_REDACTION_LABEL,
+        CHAT_LOGIN_MSG_NO,
+        CHAT_LOGIN_MSG_EN,
+        CHAT_GETTING_AUTH_STATUS
     };
 
     currentAuthenticationStatus;
@@ -147,18 +145,27 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     sendLoginEvent() {
-        getCounselorName({ recordId: this.recordId })
-            .then((data) => {
-                const loginMessage = `${this.labels.initiateMessage} ${data}. ${this.labels.loginMessage}`;
-                const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                    detail: { loginMessage }
-                });
-                this.dispatchEvent(authenticationCompleteEvt);
-                this.loginEvtSent = true;
-            })
-            .catch((error) => {
-                console.error('Failed to fetch counselor name: ', JSON.stringify(error));
+        getCounselorName({ recordId: this.recordId }).then((data) => {
+            this.councellorName = data;
+            //Message defaults to norwegian
+            const loginMessage =
+                this.chatLanguage === 'en_US'
+                    ? 'You are now in a secure chat with NAV, you are chatting with ' +
+                      this.councellorName +
+                      '. ' +
+                      this.labels.CHAT_LOGIN_MSG_EN
+                    : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
+                      this.councellorName +
+                      '. ' +
+                      this.labels.CHAT_LOGIN_MSG_NO;
+
+            //Sending event handled by parent to to trigger default chat login message
+            const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
+                detail: { loginMessage }
             });
+            this.dispatchEvent(authenticationCompleteEvt);
+            this.loginEvtSent = true;
+        });
     }
 
     requestAuthentication() {

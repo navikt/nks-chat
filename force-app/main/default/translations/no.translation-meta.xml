@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Translations xmlns="http://soap.sforce.com/2006/04/metadata"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customLabels>
-        <label>Kunne ikke igangsette autentisering. Hvis problemet vedvarer, kontakt din administrator.</label>
+        <label>Kunne ikke igangsette autentisering. Hvis problemet vedvarer, kontakt din
+            administrator.</label>
         <name>CRM_Chat_Authentication_Init_Failed</name>
     </customLabels>
     <customLabels>
@@ -26,34 +26,27 @@
         <name>CRM_Chat_Unconfirmed_Identity_Warning</name>
     </customLabels>
     <customLabels>
-        <label>Du er nå i en innlogget chat med NAV, du snakker med</label>
-        <name>NKS_Chat_Initiate_Message</name>
+        <label />
+        <name>NKS_Chat_Login_Message_EN</name>
     </customLabels>
     <customLabels>
-        <label>Vi veileder deg etter forvaltningsloven § 11. Av hensyn til personvern, ber vi deg om å kun gi oss opplysninger som gjelder det du kontakter oss om. Veilederen har allerede tilgang til saken din. Samtalen blir lagret og kan ikke endres senere. Når samtalen er avsluttet, finner du chatloggen på Ditt NAV og den vil være tilgjengelig for NAV i videre saksgang. Du kan lese mer om hvordan NAV behandler dine personopplysninger her: https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten</label>
-        <name>NKS_Chat_Login_Message</name>
-    </customLabels>
-    <customLabels>
-        <label>Denne delen av samtalen har blitt slettet fordi den inneholdt informasjon som ikke kan behandles, forvaltes eller lagres av denne tjenesten.</label>
-        <name>NKS_Chat_RedactionBoostReplacementText</name>
-    </customLabels>
-    <customLabels>
-        <label>Innhold i samtalen din har blitt slettet fordi den inneholdt informasjon som ikke kan behandles, forvaltes eller lagres av denne tjenesten.</label>
-        <name>NKS_Chat_RedactionMessageText</name>
+        <label />
+        <name>NKS_Chat_Login_Message_NO</name>
     </customLabels>
     <customLabels>
         <label>Send autentiseringsforespørsel</label>
         <name>NKS_Chat_Send_Authentication_Request</name>
     </customLabels>
+    <customLabels>
+        <label>Henter autentiseringsstatus</label>
+        <name>NKS_Chat_Getting_Authentication_Status</name>
+    </customLabels>
     <reportTypes>
-        <description><!-- Chat Transcript -->
-        </description>
-        <label><!-- Chat Transcript -->
-        </label>
+        <description />
+        <label />
         <name>Chat_Transcript</name>
         <sections>
-            <label><!-- Chat Transcripts -->
-            </label>
+            <label />
             <name>Chat Transcripts</name>
         </sections>
     </reportTypes>
