@@ -41,6 +41,10 @@
         <label>Henter autentiseringsstatus</label>
         <name>NKS_Chat_Getting_Authentication_Status</name>
     </customLabels>
+    <customLabels>
+        <label>Sender autentiseringsforespørsel</label>
+        <name>NKS_Chat_Sending_Authentication_Request</name>
+    </customLabels>
     <reportTypes>
         <description />
         <label />

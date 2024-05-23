@@ -42,7 +42,10 @@
                     <template lwc:else>
                         <div class="slds-var-p-top_small">
                             <template lwc:if={sendingAuthRequest}>
-                                <lightning-spinner size="medium" title={labels.SEND_AUTH_REQUEST}></lightning-spinner>
+                                <lightning-spinner
+                                    size="medium"
+                                    title={labels.CHAT_SENDING_AUTH_REQUEST}
+                                ></lightning-spinner>
                             </template>
                             <button
                                 class="slds-button slds-button_neutral button"

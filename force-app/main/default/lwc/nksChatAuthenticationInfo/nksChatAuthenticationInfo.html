@@ -36,7 +36,8 @@
                 <template if:false={authenticationRequested}>
                     <div class="slds-var-p-top_small">
                         <template if:true={sendingAuthRequest}>
-                            <lightning-spinner size="small" title={labels.SEND_AUTH_REQUEST}> </lightning-spinner>
+                            <lightning-spinner size="small" title={labels.CHAT_SENDING_AUTH_REQUEST}>
+                            </lightning-spinner>
                         </template>
                         <lightning-button
                             label={labels.SEND_AUTH_REQUEST}

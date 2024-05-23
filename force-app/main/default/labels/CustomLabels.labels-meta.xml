@@ -110,4 +110,12 @@
         <shortDescription>Getting Authentication Status</shortDescription>
         <value>Getting authentication status</value>
     </labels>
+    <labels>
+        <fullName>NKS_Chat_Sending_Authentication_Request</fullName>
+        <categories>UI, Chat, Authentication</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Sending Authentication Request</shortDescription>
+        <value>Sending authentication request</value>
+    </labels>
 </CustomLabels>

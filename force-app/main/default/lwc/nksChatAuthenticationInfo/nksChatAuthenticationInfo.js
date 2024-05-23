@@ -18,6 +18,7 @@ import SEND_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Send_Authentication_
 import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
 import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
 import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
+import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
 
 export default class ChatAuthenticationOverview extends LightningElement {
     labels = {
@@ -30,7 +31,8 @@ export default class ChatAuthenticationOverview extends LightningElement {
         SEND_AUTH_REQUEST,
         CHAT_LOGIN_MSG_NO,
         CHAT_LOGIN_MSG_EN,
-        CHAT_GETTING_AUTH_STATUS
+        CHAT_GETTING_AUTH_STATUS,
+        CHAT_SENDING_AUTH_REQUEST
     };
     @api loggingEnabled; //Determines if console logging is enabled for the component
     @api recordId;
