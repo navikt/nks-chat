@@ -5,7 +5,7 @@
         flow-api-name="NKS_Chat_Send_to_Redaction_Screenflow"
         flow-button-label={labels.SET_TO_REDACTION_LABEL}
     ></c-nks-button-container-top>
-    <div class="slds-border_bottom slds-var-p-horizontal_large slds-var-p-vertical_medium">
+    <div class="slds-border_bottom slds-var-p-horizontal_medium slds-var-p-bottom_medium slds-var-p-top_small">
         <header class="slds-media slds-media_center slds-has-flexi-truncate">
             <div class="slds-media__figure">
                 <lightning-icon icon-name="standard:messaging_user" size="small"></lightning-icon>
@@ -24,7 +24,7 @@
                 <template lwc:else>
                     <template lwc:if={authenticationComplete}>
                         <lightning-badge
-                            class="slds-theme_success badge"
+                            class="slds-theme_success slds-var-p-vertical_small slds-var-p-horizontal_large badge"
                             label={labels.IDENTITY_CONFIRMED_DISCLAIMER}
                         ></lightning-badge>
                     </template>
@@ -32,7 +32,7 @@
                         <template lwc:if={authenticationStarted}></template>
                         <template lwc:else>
                             <lightning-badge
-                                class="slds-align_absolute-center badge customBadge"
+                                class="slds-align_absolute-center slds-var-p-vertical_small slds-var-p-horizontal_large badge customBadge"
                                 label={labels.AUTH_STARTED}
                             ></lightning-badge>
                         </template>
