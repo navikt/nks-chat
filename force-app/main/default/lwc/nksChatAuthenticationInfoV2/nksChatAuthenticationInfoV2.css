@@ -5,6 +5,7 @@ button {
 
 .button {
     --slds-c-button-radius-border: 15rem;
+    display: grid;
 }
 
 .customBadge {
