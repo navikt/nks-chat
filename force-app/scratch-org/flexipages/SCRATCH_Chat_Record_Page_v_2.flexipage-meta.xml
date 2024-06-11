@@ -410,19 +410,19 @@
                     <value>Chat</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>createNavTaskFlowName</name>
-                    <value>NKS_Chat_Send_NAV_Task</value>
+                    <name>flowLabels</name>
+                    <value>NKS_Journal, NKS_Create_NAV_Task</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>journalFlowName</name>
-                    <value>NKS_Journal_Chat_Thread_Screenflow</value>
+                    <name>flowNames</name>
+                    <value>NKS_Journal_Chat_Thread_Screenflow, NKS_Chat_Send_NAV_Task</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>setBorders</name>
-                    <value>true</value>
+                    <value>false</value>
                 </componentInstanceProperties>
-                <componentName>nksFlowButtonContainer</componentName>
-                <identifier>c_nksFlowButtonContainer</identifier>
+                <componentName>nksButtonContainerBottom</componentName>
+                <identifier>c_nksButtonContainerBottom</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
