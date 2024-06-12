@@ -24,7 +24,7 @@
                 <template lwc:else>
                     <template lwc:if={authenticationComplete}>
                         <lightning-badge
-                            class="slds-theme_success slds-align_absolute-center slds-var-p-vertical_x-small badge"
+                            class="slds-theme_success slds-align_absolute-center slds-button_stretch slds-var-p-vertical_medium"
                             label={labels.IDENTITY_CONFIRMED_DISCLAIMER}
                         ></lightning-badge>
                     </template>
@@ -32,7 +32,7 @@
                         <template lwc:if={authenticationStarted}></template>
                         <template lwc:else>
                             <lightning-badge
-                                class="slds-align_absolute-center slds-var-p-vertical_x-small badge customBadge"
+                                class="slds-align_absolute-center slds-button_stretch slds-var-p-vertical_medium custom-badge"
                                 label={labels.AUTH_STARTED}
                             ></lightning-badge>
                         </template>
@@ -44,14 +44,14 @@
                                 title={labels.CHAT_SENDING_AUTH_REQUEST}
                             ></lightning-spinner>
                         </template>
-                        <lightning-button
-                            class="button"
-                            label={labels.SEND_AUTH_REQUEST}
+                        <button
+                            class="slds-button slds-button_neutral slds-button_stretch slds-var-p-vertical_x-small custom-button"
                             title={labels.SEND_AUTH_REQUEST}
                             disabled={cannotInitAuth}
                             onclick={requestAuthentication}
                         >
-                        </lightning-button>
+                            {labels.SEND_AUTH_REQUEST}
+                        </button>
                     </template>
                 </template>
             </div>
