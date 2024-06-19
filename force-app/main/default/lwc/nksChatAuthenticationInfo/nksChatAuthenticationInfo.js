@@ -6,6 +6,7 @@ import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusReq
 import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
 import getCouncellorName from '@salesforce/apex/ChatAuthController.getCouncellorName';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { publishToAmplitude } from 'c/amplitude';
 
 //#### LABEL IMPORTS ####
 import AUTH_REQUESTED from '@salesforce/label/c.CRM_Chat_Authentication_Requested';
@@ -81,6 +82,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
         this.getAuthUrl();
         //Registering an error listener for handling empApi errors and potential reconnect
         this.registerErrorListener();
+        publishToAmplitude('Chat Transcript Opened');
     }
 
     registerErrorListener() {
