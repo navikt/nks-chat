@@ -4,7 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getChatInfo from '@salesforce/apex/ChatAuthController.getChatInfo';
 import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusRequested';
 import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
-import getCouncellorName from '@salesforce/apex/ChatAuthController.getCouncellorName';
+import getCounselorName from '@salesforce/apex/ChatAuthController.getCounselorName';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { publishToAmplitude } from 'c/amplitude';
 
@@ -15,8 +15,11 @@ import IDENTITY_CONFIRMED from '@salesforce/label/c.CRM_Chat_Identity_Confirmed'
 import UNCONFIRMED_IDENTITY_WARNING from '@salesforce/label/c.CRM_Chat_Unconfirmed_Identity_Warning';
 import IDENTITY_CONFIRMED_DISCLAIMER from '@salesforce/label/c.CRM_Chat_Identity_Confirmed_Disclaimer';
 import AUTH_INIT_FAILED from '@salesforce/label/c.CRM_Chat_Authentication_Init_Failed';
+import SEND_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Send_Authentication_Request';
 import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
 import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
+import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
+import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
 
 export default class ChatAuthenticationOverview extends LightningElement {
     labels = {
@@ -25,7 +28,12 @@ export default class ChatAuthenticationOverview extends LightningElement {
         IDENTITY_CONFIRMED,
         UNCONFIRMED_IDENTITY_WARNING,
         IDENTITY_CONFIRMED_DISCLAIMER,
-        AUTH_INIT_FAILED
+        AUTH_INIT_FAILED,
+        SEND_AUTH_REQUEST,
+        CHAT_LOGIN_MSG_NO,
+        CHAT_LOGIN_MSG_EN,
+        CHAT_GETTING_AUTH_STATUS,
+        CHAT_SENDING_AUTH_REQUEST
     };
     @api loggingEnabled; //Determines if console logging is enabled for the component
     @api recordId;
@@ -34,7 +42,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     @api caseFields; //Comma separated string with field names to display from the related case
     @api personFields; //Comma separated string with field names to display from the related accounts person
     @api copyPersonFields; //Comma separated string with field numbers to activate copy button
-    @api councellorName;
+
     accountId; //Transcript AccountId
     caseId; //Transcript CaseId
     personId; //Transcript Account PersonId
@@ -45,7 +53,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     chatAuthUrl;
     subscription = {}; //Unique empAPI subscription for the component instance
     loginEvtSent = false;
-
     nmbOfSecurityMeasures = 0;
     isNavEmployee = false;
     isConfidential = false;
@@ -53,7 +60,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     //#### GETTERS ####
 
     get isLoading() {
-        return this.currentAuthenticationStatus ? false : true;
+        return !this.currentAuthenticationStatus;
     }
 
     get cannotInitAuth() {
@@ -179,19 +186,18 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     sendLoginEvent() {
-        getCouncellorName({ recordId: this.recordId }).then((data) => {
-            this.councellorName = data;
+        getCounselorName({ recordId: this.recordId }).then((data) => {
             //Message defaults to norwegian
             const loginMessage =
                 this.chatLanguage === 'en_US'
                     ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                      this.councellorName +
+                      data +
                       '. ' +
-                      CHAT_LOGIN_MSG_EN
+                      this.labels.CHAT_LOGIN_MSG_EN
                     : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                      this.councellorName +
+                      data +
                       '. ' +
-                      CHAT_LOGIN_MSG_NO;
+                      this.labels.CHAT_LOGIN_MSG_NO;
 
             //Sending event handled by parent to to trigger default chat login message
             const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {

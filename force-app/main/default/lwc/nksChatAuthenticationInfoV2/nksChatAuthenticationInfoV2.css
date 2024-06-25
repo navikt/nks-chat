@@ -1,0 +1,8 @@
+.custom-button {
+    --slds-c-button-radius-border: 15rem;
+}
+
+.custom-badge {
+    --slds-c-badge-color-background: #ffb24914;
+    --slds-c-badge-color-border: #ffb249;
+}
