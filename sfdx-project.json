@@ -8,7 +8,7 @@
             "dependencies": [
                 {
                     "package": "crm-platform-base",
-                    "versionNumber": "0.218.0.LATEST"
+                    "versionNumber": "0.220.0.LATEST"
                 },
                 {
                     "package": "crm-platform-access-control",
@@ -17,10 +17,14 @@
                 {
                     "package": "crm-platform-reporting",
                     "versionNumber": "0.38.0.LATEST"
+                },                
+                {
+                    "package": "crm-shared-flowComponents",
+                    "versionNumber": "0.4.0.LATEST"
                 },
                 {
                     "package": "crm-henvendelse-base",
-                    "versionNumber": "0.18.0.LATEST"
+                    "versionNumber": "0.20.0.LATEST"
                 },
                 {
                     "package": "crm-platform-integration",
@@ -29,10 +33,6 @@
                 {
                     "package": "crm-shared-user-notification",
                     "versionNumber": "0.23.0.LATEST"
-                },
-                {
-                    "package": "crm-shared-flowComponents",
-                    "versionNumber": "0.4.0.LATEST"
                 },
                 {
                     "package": "crm-journal-utilities",
@@ -52,7 +52,7 @@
                 },
                 {
                     "package": "crm-henvendelse",
-                    "versionNumber": "0.123.0.LATEST"
+                    "versionNumber": "0.129.0.LATEST"
                 },
                 {
                     "package": "crm-sf-saf",
@@ -64,11 +64,11 @@
                 },
                 {
                     "package": "crm-nks-integration",
-                    "versionNumber": "0.64.0.LATEST"
+                    "versionNumber": "0.70.0.LATEST"
                 },
                 {
                     "package": "crm-nks-base-components",
-                    "versionNumber": "0.53.0.LATEST"
+                    "versionNumber": "0.57.0.LATEST"
                 }
             ]
         }
