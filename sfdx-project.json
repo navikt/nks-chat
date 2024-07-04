@@ -17,6 +17,10 @@
                 {
                     "package": "crm-platform-reporting",
                     "versionNumber": "0.38.0.LATEST"
+                },                
+                {
+                    "package": "crm-shared-flowComponents",
+                    "versionNumber": "0.4.0.LATEST"
                 },
                 {
                     "package": "crm-henvendelse-base",
@@ -29,10 +33,6 @@
                 {
                     "package": "crm-shared-user-notification",
                     "versionNumber": "0.23.0.LATEST"
-                },
-                {
-                    "package": "crm-shared-flowComponents",
-                    "versionNumber": "0.4.0.LATEST"
                 },
                 {
                     "package": "crm-journal-utilities",
