@@ -555,7 +555,7 @@
     <formulas>
         <name>externalReference</name>
         <dataType>String</dataType>
-        <expression>{!JOURNALED_THREAD.Id} + {!Journal_Entry_SF.Theme__c} + URLENCODE({!Journal_Sak.fagsakId})</expression>
+        <expression>{!JOURNALED_THREAD.Id} + {!Journal_Entry_SF.Theme__c} + SUBSTITUTE(URLENCODE({!Journal_Sak.fagsakId}), &apos;%&apos;, &apos;_&apos;)</expression>
     </formulas>
     <formulas>
         <description>Formula to define the journal case type (Sakstype). If no Journal Case ID has been input, default is GENERELL_SAK</description>
