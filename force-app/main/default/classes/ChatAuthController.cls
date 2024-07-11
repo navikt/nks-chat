@@ -177,6 +177,7 @@ public without sharing class ChatAuthController {
         ?.AccountId;
     }
 
+    @TestVisible
     private static Account getPersonAccount(String accountId) {
         return [
             SELECT Id, CRM_Person__c, CRM_Person__r.INT_Confidential__c, CRM_Person__r.INT_IsNavEmployee__c
