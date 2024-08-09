@@ -26,10 +26,10 @@
         const authInfoCmp = component.find('chatAuthInfo');
         let authUrl = event.getParam('authUrl');
 
-        var action = component.get('c.generateAuthMessage');
+        const action = component.get('c.generateAuthMessage');
         action.setParams({ recordId });
         action.setCallback(this, function (response) {
-            var state = response.getState();
+            const state = response.getState();
             if (state === 'SUCCESS') {
                 chatToolkit
                     .sendMessage({
@@ -45,7 +45,7 @@
             } else if (state === 'INCOMPLETE') {
                 // do something
             } else if (state === 'ERROR') {
-                var errors = response.getError();
+                const errors = response.getError();
                 if (errors) {
                     if (errors[0] && errors[0].message) {
                         console.log('Error message: ' + errors[0].message);
