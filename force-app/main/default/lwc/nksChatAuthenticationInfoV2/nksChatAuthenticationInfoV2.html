@@ -16,8 +16,7 @@
                 </h2>
             </div>
         </header>
-        <template lwc:if={hideInfo}></template>
-        <template lwc:else>
+        <template lwc:if={showInfo}>
             <div class="slds-no-flex slds-var-p-top_small">
                 <template lwc:if={isLoading}>
                     <div class="slds-var-p-vertical_small">

@@ -48,6 +48,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     lmsSubscription = null;
     loginEvtSent = false;
     hideInfo = false;
+    endTime = null;
 
     @wire(MessageContext)
     messageContext;
@@ -59,6 +60,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
             this.currentAuthenticationStatus = data.AUTH_STATUS;
             this.activeConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
             this.chatLanguage = data.CHAT_LANGUAGE;
+            this.endTime = data.END_TIME;
 
             if (this.currentAuthenticationStatus !== STATUSES.COMPLETED && !this.isLoading && !this.isEmpSubscribed) {
                 this.handleSubscribe();
@@ -100,6 +102,10 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     get isEmpSubscribed() {
         return Object.keys(this.subscription).length !== 0 && this.subscription.constructor === Object;
+    }
+
+    get showInfo() {
+        return !this.endTime && !this.hideInfo;
     }
 
     subscribeToMessageChannel() {
