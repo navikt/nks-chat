@@ -6,9 +6,3 @@
     --slds-c-badge-color-background: #ffb24914;
     --slds-c-badge-color-border: #ffb249;
 }
-
-@media only screen and (max-width: 1920px) {
-    .slds-size_6-of-12 {
-        width: auto;
-    }
-}
