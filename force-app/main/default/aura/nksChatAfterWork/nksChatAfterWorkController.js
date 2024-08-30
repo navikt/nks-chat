@@ -1,5 +1,10 @@
 ({
     handleChatEnded: function (component, event, helper) {
+        // publish event to chatMessageChannel
+        component.find('chatMessageChannel').publish({
+            chatEnded: true
+        });
+
         var type = event.getParam('type');
         if (type === 'startTimer') {
             var recordId = component.get('v.recordId');
@@ -9,6 +14,7 @@
             }
         }
     },
+
     stopTimer: function (component) {
         component.set('v.stopped', true);
         var action = component.get('c.reportThreatClick');
@@ -39,6 +45,7 @@
                 }
             }
         });
+
         $A.enqueueAction(action);
     }
 });

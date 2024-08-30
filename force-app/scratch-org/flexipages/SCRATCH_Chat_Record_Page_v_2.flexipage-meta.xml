@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
     <flexiPageRegions>
-        <name>header</name>
-        <type>Region</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>maxEARContainerHeight</name>
-                    <value>500</value>
+                    <name>relationshipField</name>
+                    <value>Account.CRM_Person__c</value>
                 </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>shouldDisplayFiltersOnRight</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentName>forceKnowledge:articleSearchDesktop</componentName>
-                <identifier>forceKnowledge_articleSearchDesktop2</identifier>
+                <componentName>nksPersonHighlightPanel</componentName>
+                <identifier>c_nksPersonHighlightPanel</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.CRM_Authentication_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Completed</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
-        <name>Facet-a07c43d6-e991-4154-8ef7-4b408bc9b797</name>
-        <type>Facet</type>
+        <name>header</name>
+        <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
@@ -70,33 +69,19 @@
                 <identifier>c_nksRecordInfo4</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-a40032d7-b947-465b-a9dd-863ff1741f07</name>
+        <name>Facet-5b9934d6-aa38-4628-85c0-62c4987238d3</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-a07c43d6-e991-4154-8ef7-4b408bc9b797</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Standard.Tab.knowledge</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>flexipage_tab3</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
                     <name>active</name>
-                    <value>false</value>
+                    <value>true</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-a40032d7-b947-465b-a9dd-863ff1741f07</value>
+                    <value>Facet-5b9934d6-aa38-4628-85c0-62c4987238d3</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
@@ -106,7 +91,7 @@
                 <identifier>flexipage_tab</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-bbc171ad-ca4d-4e9b-807c-f0c4ce9f721e</name>
+        <name>Facet-80e0a1fb-5c61-4692-8e27-577984e78e6a</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -298,24 +283,6 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>maxEARContainerHeight</name>
-                    <value>500</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>shouldDisplayFiltersOnRight</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentName>forceKnowledge:articleSearchDesktop</componentName>
-                <identifier>forceKnowledge_articleSearchDesktop</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-39057714-cfd3-45e6-a405-6830ca47711e</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
                     <name>body</name>
                     <value>Facet-9eab6cf7-77f2-47a3-9c95-6c88c9a9f26b</value>
                 </componentInstanceProperties>
@@ -327,20 +294,6 @@
                 <identifier>flexipage_tab2</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-39057714-cfd3-45e6-a405-6830ca47711e</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Standard.Tab.knowledge</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>flexipage_tab7</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>Facet-b030d591-08ce-48a2-9826-240b7f54fad5</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -349,7 +302,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>tabs</name>
-                    <value>Facet-bbc171ad-ca4d-4e9b-807c-f0c4ce9f721e</value>
+                    <value>Facet-80e0a1fb-5c61-4692-8e27-577984e78e6a</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tabset</componentName>
                 <identifier>flexipage_tabset2</identifier>
@@ -386,11 +339,35 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>maxEARContainerHeight</name>
+                    <value>500</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>shouldDisplayFiltersOnRight</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>forceKnowledge:articleSearchDesktop</componentName>
+                <identifier>forceKnowledge_articleSearchDesktop</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>rightsidebar</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>loggingEnabled</name>
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentName>nksChatAuthenticationInfoContainerV2</componentName>
                 <identifier>c_nksChatAuthenticationInfoContainerV2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>nksChatAfterWork</componentName>
+                <identifier>c_nksChatAfterWork</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -465,19 +442,13 @@
                 <identifier>nksRecordInfo2</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>nksChatAfterWork</componentName>
-                <identifier>c_nksChatAfterWork</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>leftsidebar</name>
         <type>Region</type>
     </flexiPageRegions>
     <masterLabel>SCRATCH Chat Record Page v. 2</masterLabel>
     <sobjectType>LiveChatTranscript</sobjectType>
     <template>
-        <name>flexipage:recordHomePinnedHeaderLeftSidebarTwoColTemplateDesktop</name>
+        <name>flexipage:recordHomePinnedHeaderLeftSidebarTemplateDesktop</name>
         <properties>
             <name>enablePageActionConfig</name>
             <value>false</value>

@@ -1,5 +1,5 @@
 import { LightningElement, api, wire } from 'lwc';
-import { subscribe, unsubscribe, onError } from 'lightning/empApi';
+import { subscribe as empApiSubscribe, unsubscribe, onError } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import getChatInfo from '@salesforce/apex/ChatAuthController.getChatInfo';
@@ -14,6 +14,8 @@ import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
 import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
 import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
 import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
+import { subscribe as messageServiceSubscribe, MessageContext } from 'lightning/messageService';
+import CHAT_MESSAGE_CHANNEL from '@salesforce/messageChannel/chatMessageChannel__c';
 
 const STATUSES = {
     NOT_STARTED: 'Not Started',
@@ -36,13 +38,44 @@ export default class ChatAuthenticationOverview extends LightningElement {
         CHAT_GETTING_AUTH_STATUS,
         CHAT_SENDING_AUTH_REQUEST
     };
+
     currentAuthenticationStatus;
     sendingAuthRequest = false;
     activeConversation;
     chatLanguage;
     chatAuthUrl;
     subscription = {};
+    lmsSubscription = null;
     loginEvtSent = false;
+    hideInfo = false;
+    endTime = null;
+
+    @wire(MessageContext)
+    messageContext;
+
+    @wire(getChatInfo, { chatTranscriptId: '$recordId' })
+    wiredStatus({ error, data }) {
+        if (data) {
+            this.log(data);
+            this.currentAuthenticationStatus = data.AUTH_STATUS;
+            this.activeConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
+            this.chatLanguage = data.CHAT_LANGUAGE;
+            this.endTime = data.END_TIME;
+
+            if (this.currentAuthenticationStatus !== STATUSES.COMPLETED && !this.isLoading && !this.isEmpSubscribed) {
+                this.handleSubscribe();
+            }
+        } else {
+            this.currentAuthenticationStatus = STATUSES.NOT_STARTED;
+            this.log(error);
+        }
+    }
+
+    connectedCallback() {
+        this.getAuthUrl();
+        this.registerErrorListener();
+        this.subscribeToMessageChannel();
+    }
 
     get isLoading() {
         return !this.currentAuthenticationStatus;
@@ -71,9 +104,16 @@ export default class ChatAuthenticationOverview extends LightningElement {
         return Object.keys(this.subscription).length !== 0 && this.subscription.constructor === Object;
     }
 
-    connectedCallback() {
-        this.getAuthUrl();
-        this.registerErrorListener();
+    get showInfo() {
+        return !this.endTime && !this.hideInfo;
+    }
+
+    subscribeToMessageChannel() {
+        this.lmsSubscription = messageServiceSubscribe(
+            this.messageContext,
+            CHAT_MESSAGE_CHANNEL,
+            (message) => (this.hideInfo = message)
+        );
     }
 
     registerErrorListener() {
@@ -82,23 +122,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
             this.handleUnsubscribe();
             this.handleSubscribe();
         });
-    }
-
-    @wire(getChatInfo, { chatTranscriptId: '$recordId' })
-    wiredStatus({ error, data }) {
-        if (data) {
-            this.log(data);
-            this.currentAuthenticationStatus = data.AUTH_STATUS;
-            this.activeConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
-            this.chatLanguage = data.CHAT_LANGUAGE;
-
-            if (this.currentAuthenticationStatus !== STATUSES.COMPLETED && !this.isLoading && !this.isEmpSubscribed) {
-                this.handleSubscribe();
-            }
-        } else {
-            this.currentAuthenticationStatus = STATUSES.NOT_STARTED;
-            this.log(error);
-        }
     }
 
     getAuthUrl() {
@@ -125,7 +148,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
             }
         };
 
-        subscribe('/topic/Chat_Auth_Status_Changed', -1, messageCallback)
+        empApiSubscribe('/topic/Chat_Auth_Status_Changed', -1, messageCallback)
             .then((response) => {
                 this.subscription = response;
                 console.log('Successfully subscribed to: ', JSON.stringify(response.channel));
@@ -147,7 +170,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     sendLoginEvent() {
         getCounselorName({ recordId: this.recordId }).then((data) => {
-            //Message defaults to norwegian
             const loginMessage =
                 this.chatLanguage === 'en_US'
                     ? 'You are now in a secure chat with NAV, you are chatting with ' +
@@ -159,7 +181,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
                       '. ' +
                       this.labels.CHAT_LOGIN_MSG_NO;
 
-            //Sending event handled by parent to to trigger default chat login message
             const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
                 detail: { loginMessage }
             });
