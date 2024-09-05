@@ -104,7 +104,8 @@ public without sharing class ChatAuthController {
                     Account.CRM_Person__r.NKS_NumberOfSecurityMeasures__c,
                     CaseId,
                     LiveChatButton.WindowLanguage,
-                    Status
+                    Status,
+                    EndTime
                 FROM LiveChatTranscript
                 WHERE Id = :chatTranscriptId
             ];
@@ -119,7 +120,8 @@ public without sharing class ChatAuthController {
                 'NMB_SECURITY_MEASURES' => numberOfSecurityMeasures(trans),
                 'CHAT_LANGUAGE' => String.isNotBlank(trans.LiveChatButton.WindowLanguage)
                     ? trans.LiveChatButton.WindowLanguage
-                    : 'no'
+                    : 'no',
+                'END_TIME' => string.valueOf(trans.EndTime)
             };
             return chatInfo;
         } catch (Exception ex) {

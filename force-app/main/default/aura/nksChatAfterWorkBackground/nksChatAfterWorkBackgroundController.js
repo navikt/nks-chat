@@ -22,6 +22,7 @@
                 //Errors require manual handling.
             });
     },
+
     handleThreatReport: function (component, event, helper) {
         var type = event.getParam('type');
         if (type === 'createdThreatReport') {

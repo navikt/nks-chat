@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Chat Message Channel</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Message channel for listening to chat events</description>
+</MessageChannel>
