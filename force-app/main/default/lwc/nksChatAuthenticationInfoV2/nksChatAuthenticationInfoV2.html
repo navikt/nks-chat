@@ -16,7 +16,7 @@
                 </h2>
             </div>
         </header>
-        <template lwc:if={showInfo}>
+        <template lwc:if={showAuthInfo}>
             <div class="slds-no-flex slds-var-p-top_small">
                 <template lwc:if={isLoading}>
                     <div class="slds-var-p-vertical_small">
@@ -30,22 +30,16 @@
                             label={labels.IDENTITY_CONFIRMED_DISCLAIMER}
                         ></lightning-badge>
                     </template>
-                    <template lwc:elseif={authenticationRequested}>
-                        <template lwc:if={authenticationStarted}></template>
-                        <template lwc:else>
-                            <lightning-badge
-                                class="slds-align_absolute-center slds-button_stretch slds-var-p-vertical_small custom-badge"
-                                label={labels.AUTH_STARTED}
-                            ></lightning-badge>
-                        </template>
+                    <template lwc:elseif={isAuthenticating}>
+                        <lightning-badge
+                            class="slds-align_absolute-center slds-button_stretch slds-var-p-vertical_small custom-badge"
+                            label={labels.AUTH_STARTED}
+                        ></lightning-badge>
+                    </template>
+                    <template lwc:elseif={sendingAuthRequest}>
+                        <lightning-spinner size="medium" title={labels.CHAT_SENDING_AUTH_REQUEST}></lightning-spinner>
                     </template>
                     <template lwc:else>
-                        <template lwc:if={sendingAuthRequest}>
-                            <lightning-spinner
-                                size="medium"
-                                title={labels.CHAT_SENDING_AUTH_REQUEST}
-                            ></lightning-spinner>
-                        </template>
                         <button
                             class="slds-button slds-button_brand slds-button_stretch slds-var-p-vertical_xx-small custom-button"
                             title={labels.SEND_AUTH_REQUEST}
