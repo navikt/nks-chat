@@ -21,7 +21,8 @@ const STATUSES = {
     NOT_STARTED: 'Not Started',
     IN_PROGRESS: 'In Progress',
     COMPLETED: 'Completed',
-    INPROGRESS: 'InProgress'
+    INPROGRESS: 'InProgress',
+    AUTHREQUESTED: 'Authentication Requested'
 };
 
 export default class ChatAuthenticationOverview extends LightningElement {
@@ -41,14 +42,14 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     currentAuthenticationStatus;
     sendingAuthRequest = false;
-    activeConversation;
+    isActiveConversation = true;
     chatLanguage;
     chatAuthUrl;
     subscription = {};
     lmsSubscription = null;
     loginEvtSent = false;
-    hideInfo = false;
     endTime = null;
+    chatEnded = false;
 
     @wire(MessageContext)
     messageContext;
@@ -58,7 +59,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
         if (data) {
             this.log(data);
             this.currentAuthenticationStatus = data.AUTH_STATUS;
-            this.activeConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
+            this.isActiveConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
             this.chatLanguage = data.CHAT_LANGUAGE;
             this.endTime = data.END_TIME;
 
@@ -82,18 +83,11 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     get cannotInitAuth() {
-        return !(this.activeConversation && !this.sendingAuthRequest);
+        return !(this.isActiveConversation && !this.sendingAuthRequest);
     }
 
-    get authenticationRequested() {
-        return this.currentAuthenticationStatus !== STATUSES.NOT_STARTED;
-    }
-
-    get authenticationStarted() {
-        return (
-            this.currentAuthenticationStatus === STATUSES.IN_PROGRESS ||
-            this.currentAuthenticationStatus === STATUSES.COMPLETED
-        );
+    get isAuthenticating() {
+        return this.currentAuthenticationStatus === STATUSES.AUTHREQUESTED;
     }
 
     get authenticationComplete() {
@@ -104,15 +98,15 @@ export default class ChatAuthenticationOverview extends LightningElement {
         return Object.keys(this.subscription).length !== 0 && this.subscription.constructor === Object;
     }
 
-    get showInfo() {
-        return !this.endTime && !this.hideInfo;
+    get showAuthInfo() {
+        return !this.endTime && !this.chatEnded;
     }
 
     subscribeToMessageChannel() {
         this.lmsSubscription = messageServiceSubscribe(
             this.messageContext,
             CHAT_MESSAGE_CHANNEL,
-            (message) => (this.hideInfo = message)
+            (message) => (this.chatEnded = message)
         );
     }
 
@@ -136,7 +130,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     handleSubscribe() {
         const messageCallback = (response) => {
-            console.log('AUTH STATUS UPDATED');
             const eventRecordId = response.data.sobject.Id;
             if (eventRecordId === this.recordId) {
                 this.currentAuthenticationStatus = response.data.sobject.CRM_Authentication_Status__c;
