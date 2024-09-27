@@ -1,10 +1,5 @@
 ({
     handleChatEnded: function (component, event, helper) {
-        // publish event to chatMessageChannel
-        component.find('chatMessageChannel').publish({
-            chatEnded: true
-        });
-
         var type = event.getParam('type');
         if (type === 'startTimer') {
             var recordId = component.get('v.recordId');
