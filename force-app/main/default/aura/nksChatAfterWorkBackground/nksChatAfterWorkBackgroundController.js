@@ -26,7 +26,7 @@
     handleThreatReport: function (component, event, helper) {
         var type = event.getParam('type');
         if (type === 'createdThreatReport') {
-            var recordId = event.getParam('recordId');
+            const recordId = event.getParam('recordId');
             var reportingId = event.getParam('reportingId');
             helper.storeThreatReport(component, reportingId, recordId);
         }
