@@ -12,12 +12,17 @@
     <aura:attribute name="subscription" type="Map" />
     <aura:attribute name="chatRecord" type="Object" />
     <aura:attribute name="recordLoadError" type="String" />
+    <aura:attribute name="recordIdFromChatEndedEvent" type="String" />
+    <aura:attribute name="chatEnded" type="Boolean" default="false" />
 
     <lightning:conversationToolkitApi aura:id="chatToolkit" />
     <lightning:workspaceAPI aura:id="workspace" />
     <lightning:empApi aura:id="empApi" />
 
     <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+
+    <aura:registerEvent name="appEvent" type="c:afterworkEvent" />
+    <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
 
     <force:recordData
         aura:id="recordLoader"
@@ -29,6 +34,8 @@
 
     <c:nksChatAuthenticationInfoV2
         recordId="{!v.recordId}"
+        recordIdFromChatEndedEvent="{v.recordIdFromChatEndedEvent}"
+        chatEnded="{v.chatEnded}"
         loggingEnabled="{!v.loggingEnabled}"
         onrequestauthentication="{!c.requestAuthentication}"
         onauthenticationcomplete="{!c.handleAuthCompleted}"

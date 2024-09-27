@@ -30,5 +30,19 @@
 
     handleAuthCompleted: function (component, event, helper) {
         helper.showLoginMsg(component, event);
+    },
+
+    handleChatEnded: function (component, event) {
+        const type = event.getParam('type');
+        if (type === 'startTimer') {
+            const eventRecordId = event.getParam('recordId');
+
+            component.set('v.recordIdFromChatEndedEvent', eventRecordId);
+            component.set('v.chatEnded', true);
+
+            const authInfoCmp = component.find('chatAuthInfo');
+            authInfoCmp.set('v.recordIdFromChatEndedEvent', eventRecordId);
+            authInfoCmp.set('v.chatEnded', true);
+        }
     }
 });
