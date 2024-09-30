@@ -14,8 +14,6 @@ import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
 import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
 import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
 import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
-import { subscribe as messageServiceSubscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
-import CHAT_MESSAGE_CHANNEL from '@salesforce/messageChannel/chatMessageChannel__c';
 
 const STATUSES = {
     NOT_STARTED: 'Not Started',
@@ -28,6 +26,7 @@ const STATUSES = {
 export default class ChatAuthenticationOverview extends LightningElement {
     @api recordId;
     @api loggingEnabled;
+    @api chatEnded = false;
 
     labels = {
         AUTH_STARTED,
@@ -49,10 +48,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     lmsSubscription = null;
     loginEvtSent = false;
     endTime = null;
-    chatEnded = false;
-
-    @wire(MessageContext)
-    messageContext;
 
     @wire(getChatInfo, { chatTranscriptId: '$recordId' })
     wiredStatus({ error, data }) {
@@ -75,7 +70,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     connectedCallback() {
         this.getAuthUrl();
         this.registerErrorListener();
-        this.subscribeToMessageChannel();
     }
 
     get isLoading() {
@@ -100,20 +94,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     get showAuthInfo() {
         return !this.endTime && !this.chatEnded;
-    }
-
-    subscribeToMessageChannel() {
-        this.lmsSubscription = messageServiceSubscribe(
-            this.messageContext,
-            CHAT_MESSAGE_CHANNEL,
-            (message) => {
-                const { recordId, chatEnded } = message;
-                if (recordId === this.recordId) {
-                    this.chatEnded = chatEnded;
-                }
-            },
-            { scope: APPLICATION_SCOPE }
-        );
     }
 
     registerErrorListener() {
