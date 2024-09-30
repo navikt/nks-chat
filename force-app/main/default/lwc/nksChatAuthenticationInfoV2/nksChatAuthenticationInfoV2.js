@@ -93,11 +93,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     get showAuthInfo() {
-        return !this.endTime && !this.isChatEnded;
-    }
-
-    get isChatEnded() {
-        return this.chatEnded;
+        return !this.endTime && !this.chatEnded;
     }
 
     registerErrorListener() {
