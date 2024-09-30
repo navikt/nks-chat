@@ -71,7 +71,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     connectedCallback() {
         this.getAuthUrl();
         this.registerErrorListener();
-        this.subscribeToMessageChannel();
     }
 
     get isLoading() {
