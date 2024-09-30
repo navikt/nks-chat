@@ -26,7 +26,6 @@ const STATUSES = {
 export default class ChatAuthenticationOverview extends LightningElement {
     @api recordId;
     @api loggingEnabled;
-    @api recordIdFromChatEndedEvent = '';
     @api chatEnded = false;
 
     labels = {
@@ -98,7 +97,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     get isChatEnded() {
-        return this.chatEnded && this.recordId === this.recordIdFromChatEndedEvent;
+        return this.chatEnded;
     }
 
     registerErrorListener() {

@@ -32,16 +32,12 @@
         helper.showLoginMsg(component, event);
     },
 
-    handleChatEnded: function (component, event) {
-        const type = event.getParam('type');
-        if (type === 'startTimer') {
-            const eventRecordId = event.getParam('recordId');
+    handleChatEnded: function (component, event, helper) {
+        const eventFullId = helper.convertId15To18(event.getParam('recordId'));
+        const recordId = component.get('v.recordId');
 
-            component.set('v.recordIdFromChatEndedEvent', eventRecordId);
-            component.set('v.chatEnded', true);
-
+        if (eventFullId === recordId) {
             const authInfoCmp = component.find('chatAuthInfo');
-            authInfoCmp.set('v.recordIdFromChatEndedEvent', eventRecordId);
             authInfoCmp.set('v.chatEnded', true);
         }
     }
