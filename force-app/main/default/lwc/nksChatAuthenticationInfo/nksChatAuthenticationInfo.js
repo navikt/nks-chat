@@ -186,26 +186,30 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     sendLoginEvent() {
-        getCounselorName({ recordId: this.recordId }).then((data) => {
-            //Message defaults to norwegian
-            const loginMessage =
-                this.chatLanguage === 'en_US'
-                    ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                      data +
-                      '. ' +
-                      this.labels.CHAT_LOGIN_MSG_EN
-                    : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                      data +
-                      '. ' +
-                      this.labels.CHAT_LOGIN_MSG_NO;
+        this.loginEvtSent = true;
+        getCounselorName({ recordId: this.recordId })
+            .then((data) => {
+                //Message defaults to norwegian
+                const loginMessage =
+                    this.chatLanguage === 'en_US'
+                        ? 'You are now in a secure chat with NAV, you are chatting with ' +
+                          data +
+                          '. ' +
+                          this.labels.CHAT_LOGIN_MSG_EN
+                        : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
+                          data +
+                          '. ' +
+                          this.labels.CHAT_LOGIN_MSG_NO;
 
-            //Sending event handled by parent to to trigger default chat login message
-            const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                detail: { loginMessage }
+                //Sending event handled by parent to to trigger default chat login message
+                const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
+                    detail: { loginMessage }
+                });
+                this.dispatchEvent(authenticationCompleteEvt);
+            })
+            .catch(() => {
+                this.loginEvtSent = false;
             });
-            this.dispatchEvent(authenticationCompleteEvt);
-            this.loginEvtSent = true;
-        });
     }
 
     //Sends event handled by parent to utilize conversation API to send message for init of auth process
