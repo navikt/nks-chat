@@ -167,7 +167,8 @@ export default class ChatAuthenticationOverview extends LightningElement {
                 });
                 this.dispatchEvent(authenticationCompleteEvt);
             })
-            .catch(() => {
+            .catch((err) => {
+                console.err(err);
                 this.loginEvtSent = false;
             });
     }
