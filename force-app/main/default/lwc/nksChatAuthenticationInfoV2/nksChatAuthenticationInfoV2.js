@@ -148,7 +148,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     sendLoginEvent() {
-        this.loginEvtSent = true;
         getCounselorName({ recordId: this.recordId })
             .then((data) => {
                 const loginMessage =
@@ -166,10 +165,10 @@ export default class ChatAuthenticationOverview extends LightningElement {
                     detail: { loginMessage }
                 });
                 this.dispatchEvent(authenticationCompleteEvt);
+                this.loginEvtSent = true;
             })
             .catch((err) => {
                 console.err(err);
-                this.loginEvtSent = false;
             });
     }
 
