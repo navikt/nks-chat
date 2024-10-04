@@ -148,24 +148,28 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     sendLoginEvent() {
-        getCounselorName({ recordId: this.recordId }).then((data) => {
-            const loginMessage =
-                this.chatLanguage === 'en_US'
-                    ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                      data +
-                      '. ' +
-                      this.labels.CHAT_LOGIN_MSG_EN
-                    : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                      data +
-                      '. ' +
-                      this.labels.CHAT_LOGIN_MSG_NO;
+        getCounselorName({ recordId: this.recordId })
+            .then((data) => {
+                const loginMessage =
+                    this.chatLanguage === 'en_US'
+                        ? 'You are now in a secure chat with NAV, you are chatting with ' +
+                          data +
+                          '. ' +
+                          this.labels.CHAT_LOGIN_MSG_EN
+                        : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
+                          data +
+                          '. ' +
+                          this.labels.CHAT_LOGIN_MSG_NO;
 
-            const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                detail: { loginMessage }
+                const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
+                    detail: { loginMessage }
+                });
+                this.dispatchEvent(authenticationCompleteEvt);
+                this.loginEvtSent = true;
+            })
+            .catch((err) => {
+                console.err(err);
             });
-            this.dispatchEvent(authenticationCompleteEvt);
-            this.loginEvtSent = true;
-        });
     }
 
     requestAuthentication() {
