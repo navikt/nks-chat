@@ -1,14 +1,14 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getThreadId from '@salesforce/apex/nksChatView.getThreadId';
-import markasread from '@salesforce/apex/CRM_MessageHelper.markAsRead';
+import markasread from '@salesforce/apex/CRM_MessageHelperExperience.markAsRead';
 import getChatbotMessage from '@salesforce/apex/nksChatView.getChatbotMessage';
 import { publish, MessageContext } from 'lightning/messageService';
 import globalModalOpen from '@salesforce/messageChannel/globalModalOpen__c';
 import userId from '@salesforce/user/Id';
 
 ///////////// Extra import
-import getmessages from '@salesforce/apex/CRM_MessageHelper.getMessagesFromThread';
-import getContactId from '@salesforce/apex/CRM_MessageHelper.getUserContactId';
+import getmessages from '@salesforce/apex/CRM_MessageHelperExperience.getMessagesFromThread';
+import getContactId from '@salesforce/apex/CRM_MessageHelperExperience.getUserContactId';
 
 export default class NksChatView extends LightningElement {
     @api recordId;
@@ -83,7 +83,6 @@ export default class NksChatView extends LightningElement {
     get termsModal() {
         return this.template.querySelector('c-community-modal');
     }
-
     /////////////////////////////////////////////////////////////
 
     @wire(getmessages, { threadId: '$threadId' }) //Calls apex and extracts messages related to this record
