@@ -14,19 +14,19 @@ import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
 import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
 import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
 import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
-import { subscribe as messageServiceSubscribe, MessageContext } from 'lightning/messageService';
-import CHAT_MESSAGE_CHANNEL from '@salesforce/messageChannel/chatMessageChannel__c';
 
 const STATUSES = {
     NOT_STARTED: 'Not Started',
     IN_PROGRESS: 'In Progress',
     COMPLETED: 'Completed',
-    INPROGRESS: 'InProgress'
+    INPROGRESS: 'InProgress',
+    AUTHREQUESTED: 'Authentication Requested'
 };
 
 export default class ChatAuthenticationOverview extends LightningElement {
     @api recordId;
     @api loggingEnabled;
+    @api chatEnded = false;
 
     labels = {
         AUTH_STARTED,
@@ -41,24 +41,20 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     currentAuthenticationStatus;
     sendingAuthRequest = false;
-    activeConversation;
+    isActiveConversation = true;
     chatLanguage;
     chatAuthUrl;
     subscription = {};
     lmsSubscription = null;
     loginEvtSent = false;
-    hideInfo = false;
     endTime = null;
-
-    @wire(MessageContext)
-    messageContext;
 
     @wire(getChatInfo, { chatTranscriptId: '$recordId' })
     wiredStatus({ error, data }) {
         if (data) {
             this.log(data);
             this.currentAuthenticationStatus = data.AUTH_STATUS;
-            this.activeConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
+            this.isActiveConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
             this.chatLanguage = data.CHAT_LANGUAGE;
             this.endTime = data.END_TIME;
 
@@ -74,7 +70,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
     connectedCallback() {
         this.getAuthUrl();
         this.registerErrorListener();
-        this.subscribeToMessageChannel();
     }
 
     get isLoading() {
@@ -82,18 +77,11 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     get cannotInitAuth() {
-        return !(this.activeConversation && !this.sendingAuthRequest);
+        return !(this.isActiveConversation && !this.sendingAuthRequest);
     }
 
-    get authenticationRequested() {
-        return this.currentAuthenticationStatus !== STATUSES.NOT_STARTED;
-    }
-
-    get authenticationStarted() {
-        return (
-            this.currentAuthenticationStatus === STATUSES.IN_PROGRESS ||
-            this.currentAuthenticationStatus === STATUSES.COMPLETED
-        );
+    get isAuthenticating() {
+        return this.currentAuthenticationStatus === STATUSES.AUTHREQUESTED;
     }
 
     get authenticationComplete() {
@@ -104,16 +92,8 @@ export default class ChatAuthenticationOverview extends LightningElement {
         return Object.keys(this.subscription).length !== 0 && this.subscription.constructor === Object;
     }
 
-    get showInfo() {
-        return !this.endTime && !this.hideInfo;
-    }
-
-    subscribeToMessageChannel() {
-        this.lmsSubscription = messageServiceSubscribe(
-            this.messageContext,
-            CHAT_MESSAGE_CHANNEL,
-            (message) => (this.hideInfo = message)
-        );
+    get showAuthInfo() {
+        return !this.endTime && !this.chatEnded;
     }
 
     registerErrorListener() {
@@ -136,7 +116,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     handleSubscribe() {
         const messageCallback = (response) => {
-            console.log('AUTH STATUS UPDATED');
             const eventRecordId = response.data.sobject.Id;
             if (eventRecordId === this.recordId) {
                 this.currentAuthenticationStatus = response.data.sobject.CRM_Authentication_Status__c;
@@ -169,24 +148,28 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     sendLoginEvent() {
-        getCounselorName({ recordId: this.recordId }).then((data) => {
-            const loginMessage =
-                this.chatLanguage === 'en_US'
-                    ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                      data +
-                      '. ' +
-                      this.labels.CHAT_LOGIN_MSG_EN
-                    : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                      data +
-                      '. ' +
-                      this.labels.CHAT_LOGIN_MSG_NO;
+        getCounselorName({ recordId: this.recordId })
+            .then((data) => {
+                const loginMessage =
+                    this.chatLanguage === 'en_US'
+                        ? 'You are now in a secure chat with NAV, you are chatting with ' +
+                          data +
+                          '. ' +
+                          this.labels.CHAT_LOGIN_MSG_EN
+                        : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
+                          data +
+                          '. ' +
+                          this.labels.CHAT_LOGIN_MSG_NO;
 
-            const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                detail: { loginMessage }
+                const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
+                    detail: { loginMessage }
+                });
+                this.dispatchEvent(authenticationCompleteEvt);
+                this.loginEvtSent = true;
+            })
+            .catch((err) => {
+                console.err(err);
             });
-            this.dispatchEvent(authenticationCompleteEvt);
-            this.loginEvtSent = true;
-        });
     }
 
     requestAuthentication() {

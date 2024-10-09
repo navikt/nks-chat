@@ -48,5 +48,15 @@
 
     handleAuthCompleted: function (component, event, helper) {
         helper.showLoginMsg(component, event);
+    },
+
+    handleChatEnded: function (component, event, helper) {
+        const eventFullId = helper.convertId15To18(event.getParam('recordId'));
+        const recordId = component.get('v.recordId');
+
+        if (eventFullId === recordId) {
+            const authInfoCmp = component.find('chatAuthInfo');
+            authInfoCmp.set('v.chatEnded', true);
+        }
     }
 });
