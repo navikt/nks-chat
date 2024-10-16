@@ -4,7 +4,7 @@
         <name>Route_to_default_Queue_Arbeid</name>
         <label>Route to default Queue Arbeid</label>
         <locationX>336</locationX>
-        <locationY>950</locationY>
+        <locationY>842</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -85,7 +85,7 @@
         <name>Route_to_Queue</name>
         <label>Route to Queue</label>
         <locationX>50</locationX>
-        <locationY>566</locationY>
+        <locationY>458</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -183,7 +183,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>UpdateMessagingSessionWithQueueApiName</targetReference>
+                <targetReference>Get_Queue</targetReference>
             </connector>
             <label>No</label>
         </rules>
@@ -192,7 +192,7 @@
         <name>RouteCustomerDecision</name>
         <label>Is Queue null?</label>
         <locationX>182</locationX>
-        <locationY>458</locationY>
+        <locationY>350</locationY>
         <defaultConnector>
             <targetReference>Route_to_default_Queue_Arbeid</targetReference>
         </defaultConnector>
@@ -234,7 +234,7 @@
         <name>Get_Queue</name>
         <label>Get Queue</label>
         <locationX>182</locationX>
-        <locationY>350</locationY>
+        <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>RouteCustomerDecision</targetReference>
@@ -258,30 +258,6 @@
         <object>Group</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordUpdates>
-        <name>UpdateMessagingSessionWithQueueApiName</name>
-        <label>UpdateMessagingSessionWithQueueApiName</label>
-        <locationX>182</locationX>
-        <locationY>242</locationY>
-        <connector>
-            <targetReference>Get_Queue</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Queue_Api_Name__c</field>
-            <value>
-                <elementReference>input_queueApiName</elementReference>
-            </value>
-        </inputAssignments>
-        <object>MessagingSession</object>
-    </recordUpdates>
     <runInMode>DefaultMode</runInMode>
     <sourceTemplate>omnichannel_messaging__MsgRouting</sourceTemplate>
     <start>
