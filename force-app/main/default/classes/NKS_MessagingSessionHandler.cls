@@ -10,6 +10,7 @@ global with sharing class NKS_MessagingSessionHandler extends MyTriggers {
         for (MessagingSession msgSession : (List<MessagingSession>) records) {
             MessagingSession oldRecord = (MessagingSession) triggerOldMap.get(msgSession.Id);
 
+            // TODO: Also check if authentication status = Completed. We do not want to create thread + message for unauthorized chats
             if (MyTriggers.hasChangedFields(fieldNamesToCheck, msgSession, oldRecord) && oldRecord.EndTime <= Datetime.now() && oldRecord.Status == 'Ended') {
                 messagingSessionsToConvert.add(msgSession);
             }

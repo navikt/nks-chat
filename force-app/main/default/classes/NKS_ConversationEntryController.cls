@@ -32,6 +32,7 @@ public class NKS_ConversationEntryController {
                     queryDirection,
                     recordLimit
                 );
+                System.debug('wrapper: ' + wrapper);
                 //createThreadWithMessages(wrapper, session);
             } catch (Exception e) {
                 logger.exception(e, CRM_ApplicationDomain.Domain.NKS);
@@ -96,6 +97,7 @@ public class NKS_ConversationEntryController {
             logger.publish();
         }
 
+        // TODO: Create first message as auth message
         List<Message__c> messagesToInsert = new List<Message__c>();
         for (NKS_ConversationEntryService.ConversationEntry entry : wrapper.conversationEntries) {
             if (entry.messageText != null) {
@@ -104,9 +106,9 @@ public class NKS_ConversationEntryController {
                 message.CRM_Message_Text__c = entry.messageText;
                 message.CRM_Sent_Date__c = DateTime.newInstance(entry.serverReceivedTimestamp);
                 message.CRM_Read__c = false;
-                //message.CRM_Type__c = // TODO: Need type from Boost
+                //message.CRM_Type__c = // TODO: Set type for first message to authentication message, rest can be message
                 if (entry.sender.role == 'Agent') {
-                    // TODO: Set this based on navIdentUserMap. Need more data on sender from Boost though
+                    // TODO: Set this based on navIdentUserMap. Check Sender.Subject - it contains Salesforce user ID
                     //message.CRM_From_User__c
                     //message.CRM_From_NAV_Unit__c
                 } else {
