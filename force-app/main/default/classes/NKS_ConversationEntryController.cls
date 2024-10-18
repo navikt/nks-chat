@@ -1,25 +1,22 @@
 public class NKS_ConversationEntryController {
     private static LoggerUtility logger = new LoggerUtility('Messaging');
-    private static Map<String, User> navIdentUserMap = getNavIdentUserMap();
+    private static Map<String, User> navUserInfoByUserId = getNavUserInfoByUserId();
 
     public static void convertConversationEntries(
-        List<MessagingSession> messagingSessions,
+        List<MessagingSession> msgSessions,
         Long startTimestamp,
         Long endTimestamp,
         String queryDirection,
         Integer recordLimit
     ) {
-        Set<Id> conversationIds = new Set<Id>();
-        for (MessagingSession session : messagingSessions) {
-            conversationIds.add(session.ConversationId);
+        List<Id> messagingSessionIds = new List<Id>();
+        for (MessagingSession msgSession : msgSessions) {
+            messagingSessionIds.add(msgSession.Id);
         }
+        List<MessagingSession> messagingSessions = [SELECT Id, Conversation.ConversationIdentifier, Endtime, Status, EndUserAccountId, EndUserContactId FROM MessagingSession WHERE Id IN :messagingSessionIds];
 
-        Map<String, String> conversationIdentifierByMessagingSessionId = getConversationIdentifierByMessagingSessionIdMap(
-            messagingSessions,
-            conversationIds
-        );
         for (MessagingSession session : messagingSessions) {
-            String conversationIdentifier = conversationIdentifierByMessagingSessionId.get(session.Id);
+            String conversationIdentifier = session.Conversation.ConversationIdentifier;
             if (conversationIdentifier == null) {
                 continue;
             }
@@ -33,46 +30,13 @@ public class NKS_ConversationEntryController {
                     recordLimit
                 );
                 System.debug('wrapper: ' + wrapper);
-                //createThreadWithMessages(wrapper, session);
+                createThreadWithMessages(wrapper, session);
             } catch (Exception e) {
                 logger.exception(e, CRM_ApplicationDomain.Domain.NKS);
             } finally {
                 logger.publish();
             }
         }
-    }
-
-    private static Map<Id, String> getConversationIdentifierMap(Set<Id> conversationIds) {
-        Map<Id, String> conversationIdentifierByConversationId = new Map<Id, String>();
-        List<Conversation> conversations = [
-            SELECT Id, ConversationIdentifier
-            FROM Conversation
-            WHERE Id IN :conversationIds
-        ];
-        for (Conversation convo : conversations) {
-            conversationIdentifierByConversationId.put(convo.Id, convo.ConversationIdentifier);
-        }
-
-        return conversationIdentifierByConversationId;
-    }
-
-    private static Map<String, String> getConversationIdentifierByMessagingSessionIdMap(
-        List<MessagingSession> messagingSessions,
-        Set<Id> conversationIds
-    ) {
-        Map<Id, String> conversationIdentifierByConversationId = getConversationIdentifierMap(conversationIds);
-        Map<String, String> conversationIdentifierByMessagingSessionId = new Map<String, String>();
-
-        for (MessagingSession session : messagingSessions) {
-            if (conversationIdentifierByConversationId.containsKey(session.ConversationId)) {
-                conversationIdentifierByMessagingSessionId.put(
-                    session.Id,
-                    conversationIdentifierByConversationId.get(session.ConversationId)
-                );
-            }
-        }
-
-        return conversationIdentifierByMessagingSessionId;
     }
 
     private static void createThreadWithMessages(
@@ -97,25 +61,27 @@ public class NKS_ConversationEntryController {
             logger.publish();
         }
 
-        // TODO: Create first message as auth message
         List<Message__c> messagesToInsert = new List<Message__c>();
+        messagesToInsert.add(createAuthEventMessage(session, thread));
+
         for (NKS_ConversationEntryService.ConversationEntry entry : wrapper.conversationEntries) {
-            if (entry.messageText != null) {
-                Message__c message = new Message__c();
-                message.CRM_Thread__c = thread.Id;
-                message.CRM_Message_Text__c = entry.messageText;
-                message.CRM_Sent_Date__c = DateTime.newInstance(entry.serverReceivedTimestamp);
-                message.CRM_Read__c = false;
-                //message.CRM_Type__c = // TODO: Set type for first message to authentication message, rest can be message
-                if (entry.sender.role == 'Agent') {
-                    // TODO: Set this based on navIdentUserMap. Check Sender.Subject - it contains Salesforce user ID
-                    //message.CRM_From_User__c
-                    //message.CRM_From_NAV_Unit__c
-                } else {
-                    message.CRM_From_Contact__c = session.EndUserContactId;
-                }
-                messagesToInsert.add(message);
+            if (entry.messageText == null) {
+                continue;
             }
+            Message__c message = new Message__c();
+            message.CRM_Thread__c = thread.Id;
+            message.CRM_Message_Text__c = entry.messageText;
+            message.CRM_Sent_Date__c = DateTime.newInstance(entry.serverReceivedTimestamp);
+            message.CRM_Read__c = false;
+            message.CRM_Type__c = 'Message';
+            if (entry.sender.role == 'Agent') {
+                message.CRM_From_User__c = navUserInfoByUserId.get(entry.sender.subject).Id;
+                message.CRM_From_NAV_Unit__c = navUserInfoByUserId.get(entry.sender.subject).Department;
+            } else {
+                message.CRM_From_Contact__c = session.EndUserContactId;
+            }
+            messagesToInsert.add(message);
+        
         }
 
         if (!messagesToInsert.isEmpty()) {
@@ -129,10 +95,24 @@ public class NKS_ConversationEntryController {
         }
     }
 
-    private static Map<String, User> getNavIdentUserMap() {
-        Map<String, User> navIdentUsermap = new Map<String, User>();
+    private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c chatThread) {
+        String authText = 'Startet innlogget chat'; // TODO: Figure out translation
+        /*String authText = chatTrans.LiveChatButton?.WindowLanguage == 'en_US'
+            ? 'Started authenticated chat'
+            : 'Startet innlogget chat';*/
+        return new Message__c(
+            CRM_Thread__c = chatThread.Id,
+            CRM_Type__c = 'Event',
+            //CRM_Sent_date__c = chatTrans.NKS_Authentication_Timestamp__c, // TODO: Add this custom field
+            CRM_Read__c = false,
+            CRM_Message_Text__c = authText
+        );
+    }
+
+    private static Map<String, User> getNavUserInfoByUserId() {
+        Map<String, User> navUserInfoByUserId = new Map<String, User>();
         for (User usr : [
-            SELECT Id, CRM_NAV_Ident__c, Department
+            SELECT Id, Department
             FROM User
             WHERE
                 Id IN (
@@ -144,9 +124,9 @@ public class NKS_ConversationEntryController {
                 AND CRM_NAV_Ident__c != NULL
                 AND CRM_NAV_Ident__c != ''
         ]) {
-            navIdentUsermap.put(usr.CRM_NAV_Ident__c, usr);
+            navUserInfoByUserId.put(usr.Id, usr);
         }
 
-        return navIdentUsermap;
+        return navUserInfoByUserId;
     }
 }
