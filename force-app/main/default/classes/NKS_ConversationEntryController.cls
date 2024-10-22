@@ -13,7 +13,11 @@ public class NKS_ConversationEntryController {
         for (MessagingSession msgSession : msgSessions) {
             messagingSessionIds.add(msgSession.Id);
         }
-        List<MessagingSession> messagingSessions = [SELECT Id, Conversation.ConversationIdentifier, Endtime, Status, EndUserAccountId, EndUserContactId FROM MessagingSession WHERE Id IN :messagingSessionIds];
+        List<MessagingSession> messagingSessions = [
+            SELECT Id, Conversation.ConversationIdentifier, Endtime, Status, EndUserAccountId, EndUserContactId
+            FROM MessagingSession
+            WHERE Id IN :messagingSessionIds
+        ];
 
         for (MessagingSession session : messagingSessions) {
             String conversationIdentifier = session.Conversation.ConversationIdentifier;
@@ -21,18 +25,35 @@ public class NKS_ConversationEntryController {
                 continue;
             }
 
+            HttpResponse response;
             try {
-                NKS_ConversationEntryService.ConversationEntryWrapper wrapper = NKS_ConversationEntryService.getConversationEntryMessages(
+                response = NKS_ConversationEntryService.getConversationEntryMessages(
                     conversationIdentifier,
                     startTimestamp,
                     endTimestamp,
                     queryDirection,
                     recordLimit
                 );
-                System.debug('wrapper: ' + wrapper);
-                createThreadWithMessages(wrapper, session);
+
+                if (response.getStatusCode() == 200) {
+                    ConversationEntryWrapper wrapper = (ConversationEntryWrapper) JSON.deserialize(
+                        response.getBody(),
+                        ConversationEntryWrapper.class
+                    );
+                    System.debug('wrapper: ' + wrapper);
+                    //createThreadWithMessages(wrapper, session);
+                } else {
+                    logger.httpError(
+                        'Failed to get conversation entries. Status Code: ' + response.getStatusCode(),
+                        response,
+                        null,
+                        CRM_ApplicationDomain.Domain.NKS
+                    );
+                    return;
+                }
             } catch (Exception e) {
                 logger.exception(e, CRM_ApplicationDomain.Domain.NKS);
+                return;
             } finally {
                 logger.publish();
             }
@@ -40,7 +61,7 @@ public class NKS_ConversationEntryController {
     }
 
     private static void createThreadWithMessages(
-        NKS_ConversationEntryService.ConversationEntryWrapper wrapper,
+        ConversationEntryWrapper wrapper,
         MessagingSession session
     ) {
         if (wrapper == null || wrapper.conversationEntries == null || wrapper.conversationEntries.isEmpty()) {
@@ -64,7 +85,7 @@ public class NKS_ConversationEntryController {
         List<Message__c> messagesToInsert = new List<Message__c>();
         messagesToInsert.add(createAuthEventMessage(session, thread));
 
-        for (NKS_ConversationEntryService.ConversationEntry entry : wrapper.conversationEntries) {
+        for (ConversationEntry entry : wrapper.conversationEntries) {
             if (entry.messageText == null) {
                 continue;
             }
@@ -81,7 +102,6 @@ public class NKS_ConversationEntryController {
                 message.CRM_From_Contact__c = session.EndUserContactId;
             }
             messagesToInsert.add(message);
-        
         }
 
         if (!messagesToInsert.isEmpty()) {
@@ -96,14 +116,14 @@ public class NKS_ConversationEntryController {
     }
 
     private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c chatThread) {
-        String authText = 'Startet innlogget chat'; // TODO: Figure out translation
+        String authText = 'Startet innlogget chat'; // TODO: What field will this be based on and how will it be set?
         /*String authText = chatTrans.LiveChatButton?.WindowLanguage == 'en_US'
             ? 'Started authenticated chat'
             : 'Startet innlogget chat';*/
         return new Message__c(
             CRM_Thread__c = chatThread.Id,
             CRM_Type__c = 'Event',
-            //CRM_Sent_date__c = chatTrans.NKS_Authentication_Timestamp__c, // TODO: Add this custom field
+            //CRM_Sent_date__c = chatTrans.NKS_Authentication_Timestamp__c, // TODO: Add this custom field and set it when auth is complete
             CRM_Read__c = false,
             CRM_Message_Text__c = authText
         );
@@ -128,5 +148,25 @@ public class NKS_ConversationEntryController {
         }
 
         return navUserInfoByUserId;
+    }
+
+    public class ConversationEntryWrapper {
+        public List<ConversationEntry> conversationEntries;
+    }
+
+    public class ConversationEntry {
+        public Integer clientDuration;
+        public Long clientTimestamp;
+        public String identifier;
+        public String messageText;
+        public List<String> relatedRecords;
+        public Sender sender;
+        public Long serverReceivedTimestamp;
+    }
+
+    public class Sender {
+        public String appType;
+        public String role;
+        public String subject;
     }
 }

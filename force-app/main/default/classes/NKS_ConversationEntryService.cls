@@ -1,17 +1,29 @@
 public class NKS_ConversationEntryService {
-    private static final String API_VERSION = 'v61.0';
-    private static LoggerUtility logger = new LoggerUtility('Messaging');
+    //private static final String API_VERSION = 'v61.0';
+    //private static LoggerUtility logger = new LoggerUtility('Messaging');
+    private static final String API_CONFIG_NAME = 'CONVERSATION_ENTRY_CONNECT_REST_API';
+    private static final String SERVICE_NAME = 'GET_CONVERSATION_ENTRIES';
 
-    public static ConversationEntryWrapper getConversationEntryMessages(
+    public static HttpResponse getConversationEntryMessages(
         String conversationIdentifier,
         Long startTimestamp,
         Long endTimestamp,
         String queryDirection,
         Integer recordLimit
     ) {
-        String url = buildUrl(conversationIdentifier, startTimestamp, endTimestamp, queryDirection, recordLimit);
+        //String url = buildUrl(conversationIdentifier, startTimestamp, endTimestamp, queryDirection, recordLimit);
+        Map<String, String> pathParams = new Map<String, String>{ 'conversationIdentifier' => conversationIdentifier };
+        ApiController apiCtrl = new ApiController();
+        apiCtrl.initRequest(API_CONFIG_NAME, SERVICE_NAME, pathParams);
+        apiCtrl.addServiceAuthHeader(SERVICE_AUTH_HEADER);
+        apiCtrl.addHeader('Content-Type', 'application/json');
+        apiCtrl.doCallout();
+        System.debug('response: ' + apiCtrl.getResponse());
+        return apiCtrl.getResponse();
+    }
 
-        HttpRequest req = new HttpRequest();
+
+        /*HttpRequest req = new HttpRequest();
         req.setEndpoint(System.URL.getOrgDomainUrl().toExternalForm() + url);
         req.setMethod('GET');
         req.setHeader('Authorization', 'Bearer ' + UserInfo.getSessionId());
@@ -66,25 +78,5 @@ public class NKS_ConversationEntryService {
         }
 
         return url;
-    }
-
-    public class ConversationEntryWrapper {
-        public List<ConversationEntry> conversationEntries;
-    }
-
-    public class ConversationEntry {
-        public Integer clientDuration;
-        public Long clientTimestamp;
-        public String identifier;
-        public String messageText;
-        public List<String> relatedRecords;
-        public Sender sender;
-        public Long serverReceivedTimestamp;
-    }
-
-    public class Sender {
-        public String appType;
-        public String role;
-        public String subject;
-    }
+    }*/
 }
