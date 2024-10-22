@@ -1,0 +1,6 @@
+<aura:component implements="force:recordPage" controller="NKS_ChatAfterWork">
+    <aura:attribute name="recordId" type="String" />
+    <lightning:workspaceAPI aura:id="workspace" />
+    <c:nksMessagingAfterWork recordId="{!v.recordId}"></c:nksMessagingAfterWork>
+    <aura:handler name="handleCloseTab" event="c:ChatEventChannel" action="{!c.handleCloseTab}" />
+</aura:component>
