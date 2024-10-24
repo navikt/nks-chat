@@ -8,10 +8,6 @@
                 channel,
                 -1,
                 $A.getCallback(function (eventReceived) {
-                    var sessionId = eventReceived.data.payload.MessagingSessionId__c;
-                    component.set('v.sessionClosedId', sessionId);
-                    console.log('Received event: ', sessionId);
-
                     helper.handleChatEnded(component, eventReceived, helper);
                 })
             );

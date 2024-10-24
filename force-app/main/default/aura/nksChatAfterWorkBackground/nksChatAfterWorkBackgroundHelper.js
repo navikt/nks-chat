@@ -77,8 +77,8 @@
                 helper.storeClosedChatTabId(component, eventTab.tabId, eventFullID);
                 helper.startTimer(component);
             })
-            .catch(() => {
-                // Handle any errors that occur while retrieving tab information.
+            .catch((error) => {
+                console.error('Error closing tab:', error);
             });
     }
 });
