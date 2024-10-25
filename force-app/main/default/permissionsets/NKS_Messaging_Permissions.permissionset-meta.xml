@@ -11,6 +11,11 @@
         <field>MessagingSession.EndUserLanguage</field>
         <readable>true</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>MessagingSession.Queue_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
     <label>NKS - Messaging Permissions</label>
     <objectPermissions>
