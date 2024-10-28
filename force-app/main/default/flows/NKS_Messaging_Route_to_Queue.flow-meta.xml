@@ -87,7 +87,8 @@
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
-        <description>The Route Work action is used to input the routing requirements to Omni-Channel.</description>
+        <description>The Route Work action is used to input the routing requirements to
+            Omni-Channel.</description>
         <name>Route_to_Queue</name>
         <label>Route to Queue</label>
         <locationX>50</locationX>
@@ -225,7 +226,8 @@
             <label>No</label>
         </rules>
     </decisions>
-    <description>The flow is used to route chats to the correct queue based on the Queue Api Name we get from the API</description>
+    <description>The flow is used to route chats to the correct queue based on the Queue Api Name we
+        get from the API</description>
     <environments>Default</environments>
     <interviewLabel>NKS Messaging Route to Queue {!$Flow.CurrentDateTime}</interviewLabel>
     <label>NKS Messaging Route to Queue</label>
@@ -289,7 +291,8 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>The messaging session record that is being inputted into the flow. Necessary for the flow to run.</description>
+        <description>The messaging session record that is being inputted into the flow. Necessary
+            for the flow to run.</description>
         <name>input_record</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -298,7 +301,8 @@
         <objectType>MessagingSession</objectType>
     </variables>
     <variables>
-        <description>The ID of the record being inputted into the flow. Necessary for the flow to run.</description>
+        <description>The ID of the record being inputted into the flow. Necessary for the flow to
+            run.</description>
         <name>recordId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
