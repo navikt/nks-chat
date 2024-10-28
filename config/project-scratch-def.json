@@ -1,12 +1,12 @@
 {
     "orgName": "crm-nks-chat",
-    "edition": "Enterprise",
-    "release": "Current",
+    "sourceOrg": "00D2o000000aANV",
     "adminEmail": "fakeemail@nav.no.scratchorg",
     "features": [
         "ProcessBuilder",
         "API",
         "LiveAgent",
+        "LiveMessage",
         "PersonAccounts",
         "Sites",
         "ForceComPlatform",
@@ -42,6 +42,9 @@
         },
         "liveAgentSettings": {
             "enableLiveAgent": true
+        },
+        "liveMessageSettings" {
+            "enableLiveMessage": true
         },
         "knowledgeSettings": {
             "enableKnowledge": true,
