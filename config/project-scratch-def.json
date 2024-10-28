@@ -44,7 +44,7 @@
         "liveAgentSettings": {
             "enableLiveAgent": true
         },
-        "liveMessageSettings" {
+        "liveMessageSettings": {
             "enableLiveMessage": true
         },
         "knowledgeSettings": {
