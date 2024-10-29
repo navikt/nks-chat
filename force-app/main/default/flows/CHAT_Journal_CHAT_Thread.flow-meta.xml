@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Generate_Bot_Conversation</name>
         <label>Generate Bot Conversation</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>566</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
@@ -23,13 +23,15 @@
                 <stringValue>GENERATE_DOCUMENT</stringValue>
             </value>
         </inputParameters>
+        <nameSegment>CRM_JournalUtilities</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <description>Generates the document from the human chat session</description>
         <name>Generate_Chat_Document</name>
         <label>Generate Chat Document</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>458</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
@@ -49,17 +51,19 @@
                 <stringValue>GENERATE_DOCUMENT</stringValue>
             </value>
         </inputParameters>
+        <nameSegment>CRM_JournalUtilities</nameSegment>
         <outputParameters>
             <assignToReference>PDF_DOCUMENT</assignToReference>
             <name>documentString</name>
         </outputParameters>
+        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <description>Calls journal utils to perform the API post action</description>
         <name>Post_Journal_Request</name>
         <label>Post Journal Request</label>
         <locationX>380</locationX>
-        <locationY>1406</locationY>
+        <locationY>1514</locationY>
         <actionName>CRM_JournalUtilities</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -90,14 +94,16 @@
                 <stringValue>POST_JOURNAL</stringValue>
             </value>
         </inputParameters>
+        <nameSegment>CRM_JournalUtilities</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
         <description>Add document variants to document list and assign document title</description>
         <name>Assign_Journal_Documents</name>
         <label>Assign Journal Documents</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>Chat_Journal_Documents.dokumentvarianter</assignToReference>
@@ -149,7 +155,7 @@
         <name>Assign_Journal_Entry_Default_data</name>
         <label>Assign Journal Entry Default data</label>
         <locationX>380</locationX>
-        <locationY>2114</locationY>
+        <locationY>2222</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.CRM_Journal_Date__c</assignToReference>
             <operator>Assign</operator>
@@ -165,7 +171,7 @@
         <description>Assigns needed values to document variant wrapper</description>
         <name>Chat_Document_Variant_Assignment</name>
         <label>Chat Document Variant Assignment</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>974</locationY>
         <assignmentItems>
             <assignToReference>Document_Variant_PDF.filtype</assignToReference>
@@ -217,7 +223,7 @@
         <description>Assigns needed values to the journal requests and adds the document list.</description>
         <name>Journal_Request_Assignment</name>
         <label>Journal Request Assignment</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>Journal_Request.tittel</assignToReference>
@@ -318,14 +324,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Post_Journal_Request</targetReference>
+            <targetReference>Do_callout_or_return_record</targetReference>
         </connector>
     </assignments>
     <assignments>
         <description>Assigns necessary values to the Sak wrapper for journal entry.</description>
         <name>Journal_Sak_Assignment</name>
         <label>Journal Sak Assignment</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>Journal_Sak.fagsakId</assignToReference>
@@ -356,7 +362,7 @@
         <name>Set_Journal_Entry_ID</name>
         <label>Set Journal Entry ID</label>
         <locationX>182</locationX>
-        <locationY>1922</locationY>
+        <locationY>2030</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_ID__c</assignToReference>
             <operator>Assign</operator>
@@ -378,7 +384,7 @@
     <assignments>
         <name>Set_Journal_Subtheme_Null</name>
         <label>Set Journal Subtheme Null</label>
-        <locationX>468</locationX>
+        <locationX>699</locationX>
         <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Subtheme__c</assignToReference>
@@ -392,7 +398,7 @@
         <name>Set_Post_Completed</name>
         <label>Set Post Completed</label>
         <locationX>314</locationX>
-        <locationY>1730</locationY>
+        <locationY>1838</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -408,7 +414,7 @@
         <name>Set_Post_Duplicate</name>
         <label>Set Post Duplicate</label>
         <locationX>50</locationX>
-        <locationY>1730</locationY>
+        <locationY>1838</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -424,7 +430,7 @@
         <name>Set_Post_Failed</name>
         <label>Set Post Failed</label>
         <locationX>578</locationX>
-        <locationY>1622</locationY>
+        <locationY>1730</locationY>
         <assignmentItems>
             <assignToReference>Journal_Entry_SF.Journal_Entry_Status__c</assignToReference>
             <operator>Assign</operator>
@@ -447,7 +453,7 @@
         <name>Check_if_Journal_Entry_was_duplicate</name>
         <label>Check if Journal Entry was duplicate</label>
         <locationX>182</locationX>
-        <locationY>1622</locationY>
+        <locationY>1730</locationY>
         <defaultConnector>
             <targetReference>Set_Post_Completed</targetReference>
         </defaultConnector>
@@ -472,7 +478,7 @@
         <name>Check_Post_State</name>
         <label>Check Post State</label>
         <locationX>380</locationX>
-        <locationY>1514</locationY>
+        <locationY>1622</locationY>
         <defaultConnector>
             <targetReference>Set_Post_Failed</targetReference>
         </defaultConnector>
@@ -498,7 +504,7 @@
         <name>DML_Check</name>
         <label>DML Check</label>
         <locationX>380</locationX>
-        <locationY>2222</locationY>
+        <locationY>2330</locationY>
         <defaultConnectorLabel>No DML</defaultConnectorLabel>
         <rules>
             <name>Do_DML</name>
@@ -517,10 +523,32 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Do_callout_or_return_record</name>
+        <label>Do callout or return record?</label>
+        <locationX>611</locationX>
+        <locationY>1406</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Do_callout</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>doReturnRecord</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Post_Journal_Request</targetReference>
+            </connector>
+            <label>Do callout</label>
+        </rules>
+    </decisions>
+    <decisions>
         <description>Check if the subtheme has been set for the journal entry from the parent calling the flow. If not this is strictly set to null</description>
         <name>Validate_Subtheme</name>
         <label>Validate Subtheme</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Set_Journal_Subtheme_Null</targetReference>
@@ -542,6 +570,7 @@
             <label>Subtheme Was Set</label>
         </rules>
     </decisions>
+    <environments>Default</environments>
     <formulas>
         <name>BOT_DOCUMENT_TITLE</name>
         <dataType>String</dataType>
@@ -600,7 +629,7 @@
         <description>Get necessary account information to post a journal entry</description>
         <name>Get_Account_Info</name>
         <label>Get Account Info</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -622,7 +651,7 @@
         <description>Query the case related to the chat transcript for getting the bot conversation</description>
         <name>Get_Case</name>
         <label>Get Case</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -646,7 +675,7 @@
         <description>Query the info needed from record and relations to submit a journal entry</description>
         <name>Get_Necessary_Record_Info</name>
         <label>Get Necessary Record Info</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -676,7 +705,7 @@
         <name>Update_Journal_Entry</name>
         <label>Update Journal Entry</label>
         <locationX>248</locationX>
-        <locationY>2330</locationY>
+        <locationY>2438</locationY>
         <connector>
             <targetReference>Update_Thread</targetReference>
         </connector>
@@ -686,12 +715,12 @@
         <name>Update_Thread</name>
         <label>Update Thread</label>
         <locationX>248</locationX>
-        <locationY>2438</locationY>
+        <locationY>2546</locationY>
         <inputReference>JOURNALED_THREAD</inputReference>
     </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
-        <locationX>254</locationX>
+        <locationX>485</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Necessary_Record_Info</targetReference>
@@ -733,6 +762,17 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <description>Boolean to decide if the flow makes a callout or returns the record</description>
+        <name>doReturnRecord</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
         <description>SF journal entry record to be created for a journal request</description>
         <name>Journal_Entry_SF</name>
         <dataType>SObject</dataType>
@@ -748,7 +788,7 @@
         <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
-        <isOutput>false</isOutput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <description>Wrapper object for the &quot;fagsystem sak&quot; the journal relates to</description>
