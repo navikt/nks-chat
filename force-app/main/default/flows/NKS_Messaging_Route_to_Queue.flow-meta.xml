@@ -77,6 +77,12 @@
         <inputParameters>
             <name>botLabel</name>
         </inputParameters>
+        <inputParameters>
+            <name>copilotId</name>
+        </inputParameters>
+        <inputParameters>
+            <name>copilotLabel</name>
+        </inputParameters>
         <nameSegment>routeWork</nameSegment>
         <versionSegment>1</versionSegment>
     </actionCalls>
@@ -154,6 +160,12 @@
             <name>botLabel</name>
         </inputParameters>
         <inputParameters>
+            <name>copilotId</name>
+        </inputParameters>
+        <inputParameters>
+            <name>copilotLabel</name>
+        </inputParameters>
+        <inputParameters>
             <name>isQueueVariable</name>
             <value>
                 <booleanValue>true</booleanValue>
@@ -177,7 +189,7 @@
             <name>No</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>input_queueApiName</leftValueReference>
+                <leftValueReference>input_queue</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -246,7 +258,7 @@
             <field>DeveloperName</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>input_queueApiName</elementReference>
+                <elementReference>input_queue</elementReference>
             </value>
         </filters>
         <filters>
@@ -272,7 +284,7 @@
     <status>Active</status>
     <variables>
         <description>Queue API Name from the API</description>
-        <name>input_queueApiName</name>
+        <name>input_queue</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
