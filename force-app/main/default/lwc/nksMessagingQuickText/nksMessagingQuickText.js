@@ -3,7 +3,7 @@ import getQuicktexts from '@salesforce/apex/CRM_HenvendelseQuicktextController.g
 
 const QUICK_TEXT_TRIGGER_KEYS = ['Enter', ' ', ','];
 
-export default class NksCustomChat extends LightningElement {
+export default class nksMessagingQuickText extends LightningElement {
     quickTextMap;
 
     connectedCallback() {
