@@ -9,6 +9,8 @@ private class NKS_ChatTranscriptService_Test {
 
         Case botCase = (Case) UTIL_TestDataFactory.createRecord(new Case(Description = botConversation));
 
+
+        //Tester i denne fila på tilpasses MessagingSession, vekk fra LiveChatTranscript
         List<LiveChatTranscript> transcripts = new List<LiveChatTranscript>();
         for (Integer i = 0; i < 10; i++) {
             transcripts.add(

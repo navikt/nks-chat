@@ -10,16 +10,17 @@ public class NKS_CaseBotConversationHandler_Test {
         Case botCase = (Case) UTIL_TestDataFactory.createRecord(new Case(Description = botConversation));
     }
 
+    //Test må tilpasses MessagingSession
     @isTest
     static void testConversationFormat() {
-        Case casy = [SELECT Id FROM Case LIMIT 1];
+        Case case = [SELECT Id FROM Case LIMIT 1];
         LiveChatTranscript trans = (LiveChatTranscript) UTIL_TestDataFactory.createRecord(
-            new LiveChatTranscript(CaseId = casy.Id)
+            new LiveChatTranscript(CaseId = case.Id)
         );
 
         Test.startTest();
-        casy.SourceId = trans.Id;
-        update casy;
+        case.SourceId = trans.Id;
+        update case;
         Test.stopTest();
 
         System.assertNotEquals(null, [SELECT Id, NKS_Conversation__c FROM Case LIMIT 1]?.NKS_Conversation__c);

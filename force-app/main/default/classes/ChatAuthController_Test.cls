@@ -1,10 +1,12 @@
 @isTest
 public class ChatAuthController_Test {
+    //Tester må tilpasses MessagingSession
     @TestSetup
     static void makeData() {
         Case casy = (Case) UTIL_TestDataFactory.createRecord(new Case());
         UTIL_TestDataFactory.createRecord(new LiveChatTranscript(CaseId = casy.Id));
     }
+
 
     @isTest
     static void testGetChatStatus() {
