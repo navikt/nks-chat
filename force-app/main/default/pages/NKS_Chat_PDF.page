@@ -39,7 +39,7 @@
                                     {!message.fromName}
                                 </apex:outputPanel>
                                 <apex:outputPanel rendered="{!message.externalMessage == false}">
-                                    NAV {!message.fromIdent}
+                                    Nav {!message.fromIdent}
                                 </apex:outputPanel>
                                 -
                                 <apex:outputText value=" {!message.sentDate}"> </apex:outputText>
