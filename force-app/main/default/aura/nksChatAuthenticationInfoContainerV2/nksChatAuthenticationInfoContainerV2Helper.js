@@ -20,14 +20,22 @@
         const recordId = component.get('v.recordId');
         const loginMsg = event.getParam('loginMessage');
 
-        chatToolkit
-            .sendMessage({
-                recordId: recordId,
-                message: {
-                    text: loginMsg
-                }
-            })
-            .then(function () {});
+        // Send the login message only if the user is authenticated
+        if (component.get('v.authCompletedHandled')) {
+            chatToolkit
+                .sendMessage({
+                    recordId: recordId,
+                    message: {
+                        text: loginMsg
+                    }
+                })
+                .then(function () {
+                    // Optionally log or handle success
+                })
+                .catch(function (error) {
+                    console.error('Error sending login message:', error);
+                });
+        }
     },
 
     setTabIcon: function (component, newTabId, iconName, iconAlt) {
