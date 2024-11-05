@@ -1,7 +1,24 @@
 ({
+    init: function (component, event, helper) {
+        const empApi = component.find('empApi');
+
+        if (empApi) {
+            const channel = '/event/Messaging_Session_Event__e';
+            empApi.subscribe(
+                channel,
+                -1,
+                $A.getCallback(function (eventReceived) {
+                    helper.handleChatEnded(component, eventReceived, helper);
+                })
+            );
+        } else {
+            console.error('empApi is undefined');
+        }
+    },
+
     onTabCreated: function (component, event, helper) {
-        var newTabId = event.getParam('tabId');
-        var workspace = component.find('workspace');
+        const newTabId = event.getParam('tabId');
+        const workspace = component.find('workspace');
 
         workspace.getAllTabInfo().then(function (response) {
             if (response.length === 1) {
@@ -25,40 +42,6 @@
             })
             .then(function (response) {
                 helper.setTabLabelAndIcon(component, newTabId, response.recordId);
-            });
-    },
-
-    handleChatEnded: function (component, event, helper) {
-        const chatToolkit = component.find('chatToolkit');
-        const eventRecordId = event.getParam('recordId');
-        const workspace = component.find('workspace');
-        const eventFullID = helper.convertId15To18(eventRecordId);
-
-        workspace
-            .getAllTabInfo()
-            .then((res) => {
-                const eventTab = res.find((content) => content.recordId === eventFullID);
-                if (!eventTab) return;
-                helper.setTabColor(workspace, eventTab.tabId, 'success');
-            })
-            .catch(() => {
-                //Errors require manual handling.
-            });
-
-        chatToolkit
-            .getChatLog({
-                recordId: eventRecordId
-            })
-            .then((result) => {
-                let conversation = result.messages;
-                let filteredConversation = conversation.filter(function (message) {
-                    //Filtering out all messages of type supervisor and AgentWhisper as these are "whispers" and should not be added to the journal
-                    return message.type !== 'Supervisor' && message.type !== 'AgentWhisper';
-                });
-                helper.callStoreConversation(component, filteredConversation, eventRecordId);
-            })
-            .catch(() => {
-                //Errors require manual handling.
             });
     }
 });

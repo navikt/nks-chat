@@ -4,7 +4,8 @@
 >
     <lightning:conversationToolkitApi aura:id="chatToolkit" />
     <lightning:workspaceAPI aura:id="workspace" />
+    <lightning:empApi aura:id="empApi" />
 
-    <aura:handler event="lightning:conversationChatEnded" action="{!c.handleChatEnded}" />
     <aura:handler event="lightning:tabCreated" action="{! c.onTabCreated }" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
 </aura:component>

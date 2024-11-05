@@ -20,36 +20,38 @@
     },
 
     setTabLabelAndIcon: function (component, tabId, recordId) {
-        var workspace = component.find('workspace');
-        var action = component.get('c.getChatTranscript');
+        const workspace = component.find('workspace');
+        const action = component.get('c.getMessagingSession');
 
         action.setParams({ recordId: recordId });
         action.setCallback(this, function (data) {
             if (data.getReturnValue()) {
-                //Set icon based on auth status
+                // This part is dependant to authentication for messaging
+                /*
                 if (data.getReturnValue().CRM_Authentication_Status__c === 'Completed') {
                     this.setTabIcon(workspace, tabId, 'utility:lock', 'Innlogget chat');
                 } else {
                     this.setTabIcon(workspace, tabId, 'standard:live_chat', 'Uinnlogget chat');
                 }
-
+                */
                 //Set tab label
-                if (data.getReturnValue().LiveChatButton && data.getReturnValue().LiveChatButton.MasterLabel) {
-                    let label = data.getReturnValue().LiveChatButton.MasterLabel.replace('_', ' ');
-                    let caseNumber = '';
-                    if (data.getReturnValue().Case && data.getReturnValue().Case.CaseNumber) {
-                        caseNumber = data
-                            .getReturnValue()
-                            .Case.CaseNumber.substring(data.getReturnValue().Case.CaseNumber.length - 2);
+                if (data.getReturnValue().Queue_Name__c) {
+                    let queueName = data.getReturnValue().Queue_Name__c;
+                    let label = 'Chat ' + queueName.split('_').pop();
+
+                    let tabNumber = '';
+                    if (data.getReturnValue().Name) {
+                        tabNumber = data.getReturnValue().Name.slice(-2);
                     }
 
                     workspace.setTabLabel({
                         tabId: tabId,
-                        label: `${label}${caseNumber ? ` ${caseNumber}` : ''}`
+                        label: `${label} ${tabNumber}`
                     });
                 }
+
                 //Set tab color
-                if (data.getReturnValue().Status === 'Completed') {
+                if (data.getReturnValue().Status === 'Ended') {
                     this.setTabColor(workspace, tabId, 'success');
                 }
             }
@@ -87,5 +89,39 @@
             return Id + addon;
         }
         return Id;
+    },
+
+    handleChatEnded: function (component, event, helper) {
+        const chatToolkit = component.find('chatToolkit');
+        const eventRecordId = event.getParam('recordId');
+        const workspace = component.find('workspace');
+        const eventFullID = helper.convertId15To18(eventRecordId);
+
+        workspace
+            .getAllTabInfo()
+            .then((res) => {
+                const eventTab = res.find((content) => content.recordId === eventFullID);
+                if (!eventTab) return;
+                helper.setTabColor(workspace, eventTab.tabId, 'success');
+            })
+            .catch(() => {
+                //Errors require manual handling.
+            });
+
+        chatToolkit
+            .getChatLog({
+                recordId: eventRecordId
+            })
+            .then((result) => {
+                let conversation = result.messages;
+                let filteredConversation = conversation.filter(function (message) {
+                    //Filtering out all messages of type supervisor and AgentWhisper as these are "whispers" and should not be added to the journal
+                    return message.type !== 'Supervisor' && message.type !== 'AgentWhisper';
+                });
+                helper.callStoreConversation(component, filteredConversation, eventRecordId);
+            })
+            .catch(() => {
+                //Errors require manual handling.
+            });
     }
 });
