@@ -20,7 +20,6 @@
         const recordId = component.get('v.recordId');
         const loginMsg = event.getParam('loginMessage');
 
-        // Send the login message only if the user is authenticated
         if (component.get('v.authCompletedHandled')) {
             chatToolkit
                 .sendMessage({
@@ -30,7 +29,7 @@
                     }
                 })
                 .then(function () {
-                    // Optionally log or handle success
+                    console.log('Succesfully sent login message to chat');
                 })
                 .catch(function (error) {
                     console.error('Error sending login message:', error);
