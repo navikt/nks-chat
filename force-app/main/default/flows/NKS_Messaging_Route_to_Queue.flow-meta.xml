@@ -4,9 +4,12 @@
         <name>Route_to_default_Queue_Arbeid</name>
         <label>Route to default Queue Arbeid</label>
         <locationX>336</locationX>
-        <locationY>842</locationY>
+        <locationY>1058</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
+        <connector>
+            <targetReference>Assigne_Queue_Name_Default</targetReference>
+        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recordId</name>
@@ -87,20 +90,25 @@
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
-        <description>The Route Work action is used to input the routing requirements to
-            Omni-Channel.</description>
+        <description>The Route Work action is used to input the routing requirements to Omni-Channel.</description>
         <name>Route_to_Queue</name>
         <label>Route to Queue</label>
         <locationX>50</locationX>
         <locationY>458</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
+        <connector>
+            <targetReference>Assigne_Queue_Name</targetReference>
+        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recordId</name>
             <value>
                 <elementReference>recordId</elementReference>
             </value>
+        </inputParameters>
+        <inputParameters>
+            <name>psrInteractionInfo</name>
         </inputParameters>
         <inputParameters>
             <name>serviceChannelId</name>
@@ -175,6 +183,38 @@
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>Assigne_Queue_Name</name>
+        <label>Assigne Queue Name</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>input_record.Queue_Name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>input_queue</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Queue_Name</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assigne_Queue_Name_Default</name>
+        <label>Assigne Queue Name Default</label>
+        <locationX>336</locationX>
+        <locationY>1166</locationY>
+        <assignmentItems>
+            <assignToReference>input_record.Queue_Name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>input_queue</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Queue_Name_Default</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <description>Checks if we get the Queue API Name from the api</description>
         <name>Is_Queue_Api_Name_null</name>
@@ -226,8 +266,7 @@
             <label>No</label>
         </rules>
     </decisions>
-    <description>The flow is used to route chats to the correct queue based on the Queue Api Name we
-        get from the API</description>
+    <description>The flow is used to route chats to the correct queue based on the Queue Api Name we get from the API</description>
     <environments>Default</environments>
     <interviewLabel>NKS Messaging Route to Queue {!$Flow.CurrentDateTime}</interviewLabel>
     <label>NKS Messaging Route to Queue</label>
@@ -272,6 +311,20 @@
         <object>Group</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_Queue_Name</name>
+        <label>Update Queue Name</label>
+        <locationX>50</locationX>
+        <locationY>674</locationY>
+        <inputReference>input_record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Queue_Name_Default</name>
+        <label>Update Queue Name</label>
+        <locationX>336</locationX>
+        <locationY>1274</locationY>
+        <inputReference>input_record</inputReference>
+    </recordUpdates>
     <runInMode>DefaultMode</runInMode>
     <sourceTemplate>omnichannel_messaging__MsgRouting</sourceTemplate>
     <start>
@@ -291,8 +344,7 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>The messaging session record that is being inputted into the flow. Necessary
-            for the flow to run.</description>
+        <description>The messaging session record that is being inputted into the flow. Necessary for the flow to run.</description>
         <name>input_record</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -301,8 +353,7 @@
         <objectType>MessagingSession</objectType>
     </variables>
     <variables>
-        <description>The ID of the record being inputted into the flow. Necessary for the flow to
-            run.</description>
+        <description>The ID of the record being inputted into the flow. Necessary for the flow to run.</description>
         <name>recordId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
