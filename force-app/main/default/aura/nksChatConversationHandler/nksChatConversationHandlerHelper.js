@@ -91,18 +91,18 @@
         return Id;
     },
 
-    handleChatEnded: function (component, event, helper) {
+    handleChatEnded: function (component, event) {
         const chatToolkit = component.find('chatToolkit');
-        const eventRecordId = event.getParam('recordId');
+        const eventRecordId = event.data.payload.MessagingSessionId__c;
         const workspace = component.find('workspace');
-        const eventFullID = helper.convertId15To18(eventRecordId);
+        const eventFullID = this.convertId15To18(eventRecordId);
 
         workspace
             .getAllTabInfo()
             .then((res) => {
                 const eventTab = res.find((content) => content.recordId === eventFullID);
                 if (!eventTab) return;
-                helper.setTabColor(workspace, eventTab.tabId, 'success');
+                this.setTabColor(workspace, eventTab.tabId, 'success');
             })
             .catch(() => {
                 //Errors require manual handling.
@@ -118,7 +118,7 @@
                     //Filtering out all messages of type supervisor and AgentWhisper as these are "whispers" and should not be added to the journal
                     return message.type !== 'Supervisor' && message.type !== 'AgentWhisper';
                 });
-                helper.callStoreConversation(component, filteredConversation, eventRecordId);
+                this.callStoreConversation(component, filteredConversation, eventRecordId);
             })
             .catch(() => {
                 //Errors require manual handling.

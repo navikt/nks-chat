@@ -21,14 +21,14 @@
         component.set('v.closedChatList', tabs);
     },
 
-    removeClosedChatTabId: function (component, tabId, helper) {
+    removeClosedChatTabId: function (component, tabId) {
         const tabs = component.get('v.closedChatList');
         const index = tabs.findIndex((tab) => tab.tab === tabId);
         if (index === -1) return;
         const recordId = tabs[index].recordId;
         tabs.splice(index, 1);
         component.set('v.closedChatList', tabs);
-        helper.removeThreatReport(component, recordId, helper);
+        this.removeThreatReport(component, recordId);
     },
 
     startTimer: function (component) {
@@ -47,7 +47,7 @@
         component.set('v.threatReportList', threatReportList);
     },
 
-    removeThreatReport: function (component, recordId, helper) {
+    removeThreatReport: function (component, recordId) {
         const threatReports = component.get('v.threatReportList');
         const index = threatReports.findIndex((reporting) => reporting.recordId === recordId);
         if (index === -1) return;
@@ -55,7 +55,7 @@
         const time = Date.now() - threatReports[index].time;
         threatReports.splice(index, 1);
         component.set('v.threatReportList', threatReports);
-        helper.updateThreatTime(component, reportingId, time);
+        this.updateThreatTime(component, reportingId, time);
     },
 
     updateThreatTime: function (component, reportingId, time) {
@@ -64,18 +64,18 @@
         $A.enqueueAction(action);
     },
 
-    handleChatEnded: function (component, event, helper) {
+    handleChatEnded: function (component, event) {
         const eventRecordId = event.data.payload.MessagingSessionId__c;
         const workspace = component.find('workspace');
-        const eventFullID = helper.convertId15To18(eventRecordId);
+        const eventFullID = this.convertId15To18(eventRecordId);
 
         workspace
             .getAllTabInfo()
             .then((res) => {
                 const eventTab = res.find((content) => content.recordId === eventFullID);
                 if (!eventTab) return;
-                helper.storeClosedChatTabId(component, eventTab.tabId, eventFullID);
-                helper.startTimer(component);
+                this.storeClosedChatTabId(component, eventTab.tabId, eventFullID);
+                this.startTimer(component);
             })
             .catch((error) => {
                 console.error('Error closing tab:', error);
