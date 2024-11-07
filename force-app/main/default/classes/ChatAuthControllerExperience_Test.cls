@@ -5,12 +5,12 @@ public class ChatAuthControllerExperience_Test {
         User thisUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
 
         System.runAs(thisUser) {
-            MessagingChannel geirArne = (MessagingChannel) UTIL_TestDataFactory.createRecord(new MessagingChannel());
+            MessagingChannel channel = (MessagingChannel) UTIL_TestDataFactory.createRecord(new MessagingChannel());
             UTIL_TestDataFactory.createRecord(
                 new MessagingSession(
-                    MessagingChannelId = geirArne.Id,
+                    MessagingChannelId = channel.Id,
                     MessagingEndUserId = UTIL_TestDataFactory.createRecord(
-                            new MessagingEndUser(MessagingChannelId = geirArne.Id)
+                            new MessagingEndUser(MessagingChannelId = channel.Id)
                         )
                         .Id
                 )
