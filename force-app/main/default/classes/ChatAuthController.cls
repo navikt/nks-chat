@@ -1,4 +1,9 @@
 public without sharing class ChatAuthController {
+    @AuraEnabled
+    public static void setStatusRequested(Id messagingId) {
+        ChatAuthControllerExperience.setStatus(messagingId, 'Authentication Requested');
+    }
+
     /**
      * @description: Returns the CRM_Authentication_Status__c, and status of the chat transcript
      * @author Stian Ruud Schikora | 09-04-2020
@@ -6,7 +11,7 @@ public without sharing class ChatAuthController {
      * @return messagingInfo [MAP<STRING, STRING>]
      **/
     @AuraEnabled(Cacheable=true)
-    public static Map<String, String> getMesagingInfo(String messagingId) {
+    public static Map<String, String> getMessagingInfo(String messagingId) {
         Map<String, String> messagingInfo;
         try {
             MessagingSession session = [
@@ -28,13 +33,13 @@ public without sharing class ChatAuthController {
             messagingInfo = new Map<String, String>{
                 'AUTH_STATUS' => session.CRM_Authentication_Status__c,
                 'ACCOUNTID' => session.MessagingEndUser.AccountId,
-                'CASEID' => session.CaseId,
                 'PERSONID' => session.MessagingEndUser.Account.CRM_Person__c,
                 'IS_NAV_EMPLOYEE' => isNavEmployee(session),
                 'IS_CONFIDENTIAL' => '' + personIsConfidential(session),
                 'NMB_SECURITY_MEASURES' => numberOfSecurityMeasures(session)
             };
             // TODO: Figure out the equivalent here aswell
+            // 'CASEID' => session.CaseId,
             // 'CHAT_LANGUAGE' => String.isNotBlank(session.LiveChatButton.WindowLanguage)
             // ? session.LiveChatButton.WindowLanguage
             // : 'no',

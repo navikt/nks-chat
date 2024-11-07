@@ -5,11 +5,6 @@ public without sharing class ChatAuthControllerExperience {
      * @param messagingId [STRING]
      **/
     @AuraEnabled
-    public static void setStatusRequested(Id messagingId) {
-        setStatus(messagingId, 'Authentication Requested');
-    }
-
-    @AuraEnabled
     public static void setStatusCompleted(Id messagingId) {
         setStatus(messagingId, 'Completed');
     }
@@ -46,7 +41,7 @@ public without sharing class ChatAuthControllerExperience {
         messSess.NKS_Authentication_Timestamp__c = DateTime.now();
         createChatThread(messSess, endUser);
 
-        update endUSer;
+        update endUser;
         if (String.isNotBlank(accountId)) {
             Account personAcc = getPersonAccount(accountId);
             if (
@@ -77,7 +72,7 @@ public without sharing class ChatAuthControllerExperience {
         insert chatThread;
     }
     private static MessagingSession getMessagingSession(Id messagingId) {
-        return [SELECT Id, MessagingEndUser.AccountId FROM MessagingSession WHERE Id = :messagingId];
+        return [SELECT Id, MessagingEndUser.AccountId, NKS_Theme_Group__c FROM MessagingSession WHERE Id = :messagingId];
     }
 
     /**
