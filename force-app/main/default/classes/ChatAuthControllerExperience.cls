@@ -50,7 +50,7 @@ public without sharing class ChatAuthControllerExperience {
             )
                 //Persons tagged as confidential or is NAV employees cannot be journaled - NKS-430
                 messSess.NKS_Journal_Entry_Status__c = 'Completed';
-                // System.debug('Goated');
+            // System.debug('Goated');
         }
     }
 
@@ -68,11 +68,15 @@ public without sharing class ChatAuthControllerExperience {
             CRM_isActive__c = true,
             CRM_Related_Object__c = messSess.Id,
             CRM_Theme_Group__c = messSess.NKS_Theme_Group__c
-            );
+        );
         insert chatThread;
     }
     private static MessagingSession getMessagingSession(Id messagingId) {
-        return [SELECT Id, MessagingEndUser.AccountId, NKS_Theme_Group__c FROM MessagingSession WHERE Id = :messagingId];
+        return [
+            SELECT Id, MessagingEndUser.AccountId, NKS_Theme_Group__c
+            FROM MessagingSession
+            WHERE Id = :messagingId
+        ];
     }
 
     /**

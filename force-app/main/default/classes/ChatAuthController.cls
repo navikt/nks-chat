@@ -23,13 +23,13 @@ public without sharing class ChatAuthController {
                     MessagingEndUser.Account.CRM_Person__r.INT_Confidential__c,
                     MessagingEndUser.Account.CRM_Person__r.INT_IsNavEmployee__c,
                     MessagingEndUser.Account.CRM_Person__r.NKS_NumberOfSecurityMeasures__c
-                    FROM MessagingSession
-                    WHERE Id = :messagingId
-                ];
-                // TODO: Figure out the Messaging equivalent of theses fields
-                // LiveChatButton.WindowLanguage,
-                // Status,
-                // EndTime
+                FROM MessagingSession
+                WHERE Id = :messagingId
+            ];
+            // TODO: Figure out the Messaging equivalent of theses fields
+            // LiveChatButton.WindowLanguage,
+            // Status,
+            // EndTime
             messagingInfo = new Map<String, String>{
                 'AUTH_STATUS' => session.CRM_Authentication_Status__c,
                 'ACCOUNTID' => session.MessagingEndUser.AccountId,
@@ -53,7 +53,9 @@ public without sharing class ChatAuthController {
 
     private static String personIsConfidential(MessagingSession session) {
         if (String.isNotBlank(session.MessagingEndUser.AccountId)) {
-            return session.MessagingEndUser.Account.CRM_Person__r.INT_Confidential__c.equalsIgnoreCase('UGRADERT') ? 'false' : 'true';
+            return session.MessagingEndUser.Account.CRM_Person__r.INT_Confidential__c.equalsIgnoreCase('UGRADERT')
+                ? 'false'
+                : 'true';
         }
         return 'false';
     }

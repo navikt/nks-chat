@@ -2,11 +2,19 @@
 public class ChatAuthController_Test {
     @TestSetup
     static void makeData() {
-        User thisUser = [ SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        User thisUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
 
-        System.runAs (thisUser) {
-            MessagingChannel geirArne = (MessagingChannel) UTIL_TestDataFactory.createRecord(new MessagingChannel());
-            UTIL_TestDataFactory.createRecord(new MessagingSession(MessagingChannelId = geirArne.Id, MessagingEndUserId = UTIL_TestDataFactory.createRecord(new MessagingEndUser(MessagingChannelId = geirArne.Id)).Id));
+        System.runAs(thisUser) {
+            MessagingChannel channel = (MessagingChannel) UTIL_TestDataFactory.createRecord(new MessagingChannel());
+            UTIL_TestDataFactory.createRecord(
+                new MessagingSession(
+                    MessagingChannelId = channel.Id,
+                    MessagingEndUserId = UTIL_TestDataFactory.createRecord(
+                            new MessagingEndUser(MessagingChannelId = channel.Id)
+                        )
+                        .Id
+                )
+            );
         }
     }
 
@@ -34,7 +42,6 @@ public class ChatAuthController_Test {
         System.assertEquals('Authentication Requested', updatedSession.CRM_Authentication_Status__c);
     }
 
-    
     @isTest
     static void testGetChatStatus() {
         Map<String, String> messagingStatus;

@@ -2,11 +2,19 @@
 public class ChatAuthControllerExperience_Test {
     @TestSetup
     static void makeData() {
-        User thisUser = [ SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        User thisUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
 
-        System.runAs (thisUser) {
+        System.runAs(thisUser) {
             MessagingChannel geirArne = (MessagingChannel) UTIL_TestDataFactory.createRecord(new MessagingChannel());
-            UTIL_TestDataFactory.createRecord(new MessagingSession(MessagingChannelId = geirArne.Id, MessagingEndUserId = UTIL_TestDataFactory.createRecord(new MessagingEndUser(MessagingChannelId = geirArne.Id)).Id));
+            UTIL_TestDataFactory.createRecord(
+                new MessagingSession(
+                    MessagingChannelId = geirArne.Id,
+                    MessagingEndUserId = UTIL_TestDataFactory.createRecord(
+                            new MessagingEndUser(MessagingChannelId = geirArne.Id)
+                        )
+                        .Id
+                )
+            );
         }
     }
 
@@ -36,5 +44,4 @@ public class ChatAuthControllerExperience_Test {
 
         System.assert(String.isNotBlank(communityUrl));
     }
-
 }
