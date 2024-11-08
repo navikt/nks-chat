@@ -17,6 +17,7 @@
             }, 1000);
         }
     },
+
     closeTab: function (component, eventRecordId) {
         const workspaceAPI = component.find('workspace');
         workspaceAPI
@@ -26,17 +27,18 @@
                 if (!eventTab) return;
                 workspaceAPI.closeTab({ tabId: eventTab.tabId });
             })
-            .catch(() => {
-                //Errors require manual handling.
+            .catch((error) => {
+                console.log('Error on closing tab: ', error);
             });
     },
+
     convertId15To18: function (Id) {
         if (Id.length === 15) {
-            var addon = '';
-            for (var block = 0; block < 3; block++) {
-                var loop = 0;
-                for (var position = 0; position < 5; position++) {
-                    var current = Id.charAt(block * 5 + position);
+            let addon = '';
+            for (let block = 0; block < 3; block++) {
+                let loop = 0;
+                for (let position = 0; position < 5; position++) {
+                    let current = Id.charAt(block * 5 + position);
                     if (current >= 'A' && current <= 'Z') loop += 1 << position;
                 }
                 addon += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345'.charAt(loop);

@@ -1,18 +1,38 @@
 ({
-    init: function (component, event, helper) {
-        const empApi = component.find('empApi');
+    handleChatEnded: function (component, event, helper) {
+        const type = event.getParam('type');
+        if (type === 'sessionEnded') {
+            const chatToolkit = component.find('chatToolkit');
+            const eventRecordId = event.getParam('recordId');
+            const workspace = component.find('workspace');
+            const eventFullID = helper.convertId15To18(eventRecordId);
 
-        if (empApi) {
-            const channel = '/event/Messaging_Session_Event__e';
-            empApi.subscribe(
-                channel,
-                -1,
-                $A.getCallback(function (eventReceived) {
-                    helper.handleChatEnded(component, eventReceived, helper);
+            workspace
+                .getAllTabInfo()
+                .then((res) => {
+                    const eventTab = res.find((content) => content.recordId === eventFullID);
+                    if (!eventTab) return;
+                    helper.setTabColor(workspace, eventTab.tabId, 'success');
                 })
-            );
-        } else {
-            console.error('empApi is undefined');
+                .catch((error) => {
+                    console.error('Error: ', error);
+                });
+
+            chatToolkit
+                .getChatLog({
+                    recordId: eventRecordId
+                })
+                .then((result) => {
+                    let conversation = result.messages;
+                    let filteredConversation = conversation.filter(function (message) {
+                        //Filtering out all messages of type supervisor and AgentWhisper as these are "whispers" and should not be added to the journal
+                        return message.type !== 'Supervisor' && message.type !== 'AgentWhisper';
+                    });
+                    helper.callStoreConversation(component, filteredConversation, eventRecordId);
+                })
+                .catch((error) => {
+                    console.error('Error: ', error);
+                });
         }
     },
 

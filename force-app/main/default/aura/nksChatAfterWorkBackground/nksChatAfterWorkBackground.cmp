@@ -3,10 +3,7 @@
     controller="NKS_ChatAfterWork"
 >
     <lightning:workspaceAPI aura:id="workspace" />
-    <lightning:empApi aura:id="empApi" />
-
     <aura:handler event="lightning:tabClosed" action="{!c.onTabClosed}" />
-    <aura:handler name="init" value="{!this}" action="{!c.init}" />
 
     <aura:attribute name="closedChatList" type="object[]" />
 

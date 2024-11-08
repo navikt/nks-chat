@@ -1,8 +1,12 @@
 <aura:component implements="flexipage:availableForAllPageTypes, force:hasRecordId" controller="NKS_ChatAfterWork">
     <lightning:workspaceAPI aura:id="workspace" />
 
-    <aura:registerEvent name="appEvent" type="c:afterworkEvent" />
-    <aura:handler event="c:afterworkEvent" action="{!c.handleChatEnded}" />
+    <!-- Message Channel for Conversation Ended -->
+    <lightning:messageChannel
+        type="lightning__conversationEnded"
+        scope="APPLICATION"
+        onMessage="{!c.handleChatEnded}"
+    />
 
     <aura:attribute name="timer" type="integer" default="150" />
     <aura:attribute name="maxTimer" type="integer" />

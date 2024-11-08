@@ -77,11 +77,11 @@
 
     convertId15To18: function (Id) {
         if (Id.length === 15) {
-            var addon = '';
-            for (var block = 0; block < 3; block++) {
-                var loop = 0;
-                for (var position = 0; position < 5; position++) {
-                    var current = Id.charAt(block * 5 + position);
+            let addon = '';
+            for (let block = 0; block < 3; block++) {
+                let loop = 0;
+                for (let position = 0; position < 5; position++) {
+                    let current = Id.charAt(block * 5 + position);
                     if (current >= 'A' && current <= 'Z') loop += 1 << position;
                 }
                 addon += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345'.charAt(loop);
@@ -89,39 +89,5 @@
             return Id + addon;
         }
         return Id;
-    },
-
-    handleChatEnded: function (component, event) {
-        const chatToolkit = component.find('chatToolkit');
-        const eventRecordId = event.data.payload.MessagingSessionId__c;
-        const workspace = component.find('workspace');
-        const eventFullID = this.convertId15To18(eventRecordId);
-
-        workspace
-            .getAllTabInfo()
-            .then((res) => {
-                const eventTab = res.find((content) => content.recordId === eventFullID);
-                if (!eventTab) return;
-                this.setTabColor(workspace, eventTab.tabId, 'success');
-            })
-            .catch(() => {
-                //Errors require manual handling.
-            });
-
-        chatToolkit
-            .getChatLog({
-                recordId: eventRecordId
-            })
-            .then((result) => {
-                let conversation = result.messages;
-                let filteredConversation = conversation.filter(function (message) {
-                    //Filtering out all messages of type supervisor and AgentWhisper as these are "whispers" and should not be added to the journal
-                    return message.type !== 'Supervisor' && message.type !== 'AgentWhisper';
-                });
-                this.callStoreConversation(component, filteredConversation, eventRecordId);
-            })
-            .catch(() => {
-                //Errors require manual handling.
-            });
     }
 });

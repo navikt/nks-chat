@@ -1,23 +1,28 @@
 ({
     handleChatEnded: function (component, event, helper) {
-        var type = event.getParam('type');
-        if (type === 'startTimer') {
-            var recordId = component.get('v.recordId');
-            var eventRecordId = event.getParam('recordId');
-            if (recordId === eventRecordId) {
-                helper.startTimer(component, eventRecordId);
-            }
+        const recordId = component.get('v.recordId');
+        const eventRecordId = event.getParam('recordId');
+        if (recordId === eventRecordId) {
+            helper.startTimer(component, eventRecordId);
         }
+
+        // Dispatch custom event when the session ends
+        const sessionEnded = $A.get('e.c:afterworkEvent');
+        sessionEnded.setParams({
+            recordId: eventRecordId
+        });
+        sessionEnded.setParams({ type: 'sessionEnded' });
+        sessionEnded.fire();
     },
 
     stopTimer: function (component) {
         component.set('v.stopped', true);
-        var action = component.get('c.reportThreatClick');
+        const action = component.get('c.reportThreatClick');
         action.setCallback(this, function (response) {
-            var state = response.getState();
+            const state = response.getState();
             if (state === 'SUCCESS') {
-                var reportingId = response.getReturnValue();
-                var appEvent = $A.get('e.c:afterworkEvent');
+                const reportingId = response.getReturnValue();
+                const appEvent = $A.get('e.c:afterworkEvent');
                 const recordId = component.get('v.recordId');
                 appEvent.setParams({ reportingId: reportingId });
                 appEvent.setParams({ recordId: recordId });
@@ -30,7 +35,7 @@
             } else if (state === 'INCOMPLETE') {
                 // do something
             } else if (state === 'ERROR') {
-                var errors = response.getError();
+                const errors = response.getError();
                 if (errors) {
                     if (errors[0] && errors[0].message) {
                         console.log('Error message: ' + errors[0].message);
