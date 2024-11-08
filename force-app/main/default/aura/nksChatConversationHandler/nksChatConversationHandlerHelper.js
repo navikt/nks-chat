@@ -1,18 +1,15 @@
 ({
     callStoreConversation: function (component, conversation, recordId) {
-        let storeAction = component.get('c.storeConversation');
-
+        const storeAction = component.get('c.storeConversation');
         storeAction.setParams({
             chatId: recordId,
             jsonConversation: JSON.stringify(conversation)
         });
 
         storeAction.setCallback(this, function (response) {
-            let state = response.getState();
-            if (state === 'SUCCESS') {
-                //Conversation stored successfully
-            } else {
-                //Error handling
+            const state = response.getState();
+            if (state !== 'SUCCESS') {
+                console.error('Error storing conversation:', response.getError());
             }
         });
 
@@ -22,46 +19,38 @@
     setTabLabelAndIcon: function (component, tabId, recordId) {
         const workspace = component.find('workspace');
         const action = component.get('c.getMessagingSession');
-
         action.setParams({ recordId: recordId });
-        action.setCallback(this, function (data) {
-            if (data.getReturnValue()) {
-                // This part is dependant to authentication for messaging
+
+        action.setCallback(this, function (response) {
+            const sessionInfo = response.getReturnValue();
+            if (sessionInfo) {
+                // this part is related to authentication
                 /*
-                if (data.getReturnValue().CRM_Authentication_Status__c === 'Completed') {
-                    this.setTabIcon(workspace, tabId, 'utility:lock', 'Innlogget chat');
-                } else {
-                    this.setTabIcon(workspace, tabId, 'standard:live_chat', 'Uinnlogget chat');
-                }
+                const icon = sessionInfo.CRM_Authentication_Status__c === 'Completed'
+                    ? { name: 'utility:lock', alt: 'Innlogget chat' }
+                    : { name: 'standard:live_chat', alt: 'Uinnlogget chat' };
+                this.setTabIcon(workspace, tabId, icon.name, icon.alt);
                 */
-                //Set tab label
-                if (data.getReturnValue().Queue_Name__c) {
-                    let queueName = data.getReturnValue().Queue_Name__c;
-                    let label = 'Chat ' + queueName.split('_').pop();
 
-                    let tabNumber = '';
-                    if (data.getReturnValue().Name) {
-                        tabNumber = data.getReturnValue().Name.slice(-2);
-                    }
-
-                    workspace.setTabLabel({
-                        tabId: tabId,
-                        label: `${label} ${tabNumber}`
-                    });
+                if (sessionInfo.Queue_Name__c) {
+                    const queueName = sessionInfo.Queue_Name__c.split('_').pop();
+                    const tabNumber = sessionInfo.Name ? sessionInfo.Name.slice(-2) : '';
+                    const label = `Chat ${queueName} ${tabNumber}`;
+                    workspace.setTabLabel({ tabId: tabId, label: label });
                 }
 
-                //Set tab color
-                if (data.getReturnValue().Status === 'Ended') {
+                if (sessionInfo.Status === 'Ended') {
                     this.setTabColor(workspace, tabId, 'success');
                 }
             }
         });
+
         $A.enqueueAction(action);
     },
 
-    setTabIcon: function (workspace, newTabId, iconName, iconAlt) {
+    setTabIcon: function (workspace, tabId, iconName, iconAlt) {
         workspace.setTabIcon({
-            tabId: newTabId,
+            tabId: tabId,
             icon: iconName,
             iconAlt: iconAlt
         });
@@ -76,18 +65,17 @@
     },
 
     convertId15To18: function (Id) {
-        if (Id.length === 15) {
-            let addon = '';
-            for (let block = 0; block < 3; block++) {
-                let loop = 0;
-                for (let position = 0; position < 5; position++) {
-                    let current = Id.charAt(block * 5 + position);
-                    if (current >= 'A' && current <= 'Z') loop += 1 << position;
-                }
-                addon += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345'.charAt(loop);
+        if (Id.length !== 15) return Id;
+
+        let addon = '';
+        for (let block = 0; block < 3; block++) {
+            let loop = 0;
+            for (let position = 0; position < 5; position++) {
+                const char = Id.charAt(block * 5 + position);
+                if (char >= 'A' && char <= 'Z') loop += 1 << position;
             }
-            return Id + addon;
+            addon += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345'.charAt(loop);
         }
-        return Id;
+        return Id + addon;
     }
 });

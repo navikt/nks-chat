@@ -1,7 +1,7 @@
 ({
     onTabClosed: function (component, event, helper) {
         const closedTabId = event.getParam('tabId');
-        helper.removeClosedChatTabId(component, closedTabId, helper);
+        helper.removeClosedChatTabId(component, closedTabId);
         helper.startTimer(component);
     },
 
@@ -17,8 +17,8 @@
                 if (!eventTab) return;
                 helper.storeClosedChatTabId(component, eventTab.tabId, eventFullID);
             })
-            .catch(() => {
-                //Errors require manual handling.
+            .catch((error) => {
+                console.error('Error retrieving tab info: ', error);
             });
     },
 
