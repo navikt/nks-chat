@@ -1,15 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>Create_Application_Log_Action_1</name>
+        <label>Create Application Log Action 1</label>
+        <locationX>336</locationX>
+        <locationY>134</locationY>
+        <actionName>LoggerUtility</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Is_Queue_Api_Name_null</targetReference>
+        </connector>
+        <dataTypeMappings>
+            <typeName>T__refRecord</typeName>
+            <typeValue>MessagingSession</typeValue>
+        </dataTypeMappings>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>category</name>
+            <value>
+                <stringValue>Messaging</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>domain</name>
+            <value>
+                <stringValue>NKS</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logLevel</name>
+            <value>
+                <stringValue>INFO</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logMessage</name>
+            <value>
+                <stringValue>Got da queueu</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>refRecord</name>
+            <value>
+                <elementReference>input_record</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>LoggerUtility</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
         <name>Route_to_default_Queue_Arbeid</name>
         <label>Route to default Queue Arbeid</label>
         <locationX>336</locationX>
-        <locationY>1058</locationY>
+        <locationY>1382</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
-        <connector>
-            <targetReference>Assigne_Queue_Name_Default</targetReference>
-        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recordId</name>
@@ -94,12 +139,9 @@
         <name>Route_to_Queue</name>
         <label>Route to Queue</label>
         <locationX>50</locationX>
-        <locationY>458</locationY>
+        <locationY>782</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
-        <connector>
-            <targetReference>Assigne_Queue_Name</targetReference>
-        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recordId</name>
@@ -184,6 +226,22 @@
     </actionCalls>
     <apiVersion>62.0</apiVersion>
     <assignments>
+        <name>Assign_default_Queue</name>
+        <label>Assign default Queue</label>
+        <locationX>336</locationX>
+        <locationY>1166</locationY>
+        <assignmentItems>
+            <assignToReference>input_record.Queue_Name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>NKS_Messaging_Arbeid</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_to_default_Queue_Name_Arbeid</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assigne_Queue_Name</name>
         <label>Assigne Queue Name</label>
         <locationX>50</locationX>
@@ -199,30 +257,14 @@
             <targetReference>Update_Queue_Name</targetReference>
         </connector>
     </assignments>
-    <assignments>
-        <name>Assigne_Queue_Name_Default</name>
-        <label>Assigne Queue Name Default</label>
-        <locationX>336</locationX>
-        <locationY>1166</locationY>
-        <assignmentItems>
-            <assignToReference>input_record.Queue_Name__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>input_queue</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Queue_Name_Default</targetReference>
-        </connector>
-    </assignments>
     <decisions>
         <description>Checks if we get the Queue API Name from the api</description>
         <name>Is_Queue_Api_Name_null</name>
         <label>Is Queue Api Name null?</label>
         <locationX>336</locationX>
-        <locationY>134</locationY>
+        <locationY>242</locationY>
         <defaultConnector>
-            <targetReference>Route_to_default_Queue_Arbeid</targetReference>
+            <targetReference>Assign_default_Queue</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Yes</defaultConnectorLabel>
         <rules>
@@ -245,9 +287,9 @@
         <name>RouteCustomerDecision</name>
         <label>Is Queue null?</label>
         <locationX>182</locationX>
-        <locationY>350</locationY>
+        <locationY>458</locationY>
         <defaultConnector>
-            <targetReference>Route_to_default_Queue_Arbeid</targetReference>
+            <targetReference>Assign_default_Queue</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Yes</defaultConnectorLabel>
         <rules>
@@ -261,7 +303,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Route_to_Queue</targetReference>
+                <targetReference>Assigne_Queue_Name</targetReference>
             </connector>
             <label>No</label>
         </rules>
@@ -287,7 +329,7 @@
         <name>Get_Queue</name>
         <label>Get Queue</label>
         <locationX>182</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>RouteCustomerDecision</targetReference>
@@ -316,13 +358,19 @@
         <label>Update Queue Name</label>
         <locationX>50</locationX>
         <locationY>674</locationY>
+        <connector>
+            <targetReference>Route_to_Queue</targetReference>
+        </connector>
         <inputReference>input_record</inputReference>
     </recordUpdates>
     <recordUpdates>
-        <name>Update_Queue_Name_Default</name>
-        <label>Update Queue Name</label>
+        <name>Update_to_default_Queue_Name_Arbeid</name>
+        <label>Update to default Queue Name Arbeid</label>
         <locationX>336</locationX>
         <locationY>1274</locationY>
+        <connector>
+            <targetReference>Route_to_default_Queue_Arbeid</targetReference>
+        </connector>
         <inputReference>input_record</inputReference>
     </recordUpdates>
     <runInMode>DefaultMode</runInMode>
@@ -331,7 +379,7 @@
         <locationX>210</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Is_Queue_Api_Name_null</targetReference>
+            <targetReference>Create_Application_Log_Action_1</targetReference>
         </connector>
     </start>
     <status>Active</status>
