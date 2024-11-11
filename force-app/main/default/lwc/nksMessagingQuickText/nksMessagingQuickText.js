@@ -8,6 +8,9 @@ export default class nksMessagingQuickText extends LightningElement {
 
     connectedCallback() {
         const conversationBody = document.querySelector('[data-target-selection-name="scrt_conversationBody"]');
+        if (!conversationBody) {
+            return;
+        }
         const editor = conversationBody.querySelector('textarea');
         editor.addEventListener('keyup', (event) => {
             if (QUICK_TEXT_TRIGGER_KEYS.includes(event.key)) {
