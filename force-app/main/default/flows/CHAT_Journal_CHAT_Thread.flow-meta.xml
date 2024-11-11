@@ -14,7 +14,7 @@
         <inputParameters>
             <name>documentString</name>
             <value>
-                <elementReference>Get_Case.NKS_Conversation__c</elementReference>
+                <elementReference>Get_Messaging_Session.NKS_Frida_Log__c</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -706,7 +706,7 @@
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Case</targetReference>
+            <targetReference>Get_Messaging_Session</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -722,8 +722,8 @@
     </recordLookups>
     <recordLookups>
         <description>Query the case related to the chat transcript for getting the bot conversation</description>
-        <name>Get_Case</name>
-        <label>Get Case</label>
+        <name>Get_Messaging_Session</name>
+        <label>Get Messaging Session</label>
         <locationX>446</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -732,16 +732,15 @@
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>SourceId</field>
+            <field>Id</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>JOURNALED_THREAD.CRM_Related_Object__c</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Case</object>
+        <object>MessagingSession</object>
         <queriedFields>Id</queriedFields>
-        <queriedFields>NKS_Conversation__c</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
