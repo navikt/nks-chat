@@ -24,13 +24,13 @@
         action.setCallback(this, function (response) {
             const sessionInfo = response.getReturnValue();
             if (sessionInfo) {
-                // this part is related to authentication
-                /*
-                const icon = sessionInfo.CRM_Authentication_Status__c === 'Completed'
-                    ? { name: 'utility:lock', alt: 'Innlogget chat' }
-                    : { name: 'standard:live_chat', alt: 'Uinnlogget chat' };
-                this.setTabIcon(workspace, tabId, icon.name, icon.alt);
-                */
+                if (sessionInfo.CRM_Authentication_Status__c) {
+                    const icon =
+                        sessionInfo.CRM_Authentication_Status__c === 'Completed'
+                            ? { name: 'utility:lock', alt: 'Innlogget chat' }
+                            : { name: 'standard:live_chat', alt: 'Uinnlogget chat' };
+                    this.setTabIcon(workspace, tabId, icon.name, icon.alt);
+                }
 
                 if (sessionInfo.Queue_Name__c) {
                     const queueName = sessionInfo.Queue_Name__c.split('_').pop();

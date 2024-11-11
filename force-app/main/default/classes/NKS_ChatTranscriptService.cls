@@ -291,7 +291,7 @@ global class NKS_ChatTranscriptService {
     public static MessagingSession getMessagingSession(Id recordId) {
         try {
             return [
-                SELECT Name, Queue_Name__c, Status
+                SELECT Name, Queue_Name__c, Status, CRM_Authentication_Status__c
                 FROM MessagingSession
                 WHERE Id = :recordId
             ];
