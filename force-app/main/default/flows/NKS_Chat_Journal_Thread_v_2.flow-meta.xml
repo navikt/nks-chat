@@ -15,17 +15,17 @@
             <name>Is_Authenticated</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Chat_Transcript.CRM_Authentication_Status__c</leftValueReference>
+                <leftValueReference>Get_Messaging_Session.CRM_Authentication_Status__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Completed</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Chat_Transcript.AccountId</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>Get_Messaging_Session.EndUserAccountId</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <booleanValue>false</booleanValue>
+                    <stringValue>$GlobalConstant.False</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -71,7 +71,7 @@
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Get_Chat_Transcript.AccountId</elementReference>
+                <elementReference>Get_Messaging_Session.EndUserAccountId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -79,8 +79,8 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Chat_Transcript</name>
-        <label>Get Chat Transcript</label>
+        <name>Get_Messaging_Session</name>
+        <label>Get Messaging Session</label>
         <locationX>182</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -96,10 +96,10 @@
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>LiveChatTranscript</object>
+        <object>MessagingSession</object>
         <queriedFields>Id</queriedFields>
         <queriedFields>CRM_Authentication_Status__c</queriedFields>
-        <queriedFields>AccountId</queriedFields>
+        <queriedFields>EndUserAccountId</queriedFields>
         <queriedFields>NKS_Theme_Group__c</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
@@ -118,7 +118,7 @@
             <field>CRM_Related_Object__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Get_Chat_Transcript.Id</elementReference>
+                <elementReference>Get_Messaging_Session.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -145,7 +145,7 @@
             <inputParameters>
                 <name>prefilledThemeGroup</name>
                 <value>
-                    <elementReference>Get_Chat_Transcript.NKS_Theme_Group__c</elementReference>
+                    <elementReference>Get_Messaging_Session.NKS_Theme_Group__c</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -204,7 +204,7 @@
         <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Chat_Transcript</targetReference>
+            <targetReference>Get_Messaging_Session</targetReference>
         </connector>
     </start>
     <status>Active</status>
