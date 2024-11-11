@@ -42,22 +42,5 @@
             .catch((error) => {
                 console.error('Error closing tab:', error);
             });
-    },
-
-    convertId15To18: function (Id) {
-        if (Id.length !== 15) return Id;
-
-        let addon = '';
-        for (let block = 0; block < 3; block++) {
-            let bitPattern = 0;
-            for (let position = 0; position < 5; position++) {
-                const char = Id.charAt(block * 5 + position);
-                if (char >= 'A' && char <= 'Z') {
-                    bitPattern += 1 << position;
-                }
-            }
-            addon += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345'.charAt(bitPattern);
-        }
-        return Id + addon;
     }
 });

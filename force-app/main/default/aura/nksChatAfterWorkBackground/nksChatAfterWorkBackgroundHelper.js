@@ -1,20 +1,4 @@
 ({
-    convertId15To18: function (Id) {
-        if (Id.length === 15) {
-            let addon = '';
-            for (let block = 0; block < 3; block++) {
-                let loop = 0;
-                for (let position = 0; position < 5; position++) {
-                    let current = Id.charAt(block * 5 + position);
-                    if (current >= 'A' && current <= 'Z') loop += 1 << position;
-                }
-                addon += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345'.charAt(loop);
-            }
-            return Id + addon;
-        }
-        return Id;
-    },
-
     storeClosedChatTabId: function (component, tabId, recordId) {
         const closedChatList = component.get('v.closedChatList') || [];
         closedChatList.push({ tab: tabId, recordId: recordId });

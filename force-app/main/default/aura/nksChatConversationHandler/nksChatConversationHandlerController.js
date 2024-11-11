@@ -34,12 +34,11 @@
             const eventRecordId = event.getParam('recordId');
             const workspace = component.find('workspace');
             const chatToolkit = component.find('chatToolkit');
-            const eventFullID = helper.convertId15To18(eventRecordId);
 
             workspace
                 .getAllTabInfo()
                 .then((tabInfoList) => {
-                    const eventTab = tabInfoList.find((tab) => tab.recordId === eventFullID);
+                    const eventTab = tabInfoList.find((tab) => tab.recordId === eventRecordId);
                     if (eventTab) {
                         helper.setTabColor(workspace, eventTab.tabId, 'success');
                     }
