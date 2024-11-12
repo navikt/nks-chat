@@ -118,12 +118,12 @@ export default class ChatAuthenticationOverview extends LightningElement {
     registerErrorListener() {
         onError((error) => {
             console.error('Received error from empApi: ', JSON.stringify(error));
-           /**
+            /**
             * Subscription to empApi fails, leading to an endless resubscription loop due to immediate retry in error handling.
             * This may be caused by the Chat_Auth_Status_Changed topic not existing in Salesforce.
             // TODO: Verify that the Chat_Auth_Status_Changed topic is created and accessible.
             */
-           
+
             //this.handleUnsubscribe();
             //this.handleSubscribe();
         });
