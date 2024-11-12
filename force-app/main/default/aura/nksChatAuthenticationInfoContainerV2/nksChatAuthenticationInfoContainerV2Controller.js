@@ -43,7 +43,7 @@
         helper.showLoginMsg(component, event);
     },
 
-    handleChatEnded: function (component, event, helper) {
+    handleChatEnded: function (component, event) {
         const eventRecordId = event.getParam('recordId');
         const recordId = component.get('v.recordId');
 
