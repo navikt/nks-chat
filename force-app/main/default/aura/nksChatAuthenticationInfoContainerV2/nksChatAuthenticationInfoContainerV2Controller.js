@@ -48,10 +48,7 @@
         const recordId = component.get('v.recordId');
 
         if (eventRecordId === recordId) {
-            const authInfoCmp = component.find('chatAuthInfo');
-            authInfoCmp.set('v.chatEnded', true);
-
-            component.set('v.authCompletedHandled', false); // Reset for future chats
+            component.set('v.authCompletedHandled', false);
         }
     }
 });

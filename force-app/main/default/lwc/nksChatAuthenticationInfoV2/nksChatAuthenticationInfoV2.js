@@ -2,7 +2,7 @@ import { LightningElement, api, wire } from 'lwc';
 import { subscribe as empApiSubscribe, unsubscribe, onError } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
-import getChatInfo from '@salesforce/apex/ChatAuthController.getChatInfo';
+import getMessagingInfo from '@salesforce/apex/ChatAuthController.getMessagingInfo';
 import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusRequested';
 import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
 import getCounselorName from '@salesforce/apex/ChatAuthController.getCounselorName';
@@ -14,6 +14,9 @@ import CHAT_LOGIN_MSG_NO from '@salesforce/label/c.NKS_Chat_Login_Message_NO';
 import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
 import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
 import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
+import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
+
+import ConversationEndedChannel from '@salesforce/messageChannel/lightning__conversationEnded';
 
 const STATUSES = {
     NOT_STARTED: 'Not Started',
@@ -26,7 +29,6 @@ const STATUSES = {
 export default class ChatAuthenticationOverview extends LightningElement {
     @api recordId;
     @api loggingEnabled;
-    @api chatEnded = false;
 
     labels = {
         AUTH_STARTED,
@@ -44,18 +46,19 @@ export default class ChatAuthenticationOverview extends LightningElement {
     isActiveConversation = true;
     chatLanguage;
     chatAuthUrl;
-    subscription = {};
+    empApiSubscription = {};
     lmsSubscription = null;
     loginEvtSent = false;
+    chatEnded = false;
     endTime = null;
 
-    @wire(getChatInfo, { chatTranscriptId: '$recordId' })
+    @wire(MessageContext)
+    messageContext;
+
+    @wire(getMessagingInfo, { messagingId: '$recordId' })
     wiredStatus({ error, data }) {
         if (data) {
-            this.log(data);
             this.currentAuthenticationStatus = data.AUTH_STATUS;
-            this.isActiveConversation = data.CONVERSATION_STATUS === STATUSES.INPROGRESS;
-            this.chatLanguage = data.CHAT_LANGUAGE;
             this.endTime = data.END_TIME;
 
             if (this.currentAuthenticationStatus !== STATUSES.COMPLETED && !this.isLoading && !this.isEmpSubscribed) {
@@ -70,6 +73,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     connectedCallback() {
         this.getAuthUrl();
         this.registerErrorListener();
+        this.subscribeToMessageChannel();
     }
 
     get isLoading() {
@@ -89,11 +93,27 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     get isEmpSubscribed() {
-        return Object.keys(this.subscription).length !== 0 && this.subscription.constructor === Object;
+        return Object.keys(this.empApiSubscription).length !== 0 && this.empApiSubscription.constructor === Object;
+    }
+    get showAuthInfo() {
+        return !this.chatEnded && !this.endTime;
     }
 
-    get showAuthInfo() {
-        return !this.endTime && !this.chatEnded;
+    subscribeToMessageChannel() {
+        if (!this.lmsSubscription) {
+            this.lmsSubscription = subscribe(
+                this.messageContext,
+                ConversationEndedChannel,
+                (message) => this.handleMessage(message),
+                { scope: APPLICATION_SCOPE }
+            );
+        }
+    }
+
+    handleMessage(message) {
+        if (this.recordId === message.recordId) {
+            this.chatEnded = true;
+        }
     }
 
     registerErrorListener() {
@@ -129,7 +149,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
         empApiSubscribe('/topic/Chat_Auth_Status_Changed', -1, messageCallback)
             .then((response) => {
-                this.subscription = response;
+                this.empApiSubscription = response;
                 console.log('Successfully subscribed to: ', JSON.stringify(response.channel));
             })
             .catch((error) => {
@@ -138,7 +158,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     handleUnsubscribe() {
-        unsubscribe(this.subscription)
+        unsubscribe(this.empApiSubscription)
             .then((response) => {
                 console.log('Unsubscribed: ', JSON.stringify(response));
             })
