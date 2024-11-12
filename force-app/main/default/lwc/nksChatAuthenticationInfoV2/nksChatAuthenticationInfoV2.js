@@ -2,9 +2,9 @@ import { LightningElement, api, wire } from 'lwc';
 import { subscribe as empApiSubscribe, unsubscribe, onError } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
-import getMessagingInfo from '@salesforce/apex/ChatAuthController.getMessagingInfo';
+import getChatInfo from '@salesforce/apex/ChatAuthController.getMessagingInfo';
 import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusRequested';
-import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
+import getCommunityAuthUrl from '@salesforce/apex/ChatAuthControllerExperience.getCommunityAuthUrl';
 import getCounselorName from '@salesforce/apex/ChatAuthController.getCounselorName';
 import AUTH_STARTED from '@salesforce/label/c.CRM_Chat_Authentication_Started';
 import IDENTITY_CONFIRMED_DISCLAIMER from '@salesforce/label/c.CRM_Chat_Identity_Confirmed_Disclaimer';
@@ -15,7 +15,6 @@ import CHAT_LOGIN_MSG_EN from '@salesforce/label/c.NKS_Chat_Login_Message_EN';
 import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authentication_Status';
 import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
 import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
-
 import ConversationEndedChannel from '@salesforce/messageChannel/lightning__conversationEnded';
 
 const STATUSES = {
@@ -55,7 +54,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     @wire(MessageContext)
     messageContext;
 
-    @wire(getMessagingInfo, { messagingId: '$recordId' })
+    @wire(getChatInfo, { messagingId: '$recordId' })
     wiredStatus({ error, data }) {
         if (data) {
             this.currentAuthenticationStatus = data.AUTH_STATUS;
@@ -119,8 +118,14 @@ export default class ChatAuthenticationOverview extends LightningElement {
     registerErrorListener() {
         onError((error) => {
             console.error('Received error from empApi: ', JSON.stringify(error));
-            this.handleUnsubscribe();
-            this.handleSubscribe();
+           /**
+            * Subscription to empApi fails, leading to an endless resubscription loop due to immediate retry in error handling.
+            * This may be caused by the Chat_Auth_Status_Changed topic not existing in Salesforce.
+            // TODO: Verify that the Chat_Auth_Status_Changed topic is created and accessible.
+            */
+           
+            //this.handleUnsubscribe();
+            //this.handleSubscribe();
         });
     }
 

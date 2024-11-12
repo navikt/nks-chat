@@ -31,7 +31,7 @@
     handleChatEnded: function (component, event, helper) {
         const type = event.getParam('type');
         if (type === 'sessionEnded') {
-            const eventRecordId = event.getParam('recordId');
+            const eventRecordId = event.getParam('recordId');        
             const workspace = component.find('workspace');
             const chatToolkit = component.find('chatToolkit');
 

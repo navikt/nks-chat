@@ -38,7 +38,7 @@ public without sharing class ChatAuthController {
                 'IS_NAV_EMPLOYEE' => isNavEmployee(session),
                 'IS_CONFIDENTIAL' => '' + personIsConfidential(session),
                 'NMB_SECURITY_MEASURES' => numberOfSecurityMeasures(session),
-                'END_TIME' => string.valueOf(session.EndTime),
+                'END_TIME' => string.valueOf(session.EndTime)
             };
             // TODO: Figure out the equivalent here aswell
             // 'CASEID' => session.CaseId,
