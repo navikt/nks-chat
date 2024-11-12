@@ -22,10 +22,10 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Get_Messaging_Session.EndUserAccountId</leftValueReference>
-                <operator>EqualTo</operator>
+                <leftValueReference>Get_Messaging_Session.MessagingEndUser.AccountId</leftValueReference>
+                <operator>IsNull</operator>
                 <rightValue>
-                    <stringValue>$GlobalConstant.False</stringValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -71,7 +71,7 @@
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Get_Messaging_Session.EndUserAccountId</elementReference>
+                <elementReference>Get_Messaging_Session.MessagingEndUser.AccountId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -99,7 +99,7 @@
         <object>MessagingSession</object>
         <queriedFields>Id</queriedFields>
         <queriedFields>CRM_Authentication_Status__c</queriedFields>
-        <queriedFields>EndUserAccountId</queriedFields>
+        <queriedFields>MessagingEndUserId</queriedFields>
         <queriedFields>NKS_Theme_Group__c</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
