@@ -17,7 +17,8 @@
         "Knowledge",
         "LightningServiceConsole",
         "FIELDSERVICE:1",
-        "LiveMessage"
+        "LiveMessage",
+        "OrgCapitalizeRecordTypes"
     ],
     "country": "NO",
     "language": "en_US",
