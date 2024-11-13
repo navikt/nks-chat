@@ -33,7 +33,6 @@
         if (type === 'sessionEnded') {
             const eventRecordId = event.getParam('recordId');
             const workspace = component.find('workspace');
-            const chatToolkit = component.find('chatToolkit');
 
             workspace
                 .getAllTabInfo()
@@ -48,18 +47,6 @@
                 })
                 .catch((error) => {
                     console.error('Error retrieving tab info for setting color:', error);
-                });
-
-            chatToolkit
-                .getChatLog({ recordId: eventRecordId })
-                .then((chatLog) => {
-                    const filteredConversation = chatLog.messages.filter(
-                        (message) => message.type !== 'Supervisor' && message.type !== 'AgentWhisper'
-                    );
-                    helper.callStoreConversation(component, filteredConversation, eventRecordId);
-                })
-                .catch((error) => {
-                    console.error('Error retrieving chat log:', error);
                 });
         }
     }

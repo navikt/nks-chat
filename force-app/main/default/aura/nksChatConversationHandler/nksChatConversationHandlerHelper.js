@@ -1,21 +1,4 @@
 ({
-    callStoreConversation: function (component, conversation, recordId) {
-        const storeAction = component.get('c.storeConversation');
-        storeAction.setParams({
-            chatId: recordId,
-            jsonConversation: JSON.stringify(conversation)
-        });
-
-        storeAction.setCallback(this, function (response) {
-            const state = response.getState();
-            if (state !== 'SUCCESS') {
-                console.error('Error storing conversation:', response.getError());
-            }
-        });
-
-        $A.enqueueAction(storeAction);
-    },
-
     setTabLabelAndIcon: function (component, tabId, recordId) {
         const workspace = component.find('workspace');
         const action = component.get('c.getMessagingSession');
