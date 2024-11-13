@@ -40,7 +40,10 @@
                 .then((tabInfoList) => {
                     const eventTab = tabInfoList.find((tab) => tab.recordId === eventRecordId);
                     if (eventTab) {
-                        helper.setTabColor(workspace, eventTab.tabId, 'success');
+                        // eslint-disable-next-line @lwc/lwc/no-async-operation, @locker/locker/distorted-window-set-timeout
+                        setTimeout(() => {
+                            helper.setTabColor(workspace, eventTab.tabId, 'success');
+                        }, 1000);
                     }
                 })
                 .catch((error) => {
