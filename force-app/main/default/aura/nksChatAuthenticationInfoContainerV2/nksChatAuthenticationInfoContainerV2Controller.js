@@ -1,14 +1,4 @@
 ({
-    onInit: function (component, event, helper) {
-        const empApi = component.find('empApi');
-        empApi.onError(
-            $A.getCallback((error) => {
-                console.error('EMP API error: ', JSON.stringify(error));
-            })
-        );
-        helper.subscribeEmpApi(component);
-    },
-
     requestAuthentication: function (component, event) {
         const chatToolkit = component.find('chatToolkit');
         const recordId = component.get('v.recordId');
@@ -53,15 +43,12 @@
         helper.showLoginMsg(component, event);
     },
 
-    handleChatEnded: function (component, event, helper) {
-        const eventFullId = helper.convertId15To18(event.getParam('recordId'));
+    handleChatEnded: function (component, event) {
+        const eventRecordId = event.getParam('recordId');
         const recordId = component.get('v.recordId');
 
-        if (eventFullId === recordId) {
-            const authInfoCmp = component.find('chatAuthInfo');
-            authInfoCmp.set('v.chatEnded', true);
-
-            component.set('v.authCompletedHandled', false); // Reset for future chats
+        if (eventRecordId === recordId) {
+            component.set('v.authCompletedHandled', false);
         }
     }
 });

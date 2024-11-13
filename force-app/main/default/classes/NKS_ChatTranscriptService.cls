@@ -286,4 +286,17 @@ global class NKS_ChatTranscriptService {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    @AuraEnabled
+    public static MessagingSession getMessagingSession(Id recordId) {
+        try {
+            return [
+                SELECT Name, Queue_Name__c, Status, CRM_Authentication_Status__c
+                FROM MessagingSession
+                WHERE Id = :recordId
+            ];
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }
