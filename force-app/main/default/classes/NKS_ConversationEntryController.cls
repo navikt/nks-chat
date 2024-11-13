@@ -35,6 +35,9 @@ public class NKS_ConversationEntryController {
                     recordLimit
                 );
 
+                logger.info('MessagingSession response' + response, null, CRM_ApplicationDomain.Domain.NKS);
+                logger.publish();
+                System.debug('response: ' + response);
                 if (response.getStatusCode() == 200) {
                     ConversationEntryWrapper wrapper = (ConversationEntryWrapper) JSON.deserialize(
                         response.getBody(),
@@ -83,6 +86,7 @@ public class NKS_ConversationEntryController {
         }
 
         List<Message__c> messagesToInsert = new List<Message__c>();
+        // TODO: Find a way to separate chat bot messages from user messages and add them before auth message
         messagesToInsert.add(createAuthEventMessage(session, thread));
 
         for (ConversationEntry entry : wrapper.conversationEntries) {
@@ -116,8 +120,8 @@ public class NKS_ConversationEntryController {
     }
 
     private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c chatThread) {
-        String authText = 'Startet innlogget chat'; // TODO: What field will this be based on and how will it be set?
-        /*String authText = chatTrans.LiveChatButton?.WindowLanguage == 'en_US'
+        String authText = 'Startet innlogget chat'; // TODO: How will EndUserLanguage be set?
+        /*String authText = msgSession.EndUserLanguage == 'en'
             ? 'Started authenticated chat'
             : 'Startet innlogget chat';*/
         return new Message__c(
