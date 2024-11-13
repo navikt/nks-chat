@@ -22,7 +22,8 @@ public without sharing class ChatAuthController {
                     MessagingEndUser.Account.CRM_Person__c,
                     MessagingEndUser.Account.CRM_Person__r.INT_Confidential__c,
                     MessagingEndUser.Account.CRM_Person__r.INT_IsNavEmployee__c,
-                    MessagingEndUser.Account.CRM_Person__r.NKS_NumberOfSecurityMeasures__c
+                    MessagingEndUser.Account.CRM_Person__r.NKS_NumberOfSecurityMeasures__c,
+                    EndTime
                 FROM MessagingSession
                 WHERE Id = :messagingId
             ];
@@ -36,7 +37,8 @@ public without sharing class ChatAuthController {
                 'PERSONID' => session.MessagingEndUser.Account.CRM_Person__c,
                 'IS_NAV_EMPLOYEE' => isNavEmployee(session),
                 'IS_CONFIDENTIAL' => '' + personIsConfidential(session),
-                'NMB_SECURITY_MEASURES' => numberOfSecurityMeasures(session)
+                'NMB_SECURITY_MEASURES' => numberOfSecurityMeasures(session),
+                'END_TIME' => string.valueOf(session.EndTime)
             };
             // TODO: Figure out the equivalent here aswell
             // 'CASEID' => session.CaseId,
