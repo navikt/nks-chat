@@ -1,9 +1,9 @@
 import { LightningElement, api, wire } from 'lwc';
 import { subscribe, unsubscribe, onError } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import getChatInfo from '@salesforce/apex/ChatAuthController.getChatInfo';
+import getChatInfo from '@salesforce/apex/ChatAuthController.getMessagingInfo';
 import setStatusRequested from '@salesforce/apex/ChatAuthController.setStatusRequested';
-import getCommunityAuthUrl from '@salesforce/apex/ChatAuthController.getCommunityAuthUrl';
+import getCommunityAuthUrl from '@salesforce/apex/ChatAuthControllerExperience.getCommunityAuthUrl';
 import getCounselorName from '@salesforce/apex/ChatAuthController.getCounselorName';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { publishToAmplitude } from 'c/amplitude';

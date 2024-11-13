@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Necessary app and object permissions needed to give a user access to messaging functionality.</description>
+    <description>Necessary app and object permissions needed to give a user access to messaging
+        functionality.</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>MessagingSession.CRM_Authentication_Status__c</field>
@@ -23,6 +24,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>MessagingSession.NKS_Authentication_Timestamp__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>MessagingSession.NKS_Journal_Entry_Status__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>MessagingSession.NKS_Theme_Group__c</field>
         <readable>true</readable>
     </fieldPermissions>

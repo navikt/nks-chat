@@ -1,5 +1,5 @@
 import { LightningElement } from 'lwc';
-import setStatusCompleted from '@salesforce/apex/ChatAuthController.setStatusCompleted';
+import setStatusCompleted from '@salesforce/apex/ChatAuthControllerExperience.setStatusCompleted';
 
 export default class ScratchSimulateChatAuth extends LightningElement {
     loading = false;
