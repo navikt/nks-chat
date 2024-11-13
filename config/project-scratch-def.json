@@ -17,8 +17,7 @@
         "Knowledge",
         "LightningServiceConsole",
         "FIELDSERVICE:1",
-        "LiveMessage",
-        "OrgCapitalizeRecordTypes"
+        "LiveMessage"
     ],
     "country": "NO",
     "language": "en_US",
@@ -75,7 +74,6 @@
         },
         "liveMessageSettings": {
             "enableLiveMessage": true
-        },
-        "org-capitalize-record-types": true
+        }
     }
 }
