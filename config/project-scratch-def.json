@@ -74,6 +74,7 @@
         },
         "liveMessageSettings": {
             "enableLiveMessage": true
-        }
+        },
+        "org-capitalize-record-types": true
     }
 }
