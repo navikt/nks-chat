@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>61.0</apiVersion>
+    <apiVersion>62.0</apiVersion>
     <description>Delete chat and related case if account is null and the chat is older than 2 days and/or chat queue is Sosial or Gjeldsrådgivning</description>
     <environments>Default</environments>
     <interviewLabel>NKS {!$Flow.CurrentDateTime}</interviewLabel>
@@ -25,64 +25,28 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
-        <name>Remove_description_and_body</name>
-        <label>Remove description and body</label>
+        <name>Remove_Frida_Log</name>
+        <label>Remove Frida Log</label>
         <locationX>176</locationX>
-        <locationY>431</locationY>
+        <locationY>323</locationY>
         <inputAssignments>
-            <field>Body</field>
-            <value>
-                <stringValue></stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>NKS_Conversation__c</field>
+            <field>NKS_Frida_Log__c</field>
             <value>
                 <stringValue></stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
-    <recordUpdates>
-        <name>Remove_description_and_conversation</name>
-        <label>Remove description and conversation</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
-        <connector>
-            <targetReference>Remove_description_and_body</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>SourceId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Description</field>
-            <value>
-                <stringValue></stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>NKS_Conversation__c</field>
-            <value>
-                <stringValue></stringValue>
-            </value>
-        </inputAssignments>
-        <object>Case</object>
-    </recordUpdates>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Remove_description_and_conversation</targetReference>
+            <targetReference>Remove_Frida_Log</targetReference>
         </connector>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>1 AND 2 AND 3 AND (4 OR 5 OR 6 OR 7)</filterLogic>
         <filters>
-            <field>AccountId</field>
+            <field>MessagingEndUserId</field>
             <operator>IsNull</operator>
             <value>
                 <booleanValue>true</booleanValue>
@@ -92,7 +56,7 @@
             <field>Status</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>Completed</stringValue>
+                <stringValue>Ended</stringValue>
             </value>
         </filters>
         <filters>
@@ -103,34 +67,34 @@
             </value>
         </filters>
         <filters>
-            <field>NKS_Chat_Queue__c</field>
+            <field>Queue_Name__c</field>
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Sosiale Tjenester</stringValue>
             </value>
         </filters>
         <filters>
-            <field>NKS_Chat_Queue__c</field>
+            <field>Queue_Name__c</field>
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Sosiale Tjenester EN</stringValue>
             </value>
         </filters>
         <filters>
-            <field>NKS_Chat_Queue__c</field>
+            <field>Queue_Name__c</field>
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Gjeldsrådgivning</stringValue>
             </value>
         </filters>
         <filters>
-            <field>NKS_Chat_Queue__c</field>
+            <field>Queue_Name__c</field>
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Gjeldsrådgivning EN</stringValue>
             </value>
         </filters>
-        <object>LiveChatTranscript</object>
+        <object>MessagingSession</object>
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
