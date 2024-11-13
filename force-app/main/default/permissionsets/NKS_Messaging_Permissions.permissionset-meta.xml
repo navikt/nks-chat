@@ -19,12 +19,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>MessagingSession.NKS_Frida_Log__c</field>
+        <field>MessagingSession.NKS_Anonymized__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>MessagingSession.NKS_Authentication_Timestamp__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>MessagingSession.NKS_Frida_Log__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
