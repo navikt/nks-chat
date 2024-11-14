@@ -123,7 +123,10 @@
         <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>Chat_Journal_Documents.dokumentvarianter</assignToReference>
-            <operator>Assign</operator>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Document_Variant_PDF</elementReference>
+            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>Chat_Journal_Documents.tittel</assignToReference>
@@ -268,7 +271,10 @@
         </assignmentItems>
         <assignmentItems>
             <assignToReference>Journal_Request.dokumenter</assignToReference>
-            <operator>Assign</operator>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Chat_Journal_Documents</elementReference>
+            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>Journal_Request.journalfoerendeEnhet</assignToReference>
