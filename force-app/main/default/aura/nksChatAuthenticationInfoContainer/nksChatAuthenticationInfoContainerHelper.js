@@ -31,7 +31,7 @@
         // Get the empApi component
         const empApi = component.find('empApi');
         // Get the channel
-        const channel = '/topic/Chat_Auth_Status_Changed';
+        const channel = '/data/MessagingSessionChangeEvent';
         // Replay option to get new events
         const replayId = -1;
 
@@ -70,6 +70,7 @@
     //When auth status changes update the tab icon
     onEmpApiEvent: function (component, eventReceived) {
         const authStatus = eventReceived.data.sobject.CRM_Authentication_Status__c;
+        console.log('auth status: ' + authStatus);
         const changedRecordId = eventReceived.data.sobject.Id;
         const recordId = component.get('v.recordId');
 

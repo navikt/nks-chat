@@ -163,11 +163,13 @@ export default class ChatAuthenticationOverview extends LightningElement {
         // Invoke subscribe method of empApi. Pass reference to messageCallback
         //Removed subscription to record specific channel as there are issues when loading multiple components and subscribing
         //to record specific channels on initialization. New solution verifies Id in messageCallback
-        subscribe('/topic/Chat_Auth_Status_Changed' /*?Id=" + this.recordId*/, -1, messageCallback).then((response) => {
-            // Response contains the subscription information on successful subscribe call
-            this.subscription = response;
-            console.log('Successfully subscribed to : ', JSON.stringify(response.channel));
-        });
+        subscribe('/data/MessagingSessionChangeEvent' /*?Id=" + this.recordId*/, -1, messageCallback).then(
+            (response) => {
+                // Response contains the subscription information on successful subscribe call
+                this.subscription = response;
+                console.log('Successfully subscribed to : ', JSON.stringify(response.channel));
+            }
+        );
     }
 
     handleUnsubscribe() {

@@ -32,7 +32,7 @@
 
     subscribeEmpApi: function (component) {
         const empApi = component.find('empApi');
-        const channel = '/topic/Chat_Auth_Status_Changed';
+        const channel = '/data/MessagingSessionChangeEvent';
         const replayId = -1;
 
         empApi
