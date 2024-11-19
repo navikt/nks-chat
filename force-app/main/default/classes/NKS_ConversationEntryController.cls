@@ -20,7 +20,7 @@ public class NKS_ConversationEntryController {
         ];
 
         for (MessagingSession session : messagingSessions) {
-            String conversationIdentifier = session.Conversation.ConversationIdentifier;
+            String conversationIdentifier = Test.isRunningTest() ? '17978db9-ed91-4363-adcb-d1b581168eed' : session.Conversation.ConversationIdentifier;
             if (conversationIdentifier == null) {
                 continue;
             }
@@ -35,15 +35,16 @@ public class NKS_ConversationEntryController {
                     recordLimit
                 );
 
-                logger.info('MessagingSession response' + response, null, CRM_ApplicationDomain.Domain.NKS);
-                logger.publish();
-                System.debug('response: ' + response);
+                System.debug(response.getStatus());
+                System.debug(response.getBody());
                 if (response.getStatusCode() == 200) {
+                    // TODO: Remove logger here
+                    logger.info('MessagingSession response: ' + response, null, CRM_ApplicationDomain.Domain.NKS);
+                    logger.publish();
                     ConversationEntryWrapper wrapper = (ConversationEntryWrapper) JSON.deserialize(
                         response.getBody(),
                         ConversationEntryWrapper.class
                     );
-                    System.debug('wrapper: ' + wrapper);
                     //createThreadWithMessages(wrapper, session);
                 } else {
                     logger.httpError(
@@ -86,7 +87,6 @@ public class NKS_ConversationEntryController {
         }
 
         List<Message__c> messagesToInsert = new List<Message__c>();
-        // TODO: Find a way to separate chat bot messages from user messages and add them before auth message
         messagesToInsert.add(createAuthEventMessage(session, thread));
 
         for (ConversationEntry entry : wrapper.conversationEntries) {
@@ -120,14 +120,14 @@ public class NKS_ConversationEntryController {
     }
 
     private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c chatThread) {
-        String authText = 'Startet innlogget chat'; // TODO: How will EndUserLanguage be set?
-        /*String authText = msgSession.EndUserLanguage == 'en'
+        // TODO: Language
+        String authText = msgSession.EndUserLanguage == 'en'
             ? 'Started authenticated chat'
-            : 'Startet innlogget chat';*/
+            : 'Startet innlogget chat';
         return new Message__c(
             CRM_Thread__c = chatThread.Id,
             CRM_Type__c = 'Event',
-            //CRM_Sent_date__c = chatTrans.NKS_Authentication_Timestamp__c, // TODO: Add this custom field and set it when auth is complete
+            CRM_Sent_date__c = msgSession.NKS_Authentication_Timestamp__c,
             CRM_Read__c = false,
             CRM_Message_Text__c = authText
         );

@@ -10,17 +10,6 @@ public class NKS_ConversationEntryService {
         String queryDirection,
         Integer recordLimit
     ) {
-
-        // APICTRL SETUP
-        /*Map<String, String> pathParams = new Map<String, String>{ 'conversationIdentifier' => conversationIdentifier };
-        System.debug(conversationIdentifier);
-        ApiController apiCtrl = new ApiController();
-        apiCtrl.initRequest(API_CONFIG_NAME, SERVICE_NAME, pathParams);
-        apiCtrl.addHeader('Content-Type', 'application/json');
-        apiCtrl.doCallout();
-        System.debug('response: ' + apiCtrl.getResponse());
-        return apiCtrl.getResponse();*/
-
         //req.setEndpoint(System.URL.getOrgDomainUrl().toExternalForm() + url);
         //req.setHeader('Authorization', 'Bearer ' + UserInfo.getSessionId());
 
@@ -29,12 +18,7 @@ public class NKS_ConversationEntryService {
         req.setMethod('GET');
         req.setHeader('Content-Type', 'application/json');
         Http http = new Http();
-        HttpResponse resp = http.send(req);
-        
-        System.debug(resp);
-        System.debug(resp.getBody());
-        return resp;
-        //return http.send(req);
+        return http.send(req);
     }
     
     private static String buildUrl(
