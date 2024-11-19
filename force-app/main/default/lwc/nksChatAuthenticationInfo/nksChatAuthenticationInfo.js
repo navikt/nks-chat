@@ -22,6 +22,9 @@ import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authe
 import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
 
 export default class ChatAuthenticationOverview extends LightningElement {
+    @api recordId;
+    @api loggingEnabled; //Determines if console logging is enabled for the component
+
     labels = {
         AUTH_REQUESTED,
         AUTH_STARTED,
@@ -35,18 +38,15 @@ export default class ChatAuthenticationOverview extends LightningElement {
         CHAT_GETTING_AUTH_STATUS,
         CHAT_SENDING_AUTH_REQUEST
     };
-    @api loggingEnabled; //Determines if console logging is enabled for the component
-    @api recordId;
+
     @api objectApiName;
     @api accountFields; //Comma separated string with field names to display from the related account
-    @api caseFields; //Comma separated string with field names to display from the related case
     @api personFields; //Comma separated string with field names to display from the related accounts person
     @api copyPersonFields; //Comma separated string with field numbers to activate copy button
 
-    accountId; //Transcript AccountId
-    caseId; //Transcript CaseId
-    personId; //Transcript Account PersonId
-    currentAuthenticationStatus; //Current auth status of the chat transcript
+    accountId; //MessagingSession AccountId
+    personId; //MessagingSession Account PersonId
+    currentAuthenticationStatus; //Current auth status of the chat MessagingSession
     sendingAuthRequest = false; //Switch used to show spinner when initiatiing auth process
     activeConversation; //Boolean to determine if the componenet is rendered in a context on an active chat conversation
     chatLanguage;
@@ -57,8 +57,35 @@ export default class ChatAuthenticationOverview extends LightningElement {
     isNavEmployee = false;
     isConfidential = false;
 
-    //#### GETTERS ####
+    @wire(getChatInfo, { messagingId: '$recordId' })
+    wiredStatus({ error, data }) {
+        if (data) {
+            this.currentAuthenticationStatus = data.AUTH_STATUS;
+            this.activeConversation = data.CONVERSATION_STATUS === 'Active';
+            this.accountId = data.ACCOUNTID;
+            this.personId = data.PERSONID;
+            this.nmbOfSecurityMeasures = parseInt(data.NMB_SECURITY_MEASURES, 10);
+            // eslint-disable-next-line eqeqeq
+            this.isNavEmployee = 'true' == data.IS_NAV_EMPLOYEE;
+            // eslint-disable-next-line eqeqeq
+            this.isConfidential = 'true' == data.IS_CONFIDENTIAL;
 
+            if (this.isEmpSubscriptionNeeded) {
+                this.handleSubscribe();
+            }
+        } else {
+            this.currentAuthenticationStatus = 'Not Started';
+            this.log(error);
+        }
+    }
+
+    connectedCallback() {
+        this.loadAuthUrl();
+        this.registerErrorListener();
+        publishToAmplitude('Chat Opened');
+    }
+
+    //#### GETTERS ####
     get isLoading() {
         return !this.currentAuthenticationStatus;
     }
@@ -80,166 +107,108 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     get isEmpSubscribed() {
-        return Object.keys(this.subscription).length !== 0 && this.subscription.constructor === Object;
+        return !!this.empApiSubscription;
     }
 
-    //#### /GETTERS ###
-
-    connectedCallback() {
-        this.getAuthUrl();
-        //Registering an error listener for handling empApi errors and potential reconnect
-        this.registerErrorListener();
-        publishToAmplitude('Chat Transcript Opened');
+    get isEmpSubscriptionNeeded() {
+        return !this.authenticationComplete && !this.isEmpSubscribed && !this.isLoading;
     }
 
     registerErrorListener() {
-        // Invoke onError empApi method
         onError((error) => {
-            console.log('Received error from empApi: ', JSON.stringify(error));
-            //Try to resubscribe if an error was caught
+            this.handleError(error);
             this.handleUnsubscribe();
             this.handleSubscribe();
         });
     }
 
-    @wire(getChatInfo, { chatTranscriptId: '$recordId' })
-    wiredStatus({ error, data }) {
-        if (data) {
-            this.log(data);
-            this.currentAuthenticationStatus = data.AUTH_STATUS;
-            this.activeConversation = data.CONVERSATION_STATUS === 'InProgress';
-            this.accountId = data.ACCOUNTID;
-            this.caseId = data.CASEID;
-            this.personId = data.PERSONID;
-            this.chatLanguage = data.CHAT_LANGUAGE;
+    // Subscribes to CDC events when necessary
+    handleSubscribe() {
+        subscribe('/data/MessagingSessionChangeEvent', -1, this.handleCdcEvent.bind(this))
+            .then((response) => {
+                this.empApiSubscription = response;
+                console.log(`Subscribed to: ${response.channel}`);
+            })
+            .catch((error) => this.handleError(error, 'Failed to subscribe'));
+    }
 
-            this.nmbOfSecurityMeasures = parseInt(data.NMB_SECURITY_MEASURES, 10);
-            // eslint-disable-next-line eqeqeq
-            this.isNavEmployee = 'true' == data.IS_NAV_EMPLOYEE;
-            // eslint-disable-next-line eqeqeq
-            this.isConfidential = 'true' == data.IS_CONFIDENTIAL;
-
-            //If the authentication is not completed, subscribe to the push topic to receive events
-            if (this.currentAuthenticationStatus !== 'Completed' && !this.isLoading && !this.isEmpSubscribed) {
-                this.handleSubscribe();
-            }
-        } else {
-            this.currentAuthenticationStatus = 'Not Started';
-            this.log(error);
+    // Unsubscribes from CDC events
+    handleUnsubscribe() {
+        if (this.isEmpSubscribed) {
+            unsubscribe(this.empApiSubscription)
+                .then(() => {
+                    this.empApiSubscription = null;
+                    console.log('Unsubscribed successfully');
+                })
+                .catch((error) => this.handleError(error, 'Failed to unsubscribe'));
         }
     }
 
-    //Calls apex to get the correct community url for the given sandbox
-    getAuthUrl() {
-        getCommunityAuthUrl({})
+    // Handles incoming CDC events and updates authentication status
+    handleCdcEvent(response) {
+        const eventRecordId = response.data.payload.ChangeEventHeader.recordIds[0];
+        const changedFields = response.data.payload.ChangeEventHeader.changedFields;
+
+        // Only process event if it's for the correct record and the field 'CRM_Authentication_Status__c' changed
+        if (eventRecordId === this.recordId && changedFields.includes('CRM_Authentication_Status__c')) {
+            this.updateAuthStatus(response.data.payload.CRM_Authentication_Status__c);
+        }
+    }
+
+    // Updates authentication status and triggers actions if necessary
+    updateAuthStatus(newStatus) {
+        this.currentAuthenticationStatus = newStatus;
+
+        if (this.authComplete) {
+            this.sendLoginEvent();
+            getRecordNotifyChange([{ recordId: this.recordId }]);
+            this.handleUnsubscribe(); // Unsubscribe after authentication is complete
+        }
+    }
+
+    // Sends a custom event indicating login is complete
+    sendLoginEvent() {
+        if (!this.loginEvtSent) {
+            getCounselorName({ recordId: this.recordId })
+                .then((name) => {
+                    const loginMessage =
+                        this.chatLanguage === 'en_US'
+                            ? `You are now in a secure chat with Nav, chatting with ${name}. ${this.labels.CHAT_LOGIN_MSG_EN}`
+                            : `Du er nå i en innlogget chat med Nav, du snakker med ${name}. ${this.labels.CHAT_LOGIN_MSG_NO}`;
+
+                    this.dispatchEvent(new CustomEvent('authenticationcomplete', { detail: { loginMessage } }));
+                    this.loginEvtSent = true;
+                })
+                .catch(this.handleError);
+        }
+    }
+
+    // Loads the community authentication URL
+    loadAuthUrl() {
+        getCommunityAuthUrl()
             .then((url) => {
                 this.chatAuthUrl = url;
             })
-            .catch((error) => {
-                console.log('Failed to retrieve auth url: ' + JSON.stringify(error, null, 2));
-            });
+            .catch((error) => this.handleError(error, 'Failed to retrieve auth URL'));
     }
 
-    //Handles subscription to streaming API for listening to changes to auth status
-    handleSubscribe() {
-        let _this = this;
-        // Callback invoked whenever a new event message is received
-        const messageCallback = function (response) {
-            console.log('AUTH STATUS UPDATED');
-            //Only overwrite status if the event received belongs to this record
-            const eventRecordId = response.data.sobject.Id;
-            if (eventRecordId === _this.recordId) {
-                _this.currentAuthenticationStatus = response.data.sobject.CRM_Authentication_Status__c;
-                //If authentication now is complete, get the account id
-                if (_this.authenticationComplete) {
-                    _this.accountId = response.data.sobject.AccountId;
-                    if (!_this.loginEvtSent) _this.sendLoginEvent();
-                    getRecordNotifyChange([{ recordId: _this.recordId }]); //Triggers refresh of standard components
-                    _this.handleUnsubscribe();
-                }
-            }
-        };
-
-        // Invoke subscribe method of empApi. Pass reference to messageCallback
-        //Removed subscription to record specific channel as there are issues when loading multiple components and subscribing
-        //to record specific channels on initialization. New solution verifies Id in messageCallback
-        subscribe('/data/MessagingSessionChangeEvent' /*?Id=" + this.recordId*/, -1, messageCallback).then(
-            (response) => {
-                // Response contains the subscription information on successful subscribe call
-                this.subscription = response;
-                console.log('Successfully subscribed to : ', JSON.stringify(response.channel));
-            }
-        );
-    }
-
-    handleUnsubscribe() {
-        // Invoke unsubscribe method to not receive duplicate messages for this context
-        unsubscribe(this.subscription, (response) => {
-            console.log('Unsubscribed: ', JSON.stringify(response));
-            // Response is true for successful unsubscribe
-        })
-            .then(() => {
-                //Successfull unsubscribe
-                this.log('Successful unsubscribe');
-            })
-            .catch((error) => {
-                console.log('EMP unsubscribe failed: ' + JSON.stringify(error, null, 2));
-            });
-    }
-
-    sendLoginEvent() {
-        getCounselorName({ recordId: this.recordId })
-            .then((data) => {
-                //Message defaults to norwegian
-                const loginMessage =
-                    this.chatLanguage === 'en_US'
-                        ? 'You are now in a secure chat with NAV, you are chatting with ' +
-                          data +
-                          '. ' +
-                          this.labels.CHAT_LOGIN_MSG_EN
-                        : 'Du er nå i en innlogget chat med NAV, du snakker med ' +
-                          data +
-                          '. ' +
-                          this.labels.CHAT_LOGIN_MSG_NO;
-
-                //Sending event handled by parent to to trigger default chat login message
-                const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                    detail: { loginMessage }
-                });
-                this.dispatchEvent(authenticationCompleteEvt);
-                this.loginEvtSent = true;
-            })
-            .catch((err) => {
-                console.err(err);
-            });
-    }
-
-    //Sends event handled by parent to utilize conversation API to send message for init of auth process
+    // Handles the authentication request
     requestAuthentication() {
         this.sendingAuthRequest = true;
-        const authUrl = this.chatAuthUrl;
-
-        //Pass the chat auth url
-        const requestAuthenticationEvent = new CustomEvent('requestauthentication', {
-            detail: { authUrl }
-        });
-        this.dispatchEvent(requestAuthenticationEvent);
+        this.dispatchEvent(new CustomEvent('requestauthentication', { detail: { authUrl: this.chatAuthUrl } }));
     }
 
-    //Call from aura parent after a successful message to init auth process
+    // Sets authentication status to 'Requested'
     setAuthStatusRequested() {
-        setStatusRequested({ chatTranscriptId: this.recordId })
-            .then(() => {
-                this.log('Successful update');
-            })
-            .catch((error) => {
-                this.log(error);
-            })
+        setStatusRequested({ messagingId: this.recordId })
+            .then(() => console.log('Status updated successfully'))
+            .catch(this.handleError)
             .finally(() => {
                 this.sendingAuthRequest = false;
             });
     }
 
+    // Handles success/failure in authentication request
     @api
     authRequestHandling(success) {
         if (success) {
@@ -249,18 +218,24 @@ export default class ChatAuthenticationOverview extends LightningElement {
         }
     }
 
-    //Displays an error toast message if there was any issue in initialiizing authentication
+    // Shows an error toast message if authentication fails
     showAuthError() {
         const event = new ShowToastEvent({
             title: 'Authentication error',
-            message: AUTH_INIT_FAILED,
+            message: this.labels.authInitFailed,
             variant: 'error',
             mode: 'sticky'
         });
         this.dispatchEvent(event);
     }
 
-    //Logger function
+    // Error handling utility function
+    handleError(error, context = '') {
+        const message = context ? `${context}: ${JSON.stringify(error)}` : JSON.stringify(error);
+        console.error(message);
+    }
+
+    // Logs messages if logging is enabled
     log(loggable) {
         if (this.loggingEnabled) console.log(loggable);
     }

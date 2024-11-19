@@ -6,75 +6,80 @@
 
         chatToolkit
             .sendMessage({
-                recordId: recordId,
-                message: {
-                    text: loginMsg
-                }
+                recordId,
+                message: { text: loginMsg }
             })
-            .then(function () {
-                //Message success
+            .then(() => {
+                console.log('Login message sent successfully');
+            })
+            .catch((error) => {
+                console.error('Error sending login message:', JSON.stringify(error));
             });
     },
 
-    //Set icon om console tab
-    setTabIcon: function (component, newTabId, iconName, iconAlt) {
-        let workspace = component.find('workspace');
+    // Sets the tab icon based on authentication status
+    setTabIcon: function (component, tabId, iconName, iconAlt) {
+        const workspace = component.find('workspace');
+
         workspace.setTabIcon({
-            tabId: newTabId,
+            tabId,
             icon: iconName,
-            iconAlt: iconAlt
+            iconAlt
         });
     },
 
-    // Invokes the subscribe method on the empApi component
+    // Subscribes to the Change Data Capture event for MessagingSession
     subscribeEmpApi: function (component) {
-        // Get the empApi component
         const empApi = component.find('empApi');
-        // Get the channel
         const channel = '/data/MessagingSessionChangeEvent';
-        // Replay option to get new events
         const replayId = -1;
 
-        // Subscribe to an event
         empApi
             .subscribe(
                 channel,
                 replayId,
                 $A.getCallback((eventReceived) => {
-                    this.onEmpApiEvent(component, eventReceived);
+                    this.handleEmpApiEvent(component, eventReceived);
                 })
             )
             .then((subscription) => {
-                // Save subscription to unsubscribe later
                 component.set('v.subscription', subscription);
+                console.log('Subscribed to channel:', channel);
+            })
+            .catch((error) => {
+                console.error('Subscription error:', JSON.stringify(error));
             });
     },
 
-    // Invokes the unsubscribe method on the empApi component
+    // Unsubscribes from the Change Data Capture event for MessagingSession
     unsubscribeEmpApi: function (component) {
-        // Get the empApi component
         const empApi = component.find('empApi');
-        // Get the subscription that we saved when subscribing
         const subscription = component.get('v.subscription');
 
-        // Unsubscribe from event
-        empApi.unsubscribe(
-            subscription,
-            $A.getCallback(() => {
-                // Confirm that we have unsubscribed from the event channel
-                component.set('v.subscription', null);
-            })
-        );
+        if (subscription) {
+            empApi
+                .unsubscribe(
+                    subscription,
+                    $A.getCallback(() => {
+                        component.set('v.subscription', null);
+                        console.log('Unsubscribed from channel');
+                    })
+                )
+                .catch((error) => {
+                    console.error('Unsubscribe error:', JSON.stringify(error));
+                });
+        }
     },
 
-    //When auth status changes update the tab icon
-    onEmpApiEvent: function (component, eventReceived) {
-        const authStatus = eventReceived.data.sobject.CRM_Authentication_Status__c;
-        console.log('auth status: ' + authStatus);
-        const changedRecordId = eventReceived.data.sobject.Id;
+    // Handles Change Data Capture event for changes in authentication status
+    handleEmpApiEvent: function (component, eventReceived) {
         const recordId = component.get('v.recordId');
+        const eventRecordId = eventReceived.data.payload.ChangeEventHeader.recordIds[0];
+        const changedFields = eventReceived.data.payload.ChangeEventHeader.changedFields;
 
-        if (changedRecordId === recordId) {
+        if (eventRecordId === recordId && changedFields.includes('CRM_Authentication_Status__c')) {
+            const authStatus = eventReceived.data.payload.CRM_Authentication_Status__c;
+
             component
                 .find('workspace')
                 .getEnclosingTabId()

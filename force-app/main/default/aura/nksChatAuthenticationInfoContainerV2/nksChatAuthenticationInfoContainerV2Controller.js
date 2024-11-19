@@ -3,34 +3,37 @@
         const chatToolkit = component.find('chatToolkit');
         const recordId = component.get('v.recordId');
         const authInfoCmp = component.find('chatAuthInfo');
-        let authUrl = event.getParam('authUrl');
+        const authUrl = event.getParam('authUrl');
 
         const action = component.get('c.generateAuthMessage');
         action.setParams({ recordId });
+
         action.setCallback(this, function (response) {
             const state = response.getState();
             if (state === 'SUCCESS') {
+                const authMessage = response.getReturnValue() + authUrl + recordId;
+
                 chatToolkit
                     .sendMessage({
-                        recordId: recordId,
-                        message: {
-                            text: response.getReturnValue() + authUrl + recordId
-                        }
+                        recordId,
+                        message: { text: authMessage }
                     })
-                    .then(function (result) {
+                    .then((result) => {
                         authInfoCmp.authRequestHandling(result);
+                    })
+                    .catch((error) => {
+                        console.error('Error sending authentication message:', JSON.stringify(error));
                     });
             } else if (state === 'ERROR') {
                 const errors = response.getError();
-                if (errors) {
-                    if (errors[0] && errors[0].message) {
-                        console.log('Error message: ' + errors[0].message);
-                    }
+                if (errors && errors[0] && errors[0].message) {
+                    console.error('Error message:', errors[0].message);
                 } else {
-                    console.log('Unknown error');
+                    console.error('Unknown error occurred');
                 }
             }
         });
+
         $A.enqueueAction(action);
     },
 
