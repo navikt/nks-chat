@@ -7,6 +7,7 @@ import getCommunityAuthUrl from '@salesforce/apex/ChatAuthControllerExperience.g
 import getCounselorName from '@salesforce/apex/ChatAuthController.getCounselorName';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { publishToAmplitude } from 'c/amplitude';
+import { refreshApex } from '@salesforce/apex';
 
 //#### LABEL IMPORTS ####
 import AUTH_REQUESTED from '@salesforce/label/c.CRM_Chat_Authentication_Requested';
@@ -56,9 +57,12 @@ export default class ChatAuthenticationOverview extends LightningElement {
     nmbOfSecurityMeasures = 0;
     isNavEmployee = false;
     isConfidential = false;
+    wiredRecordResult;
 
     @wire(getChatInfo, { messagingId: '$recordId' })
-    wiredStatus({ error, data }) {
+    wiredResult(result) {
+        this.wiredRecordResult = result;
+        const { error, data } = result;
         if (data) {
             this.currentAuthenticationStatus = data.AUTH_STATUS;
             this.activeConversation = data.CONVERSATION_STATUS === 'Active';
@@ -159,9 +163,10 @@ export default class ChatAuthenticationOverview extends LightningElement {
     updateAuthStatus(newStatus) {
         this.currentAuthenticationStatus = newStatus;
 
-        if (this.authComplete) {
+        if (this.authenticationComplete) {
             this.sendLoginEvent();
             getRecordNotifyChange([{ recordId: this.recordId }]);
+            this.refreshData();
             this.handleUnsubscribe(); // Unsubscribe after authentication is complete
         }
     }
@@ -238,5 +243,11 @@ export default class ChatAuthenticationOverview extends LightningElement {
     // Logs messages if logging is enabled
     log(loggable) {
         if (this.loggingEnabled) console.log(loggable);
+    }
+
+    refreshData() {
+        if (this.wiredRecordResult) {
+            refreshApex(this.wiredRecordResult);
+        }
     }
 }

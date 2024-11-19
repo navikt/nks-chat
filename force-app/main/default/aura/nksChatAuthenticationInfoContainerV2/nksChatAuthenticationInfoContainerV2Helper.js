@@ -72,10 +72,10 @@
 
     handleEmpApiEvent: function (component, eventReceived) {
         const recordId = component.get('v.recordId');
-        const changedRecordId = eventReceived.data.payload.ChangeEventHeader.recordIds[0];
+        const eventRecordId = eventReceived.data.payload.ChangeEventHeader.recordIds[0];
         const changedFields = eventReceived.data.payload.ChangeEventHeader.changedFields;
 
-        if (changedRecordId === recordId && changedFields.includes('CRM_Authentication_Status__c')) {
+        if (eventRecordId === recordId && changedFields.includes('CRM_Authentication_Status__c')) {
             const authStatus = eventReceived.data.payload.CRM_Authentication_Status__c;
 
             component

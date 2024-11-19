@@ -1,4 +1,16 @@
 ({
+    onInit: function (component, event, helper) {
+        const empApi = component.find('empApi');
+
+        empApi.onError(
+            $A.getCallback((error) => {
+                console.error('EMP API error:', JSON.stringify(error));
+            })
+        );
+
+        helper.subscribeEmpApi(component);
+    },
+
     requestAuthentication: function (component, event) {
         const chatToolkit = component.find('chatToolkit');
         const recordId = component.get('v.recordId');
