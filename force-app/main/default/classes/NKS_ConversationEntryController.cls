@@ -45,7 +45,7 @@ public class NKS_ConversationEntryController {
                         response.getBody(),
                         ConversationEntryWrapper.class
                     );
-                    //createThreadWithMessages(wrapper, session);
+                    //createThreadMessages(wrapper, session);
                 } else {
                     logger.httpError(
                         'Failed to get conversation entries. Status Code: ' + response.getStatusCode(),
@@ -64,7 +64,7 @@ public class NKS_ConversationEntryController {
         }
     }
 
-    private static void createThreadWithMessages(
+    private static void createThreadMessages(
         ConversationEntryWrapper wrapper,
         MessagingSession session
     ) {
@@ -73,18 +73,7 @@ public class NKS_ConversationEntryController {
         }
 
         Id messagingSessionId = (Id) wrapper.conversationEntries[0].relatedRecords[0];
-        Thread__c thread = new Thread__c();
-        thread.CRM_Related_Object__c = messagingSessionId;
-        thread.CRM_Account__c = session.EndUserAccountId;
-        thread.CRM_Contact__c = session.EndUserContactId;
-
-        try {
-            insert thread;
-        } catch (Exception e) {
-            logger.error('Error saving thread: ' + e.getMessage(), null, CRM_ApplicationDomain.Domain.NKS);
-        } finally {
-            logger.publish();
-        }
+        Thread__c thread = getThreadDetails(messagingSessionId);
 
         List<Message__c> messagesToInsert = new List<Message__c>();
         messagesToInsert.add(createAuthEventMessage(session, thread));
@@ -111,6 +100,7 @@ public class NKS_ConversationEntryController {
         if (!messagesToInsert.isEmpty()) {
             try {
                 insert messagesToInsert;
+                updateThreadClosedate(thread.Id, System.now());
             } catch (Exception e) {
                 logger.error('Error saving messages: ' + e.getMessage(), null, CRM_ApplicationDomain.Domain.NKS);
             } finally {
@@ -119,13 +109,13 @@ public class NKS_ConversationEntryController {
         }
     }
 
-    private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c chatThread) {
+    private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c thread) {
         // TODO: Language
-        String authText = msgSession.EndUserLanguage == 'en'
+        String authText = msgSession.EndUserLanguage == 'Engelsk'
             ? 'Started authenticated chat'
             : 'Startet innlogget chat';
         return new Message__c(
-            CRM_Thread__c = chatThread.Id,
+            CRM_Thread__c = thread.Id,
             CRM_Type__c = 'Event',
             CRM_Sent_date__c = msgSession.NKS_Authentication_Timestamp__c,
             CRM_Read__c = false,
@@ -152,6 +142,29 @@ public class NKS_ConversationEntryController {
         }
 
         return navUserInfoByUserId;
+    }
+
+    private static String getChatbotConversation() {
+        return '';
+        // TODO
+    }
+
+    private static void storeChatbotConversationOnThread(String threadId, String chatbotConversation) {
+        update new Thread__c(Id = threadId, Additional_Information__c = chatbotConversation);
+    }
+
+    private static Thread__c getThreadDetails(Id messagingSessionId) {
+        return [
+            SELECT Id
+            FROM Thread__c
+            WHERE CRM_Related_Object__c = :messagingSessionId
+            FOR UPDATE
+        ];
+    }
+
+    @future
+    private static void updateThreadClosedate(String threadId, Datetime closeDate) {
+        update new Thread__c(Id = threadId, CRM_isActive__c = false, CRM_Closed_Date__c = closeDate);
     }
 
     public class ConversationEntryWrapper {

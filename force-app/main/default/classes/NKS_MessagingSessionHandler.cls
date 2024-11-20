@@ -9,11 +9,13 @@ global with sharing class NKS_MessagingSessionHandler extends MyTriggers {
         };
         List<MessagingSession> messagingSessionsToConvert = new List<MessagingSession>();
 
-        for (MessagingSession msgSession : (List<MessagingSession>) records) {
-            MessagingSession oldRecord = (MessagingSession) triggerOldMap.get(msgSession.Id);
-
-            if (MyTriggers.hasChangedFields(fieldNamesToCheck, msgSession, oldRecord) && msgSession.EndTime <= Datetime.now() && msgSession.CRM_Authentication_Status__c == 'Completed' && (msgSession.Status == 'Ended' || msgSession.Status == 'Inactive')) {
-                messagingSessionsToConvert.add(msgSession);
+        for (MessagingSession newRecord : (List<MessagingSession>) records) {
+            MessagingSession oldRecord = (MessagingSession) triggerOldMap.get(newRecord.Id);
+            System.debug('newRecord.EndTime: ' + newRecord.EndTime);
+            System.debug('newRecord.CRM_Authentication_Status__c: ' + newRecord.CRM_Authentication_Status__c);
+            System.debug('newRecord.Status: ' + newRecord.Status);
+            if (MyTriggers.hasChangedFields(fieldNamesToCheck, newRecord, oldRecord) && newRecord.EndTime <= Datetime.now() && newRecord.CRM_Authentication_Status__c == 'Completed' && (newRecord.Status == 'Ended' || newRecord.Status == 'Inactive')) {
+                messagingSessionsToConvert.add(newRecord);
             }
         }
 
