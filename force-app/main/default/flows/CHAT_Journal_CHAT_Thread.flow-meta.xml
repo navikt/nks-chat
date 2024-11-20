@@ -410,7 +410,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Check_if_Journal_Post_Id_is_Null</targetReference>
+            <targetReference>Check_if_Journal_Post_Id_and_existing_Journal_Entry_Id_is_null</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -433,7 +433,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Check_if_Journal_Post_Id_is_Null</targetReference>
+            <targetReference>Check_if_Journal_Post_Id_and_existing_Journal_Entry_Id_is_null</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -539,17 +539,17 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Check_if_Journal_Post_Id_is_Null</name>
-        <label>Check if Journal Post Id is Null</label>
+        <name>Check_if_Journal_Post_Id_and_existing_Journal_Entry_Id_is_null</name>
+        <label>Check if Journal Post Id and existing Journal Entry Id is null</label>
         <locationX>182</locationX>
         <locationY>2222</locationY>
         <defaultConnector>
             <targetReference>Assign_Journal_Entry_Default_data</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Null</defaultConnectorLabel>
+        <defaultConnectorLabel>Do not set</defaultConnectorLabel>
         <rules>
-            <name>Not_null</name>
-            <conditionLogic>and</conditionLogic>
+            <name>Set_Journal_Id</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
             <conditions>
                 <leftValueReference>Post_Journal_Request.journalpostId</leftValueReference>
                 <operator>IsBlank</operator>
@@ -564,10 +564,24 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Journal_Entry_SF.Journal_Entry_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Journal_Entry_SF.Journal_Entry_ID__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Set_Journal_Entry_Id</targetReference>
             </connector>
-            <label>Not null</label>
+            <label>Set Journal Id</label>
         </rules>
     </decisions>
     <decisions>
