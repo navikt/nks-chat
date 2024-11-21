@@ -195,8 +195,7 @@ public class NKS_ConversationEntryController {
         List<String> formattedMessages = new List<String>();
 
         for (ConversationEntry entry : entries) {
-            String sender = 'Agent'.equalsIgnoreCase(entry.sender.role) ? 'Agent' : 'Customer';
-            formattedMessages.add('[' + sender + '] ' + entry.messageText);
+            formattedMessages.add('[' + entry.sender.role + '] ' + entry.messageText);
         }
 
         return String.join(formattedMessages, '\n');
