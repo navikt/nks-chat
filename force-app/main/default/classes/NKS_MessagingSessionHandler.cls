@@ -11,9 +11,6 @@ global with sharing class NKS_MessagingSessionHandler extends MyTriggers {
 
         for (MessagingSession newRecord : (List<MessagingSession>) records) {
             MessagingSession oldRecord = (MessagingSession) triggerOldMap.get(newRecord.Id);
-            System.debug('newRecord.EndTime: ' + newRecord.EndTime);
-            System.debug('newRecord.CRM_Authentication_Status__c: ' + newRecord.CRM_Authentication_Status__c);
-            System.debug('newRecord.Status: ' + newRecord.Status);
             if (MyTriggers.hasChangedFields(fieldNamesToCheck, newRecord, oldRecord) && newRecord.EndTime <= Datetime.now() && newRecord.CRM_Authentication_Status__c == 'Completed' && (newRecord.Status == 'Ended' || newRecord.Status == 'Inactive')) {
                 messagingSessionsToConvert.add(newRecord);
             }

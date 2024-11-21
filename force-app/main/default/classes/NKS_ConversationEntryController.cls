@@ -9,109 +9,120 @@ public class NKS_ConversationEntryController {
         String queryDirection,
         Integer recordLimit
     ) {
+        if (msgSessions.isEmpty()) {
+            return;
+        }
+
         List<Id> messagingSessionIds = new List<Id>();
         for (MessagingSession msgSession : msgSessions) {
             messagingSessionIds.add(msgSession.Id);
         }
         List<MessagingSession> messagingSessions = [
-            SELECT Id, Conversation.ConversationIdentifier, Endtime, Status, EndUserAccountId, EndUserContactId
+            SELECT
+                Id,
+                Conversation.ConversationIdentifier,
+                Endtime,
+                Status,
+                EndUserAccountId,
+                EndUserContactId,
+                EndUserLanguage,
+                NKS_Authentication_Timestamp__c
             FROM MessagingSession
             WHERE Id IN :messagingSessionIds
         ];
 
         for (MessagingSession session : messagingSessions) {
-            String conversationIdentifier = Test.isRunningTest() ? '17978db9-ed91-4363-adcb-d1b581168eed' : session.Conversation.ConversationIdentifier;
+            String conversationIdentifier = Test.isRunningTest()
+                ? '17978db9-ed91-4363-adcb-d1b581168eed'
+                : session.Conversation.ConversationIdentifier;
             if (conversationIdentifier == null) {
                 continue;
             }
 
-            HttpResponse response;
-            try {
-                response = NKS_ConversationEntryService.getConversationEntryMessages(
-                    conversationIdentifier,
-                    startTimestamp,
-                    endTimestamp,
-                    queryDirection,
-                    recordLimit
-                );
-
-                System.debug(response.getStatus());
-                System.debug(response.getBody());
-                if (response.getStatusCode() == 200) {
-                    // TODO: Remove logger here
-                    logger.info('MessagingSession response: ' + response, null, CRM_ApplicationDomain.Domain.NKS);
-                    logger.publish();
-                    ConversationEntryWrapper wrapper = (ConversationEntryWrapper) JSON.deserialize(
-                        response.getBody(),
-                        ConversationEntryWrapper.class
-                    );
-                    //createThreadMessages(wrapper, session);
-                } else {
-                    logger.httpError(
-                        'Failed to get conversation entries. Status Code: ' + response.getStatusCode(),
-                        response,
-                        null,
-                        CRM_ApplicationDomain.Domain.NKS
-                    );
-                    return;
-                }
-            } catch (Exception e) {
-                logger.exception(e, CRM_ApplicationDomain.Domain.NKS);
-                return;
-            } finally {
-                logger.publish();
-            }
+            processConversationEntry(
+                session,
+                conversationIdentifier,
+                startTimestamp,
+                endTimestamp,
+                queryDirection,
+                recordLimit
+            );
         }
     }
 
-    private static void createThreadMessages(
-        ConversationEntryWrapper wrapper,
-        MessagingSession session
+    private static void processConversationEntry(
+        MessagingSession session,
+        String conversationIdentifier,
+        Long startTimestamp,
+        Long endTimestamp,
+        String queryDirection,
+        Integer recordLimit
     ) {
+        try {
+            HttpResponse response = NKS_ConversationEntryService.getConversationEntryMessages(
+                conversationIdentifier,
+                startTimestamp,
+                endTimestamp,
+                queryDirection,
+                recordLimit
+            );
+
+            if (response.getStatusCode() == 200) {
+                // TODO: Remove logs
+                logger.info('MessagingSession response: ' + response, null, CRM_ApplicationDomain.Domain.NKS);
+                logger.publish();
+                ConversationEntryWrapper wrapper = (ConversationEntryWrapper) JSON.deserialize(
+                    response.getBody(),
+                    ConversationEntryWrapper.class
+                );
+                createThreadMessages(wrapper, session);
+            } else {
+                logger.httpError(
+                    'Failed to get conversation entries. Status Code: ' + response.getStatusCode(),
+                    response,
+                    null,
+                    CRM_ApplicationDomain.Domain.NKS
+                );
+            }
+        } catch (Exception e) {
+            logger.exception(e, CRM_ApplicationDomain.Domain.NKS);
+        } finally {
+            logger.publish();
+        }
+    }
+
+    private static void createThreadMessages(ConversationEntryWrapper wrapper, MessagingSession session) {
         if (wrapper == null || wrapper.conversationEntries == null || wrapper.conversationEntries.isEmpty()) {
             return;
         }
 
-        Id messagingSessionId = (Id) wrapper.conversationEntries[0].relatedRecords[0];
-        Thread__c thread = getThreadDetails(messagingSessionId);
+        Thread__c thread = getThreadDetails(wrapper.conversationEntries[0].relatedRecords[0]);
+
+        List<ConversationEntry> chatbotMessages = new List<ConversationEntry>();
+        List<ConversationEntry> userMessages = new List<ConversationEntry>();
+        splitChatbotMessagesFromConversation(wrapper.conversationEntries, chatbotMessages, userMessages);
+
+        if (!chatbotMessages.isEmpty()) {
+            String formattedChatbotMessages = formatMessagesAsString(chatbotMessages);
+            storeChatbotConversationOnThread(thread.Id, formattedChatbotMessages);
+        }
 
         List<Message__c> messagesToInsert = new List<Message__c>();
         messagesToInsert.add(createAuthEventMessage(session, thread));
 
-        for (ConversationEntry entry : wrapper.conversationEntries) {
-            if (entry.messageText == null) {
-                continue;
+        for (ConversationEntry entry : userMessages) {
+            if (entry.messageText != null) {
+                messagesToInsert.add(createMessage(entry, session, thread));
             }
-            Message__c message = new Message__c();
-            message.CRM_Thread__c = thread.Id;
-            message.CRM_Message_Text__c = entry.messageText;
-            message.CRM_Sent_Date__c = DateTime.newInstance(entry.serverReceivedTimestamp);
-            message.CRM_Read__c = false;
-            message.CRM_Type__c = 'Message';
-            if (entry.sender.role == 'Agent') {
-                message.CRM_From_User__c = navUserInfoByUserId.get(entry.sender.subject).Id;
-                message.CRM_From_NAV_Unit__c = navUserInfoByUserId.get(entry.sender.subject).Department;
-            } else {
-                message.CRM_From_Contact__c = session.EndUserContactId;
-            }
-            messagesToInsert.add(message);
         }
 
         if (!messagesToInsert.isEmpty()) {
-            try {
-                insert messagesToInsert;
-                updateThreadClosedate(thread.Id, System.now());
-            } catch (Exception e) {
-                logger.error('Error saving messages: ' + e.getMessage(), null, CRM_ApplicationDomain.Domain.NKS);
-            } finally {
-                logger.publish();
-            }
+            insertMessages(messagesToInsert, thread.Id);
         }
     }
 
     private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c thread) {
-        // TODO: Language
-        String authText = msgSession.EndUserLanguage == 'Engelsk'
+        String authText = msgSession.EndUserLanguage == 'en_US'
             ? 'Started authenticated chat'
             : 'Startet innlogget chat';
         return new Message__c(
@@ -121,6 +132,78 @@ public class NKS_ConversationEntryController {
             CRM_Read__c = false,
             CRM_Message_Text__c = authText
         );
+    }
+
+    private static Message__c createMessage(ConversationEntry entry, MessagingSession session, Thread__c thread) {
+        Message__c message = new Message__c();
+        message.CRM_Thread__c = thread.Id;
+        message.CRM_Message_Text__c = entry.messageText;
+        message.CRM_Sent_Date__c = DateTime.newInstance(entry.serverReceivedTimestamp);
+        message.CRM_Read__c = false;
+        message.CRM_Type__c = 'Message';
+
+        if ('Agent'.equals(entry.sender.role)) {
+            User navUser = navUserInfoByUserId.get(entry.sender.subject);
+            if (navUser != null) {
+                message.CRM_From_User__c = navUser.Id;
+                message.CRM_From_NAV_Unit__c = navUser.Department;
+            }
+        } else {
+            message.CRM_From_Contact__c = session.EndUserContactId;
+        }
+
+        return message;
+    }
+
+    private static void insertMessages(List<Message__c> messages, String threadId) {
+        try {
+            insert messages;
+            updateThreadCloseDate(threadId, System.now());
+        } catch (Exception e) {
+            logger.error('Error saving messages: ' + e.getMessage(), null, CRM_ApplicationDomain.Domain.NKS);
+        }
+    }
+
+    private static void splitChatbotMessagesFromConversation(
+        List<ConversationEntry> entries,
+        List<ConversationEntry> chatbotMessages,
+        List<ConversationEntry> userMessages
+    ) {
+        Boolean greetingFound = false;
+
+        for (ConversationEntry entry : entries) {
+            if (!greetingFound && isEndOfChatbotMessages(entry)) {
+                greetingFound = true;
+            }
+
+            if (greetingFound) {
+                chatbotMessages.add(entry);
+            } else {
+                userMessages.add(entry);
+            }
+        }
+    }
+
+    // TODO: Change messageText check
+    private static Boolean isEndOfChatbotMessages(ConversationEntry entry) {
+        return entry.messageText != null &&
+            'System'.equalsIgnoreCase(entry.sender.role) &&
+            entry.messageText.containsIgnoreCase('Greetingmelding');
+    }
+
+    private static String formatMessagesAsString(List<ConversationEntry> entries) {
+        List<String> formattedMessages = new List<String>();
+
+        for (ConversationEntry entry : entries) {
+            String sender = 'Agent'.equalsIgnoreCase(entry.sender.role) ? 'Agent' : 'Customer';
+            formattedMessages.add('[' + sender + '] ' + entry.messageText);
+        }
+
+        return String.join(formattedMessages, '\n');
+    }
+
+    private static void storeChatbotConversationOnThread(String threadId, String chatbotConversation) {
+        update new Thread__c(Id = threadId, Additional_Information__c = chatbotConversation);
     }
 
     private static Map<String, User> getNavUserInfoByUserId() {
@@ -142,15 +225,6 @@ public class NKS_ConversationEntryController {
         }
 
         return navUserInfoByUserId;
-    }
-
-    private static String getChatbotConversation() {
-        return '';
-        // TODO
-    }
-
-    private static void storeChatbotConversationOnThread(String threadId, String chatbotConversation) {
-        update new Thread__c(Id = threadId, Additional_Information__c = chatbotConversation);
     }
 
     private static Thread__c getThreadDetails(Id messagingSessionId) {
