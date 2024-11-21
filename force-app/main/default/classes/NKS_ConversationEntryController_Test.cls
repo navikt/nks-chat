@@ -33,26 +33,89 @@ private class NKS_ConversationEntryController_Test {
 
     @isTest
     static void testConvertConversationEntries() {
-        Test.setMock(
-            HttpCalloutMock.class,
-            new SingleRequestMock(200, 'OK', '{"conversationEntries":[{"clientDuration":0,"clientTimestamp":1731401738134,"identifier":"17978db9-ed91-4363-adcb-d1b581168eed","messageText":"https://navdialog--sit2.sandbox.my.site.com/nks/s/identity-verified?ctid=0MwKD0000004CWb0AM","relatedRecords":["0MwKD0000004CWb"],"sender":{"appType":"agent","role":"Agent","subject":"0055t000005CmwY"},"serverReceivedTimestamp":1731401739478},{"clientDuration":0,"clientTimestamp":1731401738134,"identifier":"8360751b-0a0f-4f0c-b62f-772f15140efa","messageText":"Trykk for å logge inn på nav.no og gi veilederen tilgang til saken din.","relatedRecords":["0MwKD0000004CWb"],"sender":{"appType":"agent","role":"Agent","subject":"0055t000005CmwY"},"serverReceivedTimestamp":1731401739477}]}', null)
-        );
- 
         List<MessagingSession> messagingSessions = [
             SELECT Id, Status, Conversation.ConversationIdentifier, CRM_Authentication_Status__c
             FROM MessagingSession
             LIMIT 1
         ];
-
         messagingSessions[0].CRM_Authentication_Status__c = 'Completed';
+        String messagingSessionId = messagingSessions[0].Id;
+
+        String jsonResponse =
+            '{"conversationEntries":[{"clientDuration":0,"clientTimestamp":1732111856833,"identifier":"ae84faf0-7cd5-4870-a860-5698c8508b7c","messageText":"Melding fra bruker.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111856855},{"clientDuration":0,"clientTimestamp":1732111834877,"identifier":"adcf753e-bb2b-4a00-a6c6-7ebcf683df2c","messageText":"Melding fra veileder.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"agent","role":"Agent","subject":"0052o000009d7J9"},"serverReceivedTimestamp":1732111834344},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Greetingmelding fra Messaging Session setup.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"System","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Chatbotmelding.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra veileder.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"Agent","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra bruker.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810337},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere chatbotmelding.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810339}]}';
+
+        Test.setMock(HttpCalloutMock.class, new SingleRequestMock(200, 'OK', jsonResponse, null));
 
         Test.startTest();
         update messagingSessions;
         Test.stopTest();
 
-        // TODO: Check if messages have been created
-        String threadId = [SELECT Id FROM Thread__c WHERE CRM_Related_Object__c = :messagingSessions[0].Id].Id;
-        //List<Message__c> messages = [SELECT Id FROM Message__c WHERE Id = :threadId];
-        //System.assert(messages.size() > 0, 'Messages should be inserted');
+        String threadId = [SELECT Id FROM Thread__c WHERE CRM_Related_Object__c = :messagingSessionId].Id;
+        List<Message__c> messages = [SELECT Id, CRM_Message_Text__c FROM Message__c WHERE CRM_Thread__c = :threadId];
+        Assert.isTrue(
+            messages.size() == 3,
+            '3 messages should be inserted. 1 for chatbot history and 2 for user/advisor.'
+        );
+    }
+
+    @isTest
+    static void testGetConversationEntryMessages() {
+        List<MessagingSession> messagingSessions = [
+            SELECT Id, Conversation.ConversationIdentifier
+            FROM MessagingSession
+            LIMIT 1
+        ];
+
+        String messagingSessionId = messagingSessions[0].Id;
+        String conversationIdentifier = messagingSessions[0].Conversation.ConversationIdentifier;
+        Long startTimestamp = 1732111834877L;
+        Long endTimestamp = 1732111856833L;
+        String queryDirection = 'FromStart';
+        Integer recordLimit = 10;
+
+        String jsonResponse =
+            '{"conversationEntries":[{"clientDuration":0,"clientTimestamp":1732111856833,"identifier":"ae84faf0-7cd5-4870-a860-5698c8508b7c","messageText":"Melding fra bruker.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111856855},{"clientDuration":0,"clientTimestamp":1732111834877,"identifier":"adcf753e-bb2b-4a00-a6c6-7ebcf683df2c","messageText":"Melding fra veileder.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"agent","role":"Agent","subject":"0052o000009d7J9"},"serverReceivedTimestamp":1732111834344},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Greetingmelding fra Messaging Session setup.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"System","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Chatbotmelding.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra veileder.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"Agent","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra bruker.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810337},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere chatbotmelding.","relatedRecords":["' +
+            messagingSessionId +
+            '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810339}]}';
+
+        Test.setMock(HttpCalloutMock.class, new SingleRequestMock(200, 'OK', jsonResponse, null));
+
+        Test.startTest();
+        HttpResponse response = NKS_ConversationEntryService.getConversationEntryMessages(
+            conversationIdentifier,
+            startTimestamp,
+            endTimestamp,
+            queryDirection,
+            recordLimit
+        );
+        Test.stopTest();
+
+        Assert.areEqual(200, response.getStatusCode(), 'Expected status code 200');
     }
 }
