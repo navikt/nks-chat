@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MessagingChannel xmlns="http://soap.sforce.com/2006/04/metadata">
     <automatedResponses>
-        <response>You&apos;ve opted out of receiving messages from us, so we won&apos;t contact you again.</response>
+        <autoResponseContentType>MessageDefinition</autoResponseContentType>
+        <messageDefinitionName>Geir</messageDefinitionName>
+        <type>AgentEngagedResponse</type>
+    </automatedResponses>
+    <automatedResponses>
+        <autoResponseContentType>TextResponse</autoResponseContentType>
+        <language>en_US</language>
+        <response>You&apos;ve opted out of receiving messages from us, so we won&apos;t contact you
+            again.</response>
         <type>OptOutConfirmation</type>
     </automatedResponses>
     <automatedResponses>
-        <response>Ja, jeg vet at Eirik er noob</response>
-        <type>CustomResponse</type>
-    </automatedResponses>
-    <automatedResponses>
+        <autoResponseContentType>TextResponse</autoResponseContentType>
+        <language>en_US</language>
         <response>Text STOP to opt out of further messages.</response>
         <type>HelpResponse</type>
-    </automatedResponses>
-    <automatedResponses>
-        <response>You&apos;ve opted out of receiving messages from us, so we won&apos;t contact you again.</response>
-        <type>OptOutConfirmation</type>
     </automatedResponses>
     <customParameters>
         <actionParameterMappings>
