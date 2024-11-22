@@ -2,7 +2,7 @@
 <MessagingChannel xmlns="http://soap.sforce.com/2006/04/metadata">
     <automatedResponses>
         <autoResponseContentType>MessageDefinition</autoResponseContentType>
-        <messageDefinitionName>Geir</messageDefinitionName>
+        <messageDefinitionName>Automatic_Greeting</messageDefinitionName>
         <type>AgentEngagedResponse</type>
     </automatedResponses>
     <automatedResponses>
