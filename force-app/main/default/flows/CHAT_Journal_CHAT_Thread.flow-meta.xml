@@ -439,6 +439,13 @@
                 <stringValue>Journal Completed</stringValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Journal_Entry_SF.Duplicate_Journal_Entry_Id__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Post_Journal_Request.journalpostId</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Journal_Entry_Id_null</targetReference>
         </connector>
