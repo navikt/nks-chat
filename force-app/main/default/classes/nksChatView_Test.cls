@@ -14,7 +14,7 @@ public with sharing class nksChatView_Test {
         Case botCase = (Case) UTIL_TestDataFactory.createRecord(new Case(Description = botConversation));
 
 
-        //Tester i denne fila på tilpasses MessagingSession, vekk fra 
+        //Tester i denne fila må tilpasses MessagingSession, vekk fra 
         LiveChatTranscript transcript = new LiveChatTranscript(
             NKS_Journal_Entry_Created__c = true,
             Body = 'TESTBODY',
