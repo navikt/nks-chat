@@ -188,7 +188,8 @@ public class NKS_ConversationEntryController {
     private static Boolean isEndOfChatbotMessages(ConversationEntry entry) {
         return entry.messageText != null &&
             'System'.equalsIgnoreCase(entry.sender.role) &&
-            entry.messageText.containsIgnoreCase('Greetingmelding');
+            (entry.messageText.containsIgnoreCase('Welcome to chat with NAV') ||
+            entry.messageText.containsIgnoreCase('Velkommen til chat med NAV'));
     }
 
     private static String formatMessagesAsString(List<ConversationEntry> entries) {

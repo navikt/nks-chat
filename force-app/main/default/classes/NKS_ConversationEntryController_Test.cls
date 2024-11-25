@@ -46,7 +46,7 @@ private class NKS_ConversationEntryController_Test {
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111856855},{"clientDuration":0,"clientTimestamp":1732111834877,"identifier":"adcf753e-bb2b-4a00-a6c6-7ebcf683df2c","messageText":"Melding fra veileder.","relatedRecords":["' +
             messagingSessionId +
-            '"],"sender":{"appType":"agent","role":"Agent","subject":"0052o000009d7J9"},"serverReceivedTimestamp":1732111834344},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Greetingmelding fra Messaging Session setup.","relatedRecords":["' +
+            '"],"sender":{"appType":"agent","role":"Agent","subject":"0052o000009d7J9"},"serverReceivedTimestamp":1732111834344},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Welcome to chat with NAV.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"System","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Chatbotmelding.","relatedRecords":["' +
             messagingSessionId +
@@ -92,7 +92,7 @@ private class NKS_ConversationEntryController_Test {
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111856855},{"clientDuration":0,"clientTimestamp":1732111834877,"identifier":"adcf753e-bb2b-4a00-a6c6-7ebcf683df2c","messageText":"Melding fra veileder.","relatedRecords":["' +
             messagingSessionId +
-            '"],"sender":{"appType":"agent","role":"Agent","subject":"0052o000009d7J9"},"serverReceivedTimestamp":1732111834344},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Greetingmelding fra Messaging Session setup.","relatedRecords":["' +
+            '"],"sender":{"appType":"agent","role":"Agent","subject":"0052o000009d7J9"},"serverReceivedTimestamp":1732111834344},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Velkommen til chat med NAV.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"System","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},{"clientDuration":0,"clientTimestamp":1732111810498,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Chatbotmelding.","relatedRecords":["' +
             messagingSessionId +
