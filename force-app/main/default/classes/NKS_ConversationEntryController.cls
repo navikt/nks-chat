@@ -68,9 +68,6 @@ public class NKS_ConversationEntryController {
             );
 
             if (response.getStatusCode() == 200) {
-                // TODO: Remove logs
-                logger.info('MessagingSession response: ' + response, null, CRM_ApplicationDomain.Domain.NKS);
-                logger.publish();
                 ConversationEntryWrapper wrapper = (ConversationEntryWrapper) JSON.deserialize(
                     response.getBody(),
                     ConversationEntryWrapper.class
