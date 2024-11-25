@@ -184,7 +184,6 @@ public class NKS_ConversationEntryController {
         }
     }
 
-    // TODO: Change messageText check
     private static Boolean isEndOfChatbotMessages(ConversationEntry entry) {
         return entry.messageText != null &&
             'System'.equalsIgnoreCase(entry.sender.role) &&
