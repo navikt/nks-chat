@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MessagingChannel xmlns="http://soap.sforce.com/2006/04/metadata">
     <automatedResponses>
-        <autoResponseContentType>MessageDefinition</autoResponseContentType>
-        <messageDefinitionName>Automatic_Greeting</messageDefinitionName>
-        <type>AgentEngagedResponse</type>
-    </automatedResponses>
-    <automatedResponses>
         <autoResponseContentType>TextResponse</autoResponseContentType>
         <language>en_US</language>
         <response>You&apos;ve opted out of receiving messages from us, so we won&apos;t contact you
