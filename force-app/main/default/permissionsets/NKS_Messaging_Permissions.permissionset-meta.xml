@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Necessary app and object permissions needed to give a user access to messaging functionality.</description>
+    <description>Necessary app and object permissions needed to give a user access to messaging
+        functionality.</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>MessagingSession.CRM_Authentication_Status__c</field>
@@ -45,7 +46,7 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>MessagingEndUser</object>
-        <viewAllRecords>true</viewAllRecords>
+        <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
         <allowCreate>false</allowCreate>
