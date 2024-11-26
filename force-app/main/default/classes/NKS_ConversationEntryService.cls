@@ -10,9 +10,6 @@ public class NKS_ConversationEntryService {
         String queryDirection,
         Integer recordLimit
     ) {
-        //req.setEndpoint(System.URL.getOrgDomainUrl().toExternalForm() + url);
-        //req.setHeader('Authorization', 'Bearer ' + UserInfo.getSessionId());
-
         HttpRequest req = new HttpRequest();
         req.setEndpoint('callout:Salesforce_Connect_Rest_API' + buildUrl(conversationIdentifier, startTimestamp, endTimestamp, queryDirection, recordLimit));
         req.setMethod('GET');
