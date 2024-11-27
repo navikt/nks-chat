@@ -171,6 +171,8 @@ public class NKS_ConversationEntryController {
         for (ConversationEntry entry : entries) {
             if (!greetingFound && isEndOfChatbotMessages(entry)) {
                 greetingFound = true;
+                userMessages.add(entry); // Add welcome message to user messages
+                continue;
             }
 
             if (greetingFound) {
