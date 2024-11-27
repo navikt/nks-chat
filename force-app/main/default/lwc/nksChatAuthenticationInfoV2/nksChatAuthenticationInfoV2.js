@@ -16,6 +16,7 @@ import CHAT_GETTING_AUTH_STATUS from '@salesforce/label/c.NKS_Chat_Getting_Authe
 import CHAT_SENDING_AUTH_REQUEST from '@salesforce/label/c.NKS_Chat_Sending_Authentication_Request';
 import { subscribe, APPLICATION_SCOPE, MessageContext } from 'lightning/messageService';
 import ConversationEndedChannel from '@salesforce/messageChannel/lightning__conversationEnded';
+import { refreshApex } from '@salesforce/apex';
 
 const STATUSES = {
     NOT_STARTED: 'Not Started',
@@ -47,6 +48,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
     loginEvtSent = false;
     chatEnded = false;
     endTime = null;
+    wiredRecordResult;
 
     @wire(MessageContext) messageContext;
 
@@ -222,5 +224,11 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     log(loggable) {
         if (this.loggingEnabled) console.log(loggable);
+    }
+
+    refreshData() {
+        if (this.wiredRecordResult) {
+            refreshApex(this.wiredRecordResult);
+        }
     }
 }
