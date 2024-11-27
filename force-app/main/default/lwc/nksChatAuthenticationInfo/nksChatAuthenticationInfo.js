@@ -73,6 +73,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
             this.isNavEmployee = 'true' == data.IS_NAV_EMPLOYEE;
             // eslint-disable-next-line eqeqeq
             this.isConfidential = 'true' == data.IS_CONFIDENTIAL;
+            this.chatLanguage = data.CHAT_LANGUAGE;
 
             if (this.isEmpSubscriptionNeeded) {
                 this.handleSubscribe();

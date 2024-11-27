@@ -24,12 +24,11 @@ public without sharing class ChatAuthController {
                     MessagingEndUser.Account.CRM_Person__r.INT_IsNavEmployee__c,
                     MessagingEndUser.Account.CRM_Person__r.NKS_NumberOfSecurityMeasures__c,
                     EndTime,
-                    Status
+                    Status,
+                    CRM_Language__c
                 FROM MessagingSession
                 WHERE Id = :messagingId
             ];
-            // TODO: Figure out the Messaging equivalent of theses fields
-            // LiveChatButton.WindowLanguage,
 
             messagingInfo = new Map<String, String>{
                 'AUTH_STATUS' => session.CRM_Authentication_Status__c,
@@ -39,13 +38,9 @@ public without sharing class ChatAuthController {
                 'IS_CONFIDENTIAL' => '' + personIsConfidential(session),
                 'NMB_SECURITY_MEASURES' => numberOfSecurityMeasures(session),
                 'END_TIME' => string.valueOf(session.EndTime),
-                'CONVERSATION_STATUS' => session.Status
+                'CONVERSATION_STATUS' => session.Status,
+                'CHAT_LANGUAGE' => session.CRM_Language__c
             };
-            // TODO: Figure out the equivalent here aswell
-            // 'CASEID' => session.CaseId,
-            // 'CHAT_LANGUAGE' => String.isNotBlank(session.LiveChatButton.WindowLanguage)
-            // ? session.LiveChatButton.WindowLanguage
-            // : 'no',
 
             return messagingInfo;
         } catch (Exception ex) {

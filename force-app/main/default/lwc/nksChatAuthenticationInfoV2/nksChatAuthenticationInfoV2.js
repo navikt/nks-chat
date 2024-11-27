@@ -42,6 +42,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     currentAuthenticationStatus = STATUSES.NOT_STARTED;
     sendingAuthRequest = false;
+    chatLanguage;
     chatAuthUrl = '';
     empApiSubscription = null;
     lmsSubscription = null;
@@ -57,6 +58,7 @@ export default class ChatAuthenticationOverview extends LightningElement {
         if (data) {
             this.currentAuthenticationStatus = data.AUTH_STATUS;
             this.endTime = data.END_TIME;
+            this.chatLanguage = data.CHAT_LANGUAGE;
 
             if (this.isEmpSubscriptionNeeded) {
                 this.handleSubscribe();
