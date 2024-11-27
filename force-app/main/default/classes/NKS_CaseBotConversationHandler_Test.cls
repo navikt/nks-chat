@@ -14,12 +14,12 @@ public class NKS_CaseBotConversationHandler_Test {
     @isTest
     static void testConversationFormat() {
         Case case = [SELECT Id FROM Case LIMIT 1];
-        LiveChatTranscript trans = (LiveChatTranscript) UTIL_TestDataFactory.createRecord(
-            new LiveChatTranscript(CaseId = case.Id)
+        MessagingSession session = (MessagingSession) UTIL_TestDataFactory.createRecord(
+            new MessagingSession(CaseId = case.Id)
         );
 
         Test.startTest();
-        case.SourceId = trans.Id;
+        case.SourceId = session.Id;
         update case;
         Test.stopTest();
 
