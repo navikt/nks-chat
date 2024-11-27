@@ -194,8 +194,8 @@ public class NKS_ConversationEntryController {
         List<String> formattedMessages = new List<String>();
 
         for (ConversationEntry entry : entries) {
-            formattedMessages.add('[' + entry.sender.role + '] ' + entry.messageText);
-        }
+            formattedMessages.add(entry.messageText);
+        }   
 
         return String.join(formattedMessages, '\n');
     }
