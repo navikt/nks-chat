@@ -11,10 +11,10 @@ private class NKS_ChatTranscriptService_Test {
 
 
         //Tester i denne fila på tilpasses MessagingSession, vekk fra LiveChatTranscript
-        List<LiveChatTranscript> transcripts = new List<LiveChatTranscript>();
+        List<MessagingSession> transcripts = new List<MessagingSession>();
         for (Integer i = 0; i < 10; i++) {
             transcripts.add(
-                new LiveChatTranscript(
+                new MessagingSession(
                     NKS_Journal_Entry_Created__c = true,
                     Body = 'TESTBODY',
                     CaseId = botCase.Id,
@@ -37,7 +37,7 @@ private class NKS_ChatTranscriptService_Test {
 
     @isTest
     static void testStoreConversation() {
-        LiveChatTranscript transcript = [SELECT Id, NKS_Conversation__c FROM LiveChatTranscript LIMIT 1];
+        MessagingSession transcript = [SELECT Id, NKS_Conversation__c FROM MessagingSession LIMIT 1];
         User testUser = [SELECT Id FROM User WHERE CRM_NAV_Ident__c = 'Z999998'];
 
         StaticResource testConversation = [
@@ -58,8 +58,8 @@ private class NKS_ChatTranscriptService_Test {
 
     @isTest
     static void testGetChatTranscript() {
-        LiveChatTranscript transcript = [SELECT Id, NKS_Conversation__c FROM LiveChatTranscript LIMIT 1];
-        LiveChatTranscript result;
+        MessagingSession transcript = [SELECT Id, NKS_Conversation__c FROM MessagingSession LIMIT 1];
+        MessagingSession result;
         Test.startTest();
         result = NKS_ChatTranscriptService.getChatTranscript(transcript.Id);
         Test.stopTest();
@@ -69,7 +69,7 @@ private class NKS_ChatTranscriptService_Test {
 
     @isTest
     static void testGenerateAuthMessage() {
-        LiveChatTranscript transcript = [SELECT Id FROM LiveChatTranscript LIMIT 1];
+        MessagingSession transcript = [SELECT Id FROM MessagingSession LIMIT 1];
         Test.startTest();
         String result = NKS_ChatTranscriptService.generateAuthMessage(transcript.Id);
         Test.stopTest();
