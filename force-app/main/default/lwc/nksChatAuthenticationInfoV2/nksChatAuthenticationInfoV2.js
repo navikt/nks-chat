@@ -152,10 +152,10 @@ export default class ChatAuthenticationOverview extends LightningElement {
     }
 
     handleCdcEvent(response) {
-        const eventRecordId = response.data.payload.ChangeEventHeader.recordIds[0];
+        const eventRecordIds = response.data.payload.ChangeEventHeader.recordIds;
         const changedFields = response.data.payload.ChangeEventHeader.changedFields;
 
-        if (eventRecordId === this.recordId && changedFields.includes('CRM_Authentication_Status__c')) {
+        if (eventRecordIds.includes(this.recordId) && changedFields.includes('CRM_Authentication_Status__c')) {
             this.updateAuthStatus(response.data.payload.CRM_Authentication_Status__c);
         }
     }
