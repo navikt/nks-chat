@@ -1,5 +1,5 @@
 import { LightningElement, api, wire } from 'lwc';
-import { subscribe as empApiSubscribe, unsubscribe, onError, setDebugFlag } from 'lightning/empApi';
+import { subscribe as empApiSubscribe, unsubscribe, onError } from 'lightning/empApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import getChatInfo from '@salesforce/apex/ChatAuthController.getMessagingInfo';
@@ -72,7 +72,6 @@ export default class ChatAuthenticationOverview extends LightningElement {
         this.loadAuthUrl();
         this.subscribeToMessageChannel();
         this.registerErrorListener();
-        // setDebugFlag(true);
     }
 
     get isLoading() {
