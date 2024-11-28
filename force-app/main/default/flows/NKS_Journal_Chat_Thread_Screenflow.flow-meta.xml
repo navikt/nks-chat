@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>53.0</apiVersion>
+    <apiVersion>62.0</apiVersion>
     <decisions>
         <description>Check that the chat har been authenticated to be able to create a journal entry.</description>
         <name>Verify_Authentication_Status</name>

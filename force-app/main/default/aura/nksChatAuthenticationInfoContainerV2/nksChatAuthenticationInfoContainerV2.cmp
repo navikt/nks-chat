@@ -4,10 +4,6 @@
 >
     <aura:attribute name="loggingEnabled" type="boolean" default="true" />
     <aura:attribute name="authenticated" type="boolean" default="false" />
-    <aura:attribute name="accountFields" type="String" />
-    <aura:attribute name="caseFields" type="String" />
-    <aura:attribute name="personFields" type="String" />
-    <aura:attribute name="copyPersonFields" type="String" />
     <aura:attribute name="conversation" type="object[]" />
     <aura:attribute name="subscription" type="Map" />
     <aura:attribute name="chatRecord" type="Object" />
@@ -16,6 +12,9 @@
 
     <lightning:conversationToolkitApi aura:id="chatToolkit" />
     <lightning:workspaceAPI aura:id="workspace" />
+    <lightning:empApi aura:id="empApi" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
 
     <lightning:messageChannel
         type="lightning__conversationEnded"

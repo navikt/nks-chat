@@ -1,100 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Messaging_Routing_Error_Log</name>
-        <label>Messaging Routing Error Log</label>
-        <locationX>314</locationX>
-        <locationY>782</locationY>
-        <actionName>LoggerUtility</actionName>
-        <actionType>apex</actionType>
-        <dataTypeMappings>
-            <typeName>T__refRecord</typeName>
-            <typeValue>MessagingSession</typeValue>
-        </dataTypeMappings>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>category</name>
-            <value>
-                <stringValue>Messaging</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>domain</name>
-            <value>
-                <stringValue>NKS</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>logLevel</name>
-            <value>
-                <stringValue>ERROR</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>logMessage</name>
-            <value>
-                <stringValue>Messaging: Failed to rout chat to Queue</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>refRecord</name>
-            <value>
-                <elementReference>input_record</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>LoggerUtility</nameSegment>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
-    <actionCalls>
-        <name>Messaging_Routing_Error_Log_Default_Queue</name>
-        <label>Messaging Routing Error Log Default Queue</label>
-        <locationX>930</locationX>
-        <locationY>1514</locationY>
-        <actionName>LoggerUtility</actionName>
-        <actionType>apex</actionType>
-        <dataTypeMappings>
-            <typeName>T__refRecord</typeName>
-            <typeValue>MessagingSession</typeValue>
-        </dataTypeMappings>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>category</name>
-            <value>
-                <stringValue>Messaging</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>domain</name>
-            <value>
-                <stringValue>NKS</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>logLevel</name>
-            <value>
-                <stringValue>ERROR</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>logMessage</name>
-            <value>
-                <stringValue>Messaging: Failed to route chat to Default Queue</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>refRecord</name>
-            <value>
-                <elementReference>input_record</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>LoggerUtility</nameSegment>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
-    <actionCalls>
         <name>Route_to_default_Queue_Arbeid</name>
         <label>Route to default Queue Arbeid</label>
         <locationX>534</locationX>
-        <locationY>1406</locationY>
+        <locationY>1706</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
         <faultConnector>
@@ -113,7 +23,7 @@
         <inputParameters>
             <name>serviceChannelId</name>
             <value>
-                <stringValue>0N95t000000H43ICAS</stringValue>
+                <stringValue>0N9KN0000008QWU0A2</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -177,14 +87,16 @@
             <name>copilotLabel</name>
         </inputParameters>
         <nameSegment>routeWork</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
-        <description>The Route Work action is used to input the routing requirements to Omni-Channel.</description>
+        <description>The Route Work action is used to input the routing requirements to
+            Omni-Channel.</description>
         <name>Route_to_Queue</name>
         <label>Route to Queue</label>
         <locationX>50</locationX>
-        <locationY>674</locationY>
+        <locationY>974</locationY>
         <actionName>routeWork</actionName>
         <actionType>routeWork</actionType>
         <faultConnector>
@@ -203,7 +115,7 @@
         <inputParameters>
             <name>serviceChannelId</name>
             <value>
-                <stringValue>0N95t000000H43ICAS</stringValue>
+                <stringValue>0N9KN0000008QWU0A2</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -270,6 +182,7 @@
             </value>
         </inputParameters>
         <nameSegment>routeWork</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>62.0</apiVersion>
@@ -277,7 +190,7 @@
         <name>Assign_default_Queue</name>
         <label>Assign default Queue</label>
         <locationX>534</locationX>
-        <locationY>1190</locationY>
+        <locationY>1490</locationY>
         <assignmentItems>
             <assignToReference>input_record.Queue_Name__c</assignToReference>
             <operator>Assign</operator>
@@ -293,16 +206,48 @@
         <name>Assigne_Queue_Name</name>
         <label>Assigne Queue Name</label>
         <locationX>50</locationX>
-        <locationY>458</locationY>
+        <locationY>758</locationY>
         <assignmentItems>
             <assignToReference>input_record.Queue_Name__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>input_queue</elementReference>
+                <elementReference>queueApiName</elementReference>
             </value>
         </assignmentItems>
         <connector>
             <targetReference>Update_Queue_Name</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_english_language</name>
+        <label>Set english language</label>
+        <locationX>402</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>input_record.EndUserLanguage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>en_US</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Queue_Api_Name_null</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_norwegian_language</name>
+        <label>Set norwegian language</label>
+        <locationX>666</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>input_record.EndUserLanguage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>no</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Queue_Api_Name_null</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -310,7 +255,7 @@
         <name>Is_Queue_Api_Name_null</name>
         <label>Is Queue Api Name null?</label>
         <locationX>534</locationX>
-        <locationY>134</locationY>
+        <locationY>434</locationY>
         <defaultConnector>
             <targetReference>Assign_default_Queue</targetReference>
         </defaultConnector>
@@ -319,7 +264,7 @@
             <name>No</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>input_queue</leftValueReference>
+                <leftValueReference>queueApiName</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -335,7 +280,7 @@
         <name>RouteCustomerDecision</name>
         <label>Is Queue null?</label>
         <locationX>314</locationX>
-        <locationY>350</locationY>
+        <locationY>650</locationY>
         <defaultConnector>
             <targetReference>Assign_default_Queue</targetReference>
         </defaultConnector>
@@ -356,8 +301,45 @@
             <label>No</label>
         </rules>
     </decisions>
-    <description>The flow is used to route chats to the correct queue based on the Queue Api Name we get from the API</description>
+    <decisions>
+        <name>Set_language</name>
+        <label>Set language</label>
+        <locationX>534</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>Set_norwegian_language</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Is Norwegian</defaultConnectorLabel>
+        <rules>
+            <name>Is_English</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>language</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>en</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_english_language</targetReference>
+            </connector>
+            <label>Is English</label>
+        </rules>
+    </decisions>
+    <description>The flow is used to route chats to the correct queue based on the Queue Api Name we
+        get from the API</description>
     <environments>Default</environments>
+    <formulas>
+        <name>language</name>
+        <dataType>String</dataType>
+        <expression>RIGHT( {!input_queue}, LEN({!input_queue}) - FIND( &quot;|&quot; ,
+            {!input_queue}))</expression>
+    </formulas>
+    <formulas>
+        <name>queueApiName</name>
+        <dataType>String</dataType>
+        <expression>LEFT( {!input_queue}, FIND( &quot;|&quot; , {!input_queue}) -1)</expression>
+    </formulas>
     <interviewLabel>NKS Messaging Route to Queue {!$Flow.CurrentDateTime}</interviewLabel>
     <label>NKS Messaging Route to Queue</label>
     <processMetadataValues>
@@ -377,7 +359,7 @@
         <name>Get_Queue</name>
         <label>Get Queue</label>
         <locationX>314</locationX>
-        <locationY>242</locationY>
+        <locationY>542</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>RouteCustomerDecision</targetReference>
@@ -387,7 +369,7 @@
             <field>DeveloperName</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>input_queue</elementReference>
+                <elementReference>queueApiName</elementReference>
             </value>
         </filters>
         <filters>
@@ -405,7 +387,7 @@
         <name>Update_Queue_Name</name>
         <label>Update Queue Name</label>
         <locationX>50</locationX>
-        <locationY>566</locationY>
+        <locationY>866</locationY>
         <connector>
             <targetReference>Route_to_Queue</targetReference>
         </connector>
@@ -415,7 +397,7 @@
         <name>Update_to_default_Queue_Name_Arbeid</name>
         <label>Update to default Queue Name Arbeid</label>
         <locationX>534</locationX>
-        <locationY>1298</locationY>
+        <locationY>1598</locationY>
         <connector>
             <targetReference>Route_to_default_Queue_Arbeid</targetReference>
         </connector>
@@ -427,10 +409,108 @@
         <locationX>408</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Is_Queue_Api_Name_null</targetReference>
+            <targetReference>Set_language</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>Messaging_Routing_Error_Log</name>
+        <label>Messaging Routing Error Log</label>
+        <locationX>314</locationX>
+        <locationY>1082</locationY>
+        <flowName>Flow_Create_Application_Log</flowName>
+        <inputAssignments>
+            <name>Application_Domain</name>
+            <value>
+                <stringValue>NKS</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Payload</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Source</name>
+            <value>
+                <elementReference>Route_to_Queue</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Category</name>
+            <value>
+                <stringValue>Messaging</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Level</name>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Message</name>
+            <value>
+                <stringValue>Failed to rout chat to Queue</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>ReferenceID</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Messaging_Routing_Error_Log_Default_Queue</name>
+        <label>Messaging Routing Error Log Default Queue</label>
+        <locationX>930</locationX>
+        <locationY>1814</locationY>
+        <flowName>Flow_Create_Application_Log</flowName>
+        <inputAssignments>
+            <name>Application_Domain</name>
+            <value>
+                <stringValue>NKS</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Payload</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Error_Source</name>
+            <value>
+                <elementReference>Route_to_default_Queue_Arbeid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Category</name>
+            <value>
+                <stringValue>Messaging</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Level</name>
+            <value>
+                <stringValue>Error</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Log_Message</name>
+            <value>
+                <stringValue>Failed to route chat to Default Queue</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>ReferenceID</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
     <variables>
         <description>Queue API Name from the API</description>
         <name>input_queue</name>
@@ -440,7 +520,8 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>The messaging session record that is being inputted into the flow. Necessary for the flow to run.</description>
+        <description>The messaging session record that is being inputted into the flow. Necessary
+            for the flow to run.</description>
         <name>input_record</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -449,7 +530,8 @@
         <objectType>MessagingSession</objectType>
     </variables>
     <variables>
-        <description>The ID of the record being inputted into the flow. Necessary for the flow to run.</description>
+        <description>The ID of the record being inputted into the flow. Necessary for the flow to
+            run.</description>
         <name>recordId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
