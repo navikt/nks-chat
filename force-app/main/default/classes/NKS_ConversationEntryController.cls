@@ -100,7 +100,7 @@ public class NKS_ConversationEntryController {
         splitChatbotMessagesFromConversation(wrapper.conversationEntries, chatbotMessages, userMessages);
 
         if (!chatbotMessages.isEmpty()) {
-            String formattedChatbotMessages = formatMessagesAsString(chatbotMessages);
+            String formattedChatbotMessages = formatMessagesAsString(chatbotMessages, session.EndUserLanguage);
             storeChatbotConversationOnThread(thread.Id, formattedChatbotMessages);
         }
 
@@ -169,8 +169,12 @@ public class NKS_ConversationEntryController {
         Boolean greetingFound = false;
 
         for (ConversationEntry entry : entries) {
+            if (entry.messageText != null) {
+                entry.messageText = entry.messageText.unescapeHtml4(); // Connect API returns HTML-encoded strings -> decode for further processing
+            }
             if (!greetingFound && isEndOfChatbotMessages(entry)) {
                 greetingFound = true;
+                entry.sender.role = 'Agent'; // Welcome message is incorrectly set as User message
                 userMessages.add(entry); // Add welcome message to user messages
                 continue;
             }
@@ -190,13 +194,19 @@ public class NKS_ConversationEntryController {
             entry.messageText.containsIgnoreCase('Velkommen til chat med NAV'));
     }
 
-    private static String formatMessagesAsString(List<ConversationEntry> entries) {
+    private static String formatMessagesAsString(List<ConversationEntry> entries, String language) {
         List<String> formattedMessages = new List<String>();
-
-        for (ConversationEntry entry : entries) {
-            formattedMessages.add(entry.messageText);
-        }   
-
+        // Reverse the entries for correct order in Text Area field
+        for (Integer i = entries.size() - 1; i >= 0; i--) {
+            ConversationEntry entry = entries[i];
+            // Append "Bruker: " for all messages except the first (Fridalog) in reversed order. 
+            // This is for cases where user sends messages when they are in queue waiting for an agent to pick up the chat.
+            if (i == entries.size() - 1) {
+                formattedMessages.add(entry.messageText);
+            } else {
+                formattedMessages.add(language == 'en_US' ? 'User: ' : 'Bruker: ' + entry.messageText);
+            }
+        }
         return String.join(formattedMessages, '\n');
     }
 
