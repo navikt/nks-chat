@@ -67,7 +67,6 @@
     <c:nksChatAuthenticationInfo
         recordId="{!v.recordId}"
         loggingEnabled="{!v.loggingEnabled}"
-        caseFields="{!v.caseFields}"
         accountFields="{!v.accountFields}"
         personFields="{!v.personFields}"
         copyPersonFields="{!v.copyPersonFields}"

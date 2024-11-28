@@ -22,7 +22,6 @@ const STATUSES = {
     NOT_STARTED: 'Not Started',
     IN_PROGRESS: 'In Progress',
     COMPLETED: 'Completed',
-    INPROGRESS: 'InProgress',
     AUTHREQUESTED: 'Authentication Requested'
 };
 
@@ -41,50 +40,42 @@ export default class ChatAuthenticationOverview extends LightningElement {
         CHAT_SENDING_AUTH_REQUEST
     };
 
-    currentAuthenticationStatus;
+    currentAuthenticationStatus = STATUSES.NOT_STARTED;
     sendingAuthRequest = false;
-    isActiveConversation = true;
     chatLanguage;
-    chatAuthUrl;
-    empApiSubscription = {};
+    chatAuthUrl = '';
+    empApiSubscription = null;
     lmsSubscription = null;
     loginEvtSent = false;
     chatEnded = false;
     endTime = null;
     wiredRecordResult;
 
-    @wire(MessageContext)
-    messageContext;
+    @wire(MessageContext) messageContext;
 
     @wire(getChatInfo, { messagingId: '$recordId' })
-    wiredResult(result) {
-        this.wiredRecordResult = result;
-        const { error, data } = result;
+    loadChatInfo({ error, data }) {
         if (data) {
             this.currentAuthenticationStatus = data.AUTH_STATUS;
             this.endTime = data.END_TIME;
+            this.chatLanguage = data.CHAT_LANGUAGE;
 
-            if (this.currentAuthenticationStatus !== STATUSES.COMPLETED && !this.isLoading && !this.isEmpSubscribed) {
+            if (this.isEmpSubscriptionNeeded) {
                 this.handleSubscribe();
             }
         } else {
-            this.currentAuthenticationStatus = STATUSES.NOT_STARTED;
-            this.log(error);
+            this.handleError(error);
         }
     }
 
     connectedCallback() {
-        this.getAuthUrl();
-        this.registerErrorListener();
+        this.loadAuthUrl();
         this.subscribeToMessageChannel();
+        this.registerErrorListener();
     }
 
     get isLoading() {
         return !this.currentAuthenticationStatus;
-    }
-
-    get cannotInitAuth() {
-        return !(this.isActiveConversation && !this.sendingAuthRequest);
     }
 
     get isAuthenticating() {
@@ -95,9 +86,14 @@ export default class ChatAuthenticationOverview extends LightningElement {
         return this.currentAuthenticationStatus === STATUSES.COMPLETED;
     }
 
-    get isEmpSubscribed() {
-        return Object.keys(this.empApiSubscription).length !== 0 && this.empApiSubscription.constructor === Object;
+    get isEmpSubscriptionNeeded() {
+        return !this.authenticationComplete && !this.isEmpSubscribed && !this.isLoading;
     }
+
+    get isEmpSubscribed() {
+        return !!this.empApiSubscription;
+    }
+
     get showAuthInfo() {
         return !this.chatEnded && !this.endTime;
     }
@@ -121,104 +117,83 @@ export default class ChatAuthenticationOverview extends LightningElement {
 
     registerErrorListener() {
         onError((error) => {
-            console.error('Received error from empApi: ', JSON.stringify(error));
-            /**
-            * Subscription to empApi fails, leading to an endless resubscription loop due to immediate retry in error handling.
-            * This may be caused by the Chat_Auth_Status_Changed topic not existing in Salesforce.
-            // TODO: Verify that the Chat_Auth_Status_Changed topic is created and accessible.
-            */
-
-            //this.handleUnsubscribe();
-            //this.handleSubscribe();
+            this.handleError(error);
+            this.handleUnsubscribe();
+            this.handleSubscribe();
         });
     }
 
-    getAuthUrl() {
-        getCommunityAuthUrl({})
+    loadAuthUrl() {
+        getCommunityAuthUrl()
             .then((url) => {
                 this.chatAuthUrl = url;
             })
-            .catch((error) => {
-                console.error('Failed to retrieve auth url: ', JSON.stringify(error));
-            });
+            .catch((error) => this.handleError(error, 'Failed to retrieve auth URL'));
     }
 
     handleSubscribe() {
-        const messageCallback = (response) => {
-            const eventRecordId = response.data.sobject.Id;
-            if (eventRecordId === this.recordId) {
-                this.currentAuthenticationStatus = response.data.sobject.CRM_Authentication_Status__c;
-                if (this.authenticationComplete) {
-                    if (!this.loginEvtSent) this.sendLoginEvent();
-                    getRecordNotifyChange([{ recordId: this.recordId }]);
-                    this.refreshData();
-                    this.handleUnsubscribe();
-                }
-            }
-        };
-
-        empApiSubscribe('/topic/Chat_Auth_Status_Changed', -1, messageCallback)
+        empApiSubscribe('/data/MessagingSessionChangeEvent', -1, this.handleCdcEvent.bind(this))
             .then((response) => {
                 this.empApiSubscription = response;
-                console.log('Successfully subscribed to: ', JSON.stringify(response.channel));
+                console.log(`Subscribed to: ${response.channel}`);
             })
-            .catch((error) => {
-                console.error('Failed to subscribe: ', JSON.stringify(error));
-            });
+            .catch((error) => this.handleError(error, 'Failed to subscribe'));
     }
 
     handleUnsubscribe() {
-        unsubscribe(this.empApiSubscription)
-            .then((response) => {
-                console.log('Unsubscribed: ', JSON.stringify(response));
-            })
-            .catch((error) => {
-                console.error('EMP unsubscribe failed: ', JSON.stringify(error));
-            });
+        if (this.isEmpSubscribed) {
+            unsubscribe(this.empApiSubscription)
+                .then(() => {
+                    this.empApiSubscription = null;
+                })
+                .catch((error) => this.handleError(error, 'Failed to unsubscribe'));
+        }
+    }
+
+    handleCdcEvent(response) {
+        const eventRecordIds = response.data.payload.ChangeEventHeader.recordIds;
+        const changedFields = response.data.payload.ChangeEventHeader.changedFields;
+
+        if (eventRecordIds.includes(this.recordId) && changedFields.includes('CRM_Authentication_Status__c')) {
+            this.updateAuthStatus(response.data.payload.CRM_Authentication_Status__c);
+        }
+    }
+
+    updateAuthStatus(newStatus) {
+        this.currentAuthenticationStatus = newStatus;
+
+        if (this.authenticationComplete) {
+            this.sendLoginEvent();
+            getRecordNotifyChange([{ recordId: this.recordId }]);
+            this.handleUnsubscribe();
+        }
     }
 
     sendLoginEvent() {
-        getCounselorName({ recordId: this.recordId })
-            .then((data) => {
-                const loginMessage =
-                    this.chatLanguage === 'en_US'
-                        ? 'You are now in a secure chat with Nav, you are chatting with ' +
-                          data +
-                          '. ' +
-                          this.labels.CHAT_LOGIN_MSG_EN
-                        : 'Du er nå i en innlogget chat med Nav, du snakker med ' +
-                          data +
-                          '. ' +
-                          this.labels.CHAT_LOGIN_MSG_NO;
+        if (!this.loginEvtSent) {
+            getCounselorName({ recordId: this.recordId })
+                .then((name) => {
+                    const loginMessage =
+                        this.chatLanguage === 'en_US'
+                            ? `You are now in a secure chat with Nav, chatting with ${name}. ${this.labels.CHAT_LOGIN_MSG_EN}`
+                            : `Du er nå i en innlogget chat med Nav, du snakker med ${name}. ${this.labels.CHAT_LOGIN_MSG_NO}`;
 
-                const authenticationCompleteEvt = new CustomEvent('authenticationcomplete', {
-                    detail: { loginMessage }
-                });
-                this.dispatchEvent(authenticationCompleteEvt);
-                this.loginEvtSent = true;
-            })
-            .catch((err) => {
-                console.err(err);
-            });
+                    this.dispatchEvent(new CustomEvent('authenticationcomplete', { detail: { loginMessage } }));
+                    this.loginEvtSent = true;
+                })
+                .catch(this.handleError);
+        }
     }
 
     requestAuthentication() {
         this.sendingAuthRequest = true;
-        const authUrl = this.chatAuthUrl;
-        const requestAuthenticationEvent = new CustomEvent('requestauthentication', {
-            detail: { authUrl }
-        });
-        this.dispatchEvent(requestAuthenticationEvent);
+        this.dispatchEvent(new CustomEvent('requestauthentication', { detail: { authUrl: this.chatAuthUrl } }));
     }
 
     setAuthStatusRequested() {
-        setStatusRequested({ chatTranscriptId: this.recordId })
-            .then(() => {
-                this.log('Successful update');
-            })
-            .catch((error) => {
-                this.log(error);
-            })
+        setStatusRequested({ messagingId: this.recordId })
+            .then(() => console.log('Status updated successfully'))
+            .catch(this.handleError)
             .finally(() => {
                 this.sendingAuthRequest = false;
             });
@@ -241,6 +216,11 @@ export default class ChatAuthenticationOverview extends LightningElement {
             mode: 'sticky'
         });
         this.dispatchEvent(event);
+    }
+
+    handleError(error, context = '') {
+        const message = context ? `${context}: ${JSON.stringify(error)}` : JSON.stringify(error);
+        console.error(message);
     }
 
     log(loggable) {

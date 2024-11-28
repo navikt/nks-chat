@@ -38,20 +38,21 @@
             <label>Common Code Not Null</label>
         </rules>
     </decisions>
-    <description>Automatically populates the theme group value for the chat based on which queue it originates from.</description>
+    <description>Automatically populates the theme group value for the chat based on which queue it
+        originates from.</description>
     <formulas>
         <description>Maps the incoming queue names to a theme group.</description>
         <name>Queue_Theme_Mapping</name>
         <dataType>String</dataType>
         <expression>CASE({!$Record.LiveChatButton.Queue.DeveloperName},
-    &apos;NKS_Chat_Familie&apos;, &apos;FMLI&apos;,
-    &apos;NKS_Chat_Arbeid&apos;, &apos;ARBD&apos;,
-    &apos;NKS_Chat_Ufoere&apos;, &apos;HELSE&apos;,
-    &apos;NKS_Chat_Helse&apos;, &apos;HELSE&apos;,
-    &apos;NKS_Chat_Arbeidsgiver_og_Samhandler&apos;, &apos;ARBD&apos;,
-    &apos;NKS_Chat_Pensjon&apos;, &apos;PENS&apos;,
-    null
-)</expression>
+            &apos;NKS_Chat_Familie&apos;, &apos;FMLI&apos;,
+            &apos;NKS_Chat_Arbeid&apos;, &apos;ARBD&apos;,
+            &apos;NKS_Chat_Ufoere&apos;, &apos;HELSE&apos;,
+            &apos;NKS_Chat_Helse&apos;, &apos;HELSE&apos;,
+            &apos;NKS_Chat_Arbeidsgiver_og_Samhandler&apos;, &apos;ARBD&apos;,
+            &apos;NKS_Chat_Pensjon&apos;, &apos;PENS&apos;,
+            null
+            )</expression>
     </formulas>
     <interviewLabel>Set Chat Theme Group {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Set Chat Theme Group</label>

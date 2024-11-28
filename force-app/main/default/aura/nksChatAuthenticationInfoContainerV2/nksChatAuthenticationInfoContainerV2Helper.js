@@ -7,32 +7,31 @@
         if (component.get('v.authCompletedHandled')) {
             chatToolkit
                 .sendMessage({
-                    recordId: recordId,
-                    message: {
-                        text: loginMsg
-                    }
+                    recordId,
+                    message: { text: loginMsg }
                 })
-                .then(function () {
-                    console.log('Succesfully sent login message to chat');
+                .then(() => {
+                    console.log('Successfully sent login message to chat');
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     console.error('Error sending login message:', error);
                 });
         }
     },
 
-    setTabIcon: function (component, newTabId, iconName, iconAlt) {
-        let workspace = component.find('workspace');
+    setTabIcon: function (component, tabId, iconName, iconAlt) {
+        const workspace = component.find('workspace');
+
         workspace.setTabIcon({
-            tabId: newTabId,
+            tabId,
             icon: iconName,
-            iconAlt: iconAlt
+            iconAlt
         });
     },
 
     subscribeEmpApi: function (component) {
         const empApi = component.find('empApi');
-        const channel = '/topic/Chat_Auth_Status_Changed';
+        const channel = '/data/MessagingSessionChangeEvent';
         const replayId = -1;
 
         empApi
@@ -40,11 +39,15 @@
                 channel,
                 replayId,
                 $A.getCallback((eventReceived) => {
-                    this.onEmpApiEvent(component, eventReceived);
+                    this.handleEmpApiEvent(component, eventReceived);
                 })
             )
             .then((subscription) => {
                 component.set('v.subscription', subscription);
+                console.log('Subscribed to channel:', channel);
+            })
+            .catch((error) => {
+                console.error('Subscription error:', JSON.stringify(error));
             });
     },
 
@@ -52,20 +55,29 @@
         const empApi = component.find('empApi');
         const subscription = component.get('v.subscription');
 
-        empApi.unsubscribe(
-            subscription,
-            $A.getCallback(() => {
-                component.set('v.subscription', null);
-            })
-        );
+        if (subscription) {
+            empApi
+                .unsubscribe(
+                    subscription,
+                    $A.getCallback(() => {
+                        component.set('v.subscription', null);
+                        console.log('Unsubscribed from channel');
+                    })
+                )
+                .catch((error) => {
+                    console.error('Unsubscribe error:', JSON.stringify(error));
+                });
+        }
     },
 
-    onEmpApiEvent: function (component, eventReceived) {
-        const authStatus = eventReceived.data.sobject.CRM_Authentication_Status__c;
-        const changedRecordId = eventReceived.data.sobject.Id;
+    handleEmpApiEvent: function (component, eventReceived) {
         const recordId = component.get('v.recordId');
+        const eventRecordIds = eventReceived.data.payload.ChangeEventHeader.recordIds;
+        const changedFields = eventReceived.data.payload.ChangeEventHeader.changedFields;
 
-        if (changedRecordId === recordId) {
+        if (eventRecordIds.includes(recordId) && changedFields.includes('CRM_Authentication_Status__c')) {
+            const authStatus = eventReceived.data.payload.CRM_Authentication_Status__c;
+
             component
                 .find('workspace')
                 .getEnclosingTabId()
