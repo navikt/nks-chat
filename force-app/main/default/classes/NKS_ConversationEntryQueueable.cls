@@ -19,10 +19,6 @@ public with sharing class NKS_ConversationEntryQueueable implements Queueable, D
         this.recordLimit = recordLimit;
     }
 
-    public NKS_ConversationEntryQueueable(List<MessagingSession> messagingSessions) {
-        this.messagingSessions = messagingSessions;
-    }
-
     public void execute(QueueableContext context) {
         NKS_ConversationEntryController.convertConversationEntries(
             messagingSessions,

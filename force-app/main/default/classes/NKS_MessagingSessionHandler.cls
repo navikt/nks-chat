@@ -17,7 +17,7 @@ global with sharing class NKS_MessagingSessionHandler extends MyTriggers {
         }
 
         if (messagingSessionsToConvert.size() > 0) {
-            System.enqueueJob(new NKS_ConversationEntryQueueable(messagingSessionsToConvert));
+            System.enqueueJob(new NKS_ConversationEntryQueueable(messagingSessionsToConvert, null, null, null, 1000));
         }
     }
 }
