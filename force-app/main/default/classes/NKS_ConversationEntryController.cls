@@ -100,7 +100,7 @@ public class NKS_ConversationEntryController {
         splitChatbotMessagesFromConversation(wrapper.conversationEntries, chatbotMessages, userMessages);
 
         if (!chatbotMessages.isEmpty()) {
-            String formattedChatbotMessages = formatMessagesAsString(chatbotMessages, session.EndUserLanguage);
+            String formattedChatbotMessages = formatChatbotMessagesAsString(chatbotMessages);
             storeChatbotConversationOnThread(thread.Id, formattedChatbotMessages);
         }
 
@@ -114,7 +114,7 @@ public class NKS_ConversationEntryController {
         }
 
         if (!messagesToInsert.isEmpty()) {
-            insertMessages(messagesToInsert, thread.Id);
+            insertMessagesAndUpdatedThreadCloseDate(messagesToInsert, thread.Id);
         }
     }
 
@@ -152,7 +152,7 @@ public class NKS_ConversationEntryController {
         return message;
     }
 
-    private static void insertMessages(List<Message__c> messages, String threadId) {
+    private static void insertMessagesAndUpdatedThreadCloseDate(List<Message__c> messages, String threadId) {
         try {
             insert messages;
             updateThreadCloseDate(threadId, System.now());
@@ -166,47 +166,38 @@ public class NKS_ConversationEntryController {
         List<ConversationEntry> chatbotMessages,
         List<ConversationEntry> userMessages
     ) {
-        Boolean greetingFound = false;
+        Boolean isFirstEntry = true;
 
         for (ConversationEntry entry : entries) {
             if (entry.messageText != null) {
                 entry.messageText = entry.messageText.unescapeHtml4(); // Connect API returns HTML-encoded strings -> decode for further processing
             }
-            if (!greetingFound && isEndOfChatbotMessages(entry)) {
-                greetingFound = true;
+            if (entry.messageText != null && isFirstEntry) {
+                isFirstEntry = false;
+                chatbotMessages.add(entry); // Add the first message to chatbot messages
+            } else if (isWelcomeMessage(entry)) {
                 entry.sender.role = 'Agent'; // Welcome message is incorrectly set as User message
-                userMessages.add(entry); // Add welcome message to user messages
-                continue;
-            }
-
-            if (greetingFound) {
-                chatbotMessages.add(entry);
+                userMessages.add(entry);
             } else {
                 userMessages.add(entry);
             }
         }
     }
 
-    private static Boolean isEndOfChatbotMessages(ConversationEntry entry) {
+    private static Boolean isWelcomeMessage(ConversationEntry entry) {
         return entry.messageText != null &&
             'System'.equalsIgnoreCase(entry.sender.role) &&
             (entry.messageText.containsIgnoreCase('Welcome to chat with NAV') ||
             entry.messageText.containsIgnoreCase('Velkommen til chat med NAV'));
     }
 
-    private static String formatMessagesAsString(List<ConversationEntry> entries, String language) {
+    private static String formatChatbotMessagesAsString(List<ConversationEntry> entries) {
         List<String> formattedMessages = new List<String>();
-        // Reverse the entries for correct order in Text Area field
-        for (Integer i = entries.size() - 1; i >= 0; i--) {
-            ConversationEntry entry = entries[i];
-            // Append "Bruker: " for all messages except the first (Fridalog) in reversed order. 
-            // This is for cases where user sends messages when they are in queue waiting for an agent to pick up the chat.
-            if (i == entries.size() - 1) {
-                formattedMessages.add(entry.messageText);
-            } else {
-                formattedMessages.add(language == 'en_US' ? 'User: ' : 'Bruker: ' + entry.messageText);
-            }
+
+        for (ConversationEntry entry : entries) {
+            formattedMessages.add(entry.messageText);
         }
+
         return String.join(formattedMessages, '\n');
     }
 
