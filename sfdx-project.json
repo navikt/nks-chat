@@ -4,11 +4,11 @@
             "path": "force-app",
             "default": true,
             "package": "crm-nks-chat",
-            "versionNumber": "0.42.0.NEXT",
+            "versionNumber": "0.51.0.NEXT",
             "dependencies": [
                 {
                     "package": "crm-platform-base",
-                    "versionNumber": "0.226.0.LATEST"
+                    "versionNumber": "0.231.0.LATEST"
                 },
                 {
                     "package": "crm-platform-access-control",
@@ -36,7 +36,7 @@
                 },
                 {
                     "package": "crm-journal-utilities",
-                    "versionNumber": "0.33.0.LATEST"
+                    "versionNumber": "0.39.0.LATEST"
                 },
                 {
                     "package": "crm-platform-oppgave",
@@ -48,11 +48,11 @@
                 },
                 {
                     "package": "crm-community-base",
-                    "versionNumber": "0.92.0.LATEST"
+                    "versionNumber": "0.119.0.LATEST"
                 },
                 {
                     "package": "crm-henvendelse",
-                    "versionNumber": "0.144.0.LATEST"
+                    "versionNumber": "0.148.0.LATEST"
                 },
                 {
                     "package": "crm-sf-saf",
@@ -68,14 +68,14 @@
                 },
                 {
                     "package": "crm-nks-base-components",
-                    "versionNumber": "0.64.0.LATEST"
+                    "versionNumber": "0.79.0.LATEST"
                 }
             ]
         }
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "59.0",
+    "sourceApiVersion": "62.0",
     "packageAliases": {
         "crm-nks-chat": "0Ho7U000000000GSAQ",
         "crm-henvendelse-base": "0Ho7U000000000kSAA",

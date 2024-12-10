@@ -1,12 +1,12 @@
 {
     "orgName": "crm-nks-chat",
-    "edition": "Enterprise",
-    "release": "Current",
+    "sourceOrg": "00D2o000000aANV",
     "adminEmail": "fakeemail@nav.no.scratchorg",
     "features": [
         "ProcessBuilder",
         "API",
         "LiveAgent",
+        "LiveMessage",
         "PersonAccounts",
         "Sites",
         "ForceComPlatform",
@@ -16,7 +16,8 @@
         "ServiceCloud",
         "Knowledge",
         "LightningServiceConsole",
-        "FIELDSERVICE:1"
+        "FIELDSERVICE:1",
+        "LiveMessage"
     ],
     "country": "NO",
     "language": "en_US",
@@ -43,6 +44,9 @@
         "liveAgentSettings": {
             "enableLiveAgent": true
         },
+        "liveMessageSettings": {
+            "enableLiveMessage": true
+        },
         "knowledgeSettings": {
             "enableKnowledge": true,
             "enableLightningKnowledge": true
@@ -67,6 +71,9 @@
         },
         "surveySettings": {
             "enableSurvey": true
+        },
+        "liveMessageSettings": {
+            "enableLiveMessage": true
         }
     }
 }
