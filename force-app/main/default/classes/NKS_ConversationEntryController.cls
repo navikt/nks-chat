@@ -166,24 +166,29 @@ public class NKS_ConversationEntryController {
         List<ConversationEntry> chatbotMessages,
         List<ConversationEntry> userMessages
     ) {
-        Boolean isFirstEntry = true;
-
+        Boolean automaticGreetingFound = false;
         for (ConversationEntry entry : entries) {
-            if (entry.messageText != null) {
-                entry.messageText = entry.messageText.unescapeHtml4(); // Connect API returns HTML-encoded strings -> decode for further processing
-            }
-            if (entry.messageText != null && isFirstEntry) {
-                isFirstEntry = false;
-                chatbotMessages.add(entry); // Add the first message to chatbot messages
-            } else if (isWelcomeMessage(entry)) {
+            if (entry.messageText == null) {
+                continue;
+            } 
+            entry.messageText = entry.messageText.unescapeHtml4(); // Connect API returns HTML-encoded strings -> decode for further processing
+
+            if (isWelcomeMessage(entry)) {
+                automaticGreetingFound = true;
                 entry.sender.role = 'Agent'; // Welcome message is incorrectly set as User message
+                userMessages.add(entry); // Add welcome message to user messages
+                continue;
+            }
+
+            if (automaticGreetingFound) {
                 userMessages.add(entry);
             } else {
-                userMessages.add(entry);
+                chatbotMessages.add(entry);
             }
         }
     }
 
+    // TODO: Only check sender.role == System to avoid this failing if we change the welcome message in the future?
     private static Boolean isWelcomeMessage(ConversationEntry entry) {
         return entry.messageText != null &&
             'System'.equalsIgnoreCase(entry.sender.role) &&
