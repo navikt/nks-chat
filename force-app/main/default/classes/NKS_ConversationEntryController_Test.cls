@@ -44,13 +44,13 @@ private class NKS_ConversationEntryController_Test {
         String jsonResponse =
             '{' +
             '"conversationEntries":[{' +
-            '"clientDuration":0,"clientTimestamp":1732111810339,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Første chatbotmelding aka Fridalog.","relatedRecords":["' +
+            '"clientDuration":0,"clientTimestamp":1732111810339,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Frida: Første chatbotmelding fra Frida.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810339},' +
             '{"clientDuration":0,"clientTimestamp":1732111810439,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra bruker.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810439},' +
-            '{"clientDuration":0,"clientTimestamp":1732111810607,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra veileder.","relatedRecords":["' +
+            '{"clientDuration":0,"clientTimestamp":1732111810607,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra bruker.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"Agent","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},' +
             '{"clientDuration":0,"clientTimestamp":1732111810707,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Velkommen til chat med NAV","relatedRecords":["' +
@@ -79,7 +79,7 @@ private class NKS_ConversationEntryController_Test {
         
         Assert.isTrue(messages.size() == 4, '4 messages should be inserted (including auth event message).');
         Assert.isTrue(
-            thread.Additional_Information__c.contains('Første chatbotmelding aka Fridalog.'),
+            thread.Additional_Information__c.contains('Frida: Første chatbotmelding fra Frida.'),
             'Fridalog should be added to the field.'
         );
     }
@@ -102,13 +102,13 @@ private class NKS_ConversationEntryController_Test {
         String jsonResponse =
             '{' +
             '"conversationEntries":[{' +
-            '"clientDuration":0,"clientTimestamp":1732111810339,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Første chatbotmelding aka Fridalog.","relatedRecords":["' +
+            '"clientDuration":0,"clientTimestamp":1732111810339,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Frida: Første chatbotmelding fra Frida.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810339},' +
             '{"clientDuration":0,"clientTimestamp":1732111810439,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra bruker.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"EndUser","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810439},' +
-            '{"clientDuration":0,"clientTimestamp":1732111810607,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra veileder.","relatedRecords":["' +
+            '{"clientDuration":0,"clientTimestamp":1732111810607,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Tidligere melding fra bruker.","relatedRecords":["' +
             messagingSessionId +
             '"],"sender":{"appType":"iamessage","role":"Agent","subject":"v2/iamessage/UNAUTH/NA/uid:66823427-6991-4b41-b932-605b3ad2dd7c"},"serverReceivedTimestamp":1732111810607},' +
             '{"clientDuration":0,"clientTimestamp":1732111810707,"identifier":"f895ea81-4e7a-4630-94d5-3de815cdaa95","messageText":"Velkommen til chat med NAV","relatedRecords":["' +

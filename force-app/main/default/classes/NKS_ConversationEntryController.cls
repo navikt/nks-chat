@@ -200,7 +200,12 @@ public class NKS_ConversationEntryController {
         List<String> formattedMessages = new List<String>();
 
         for (ConversationEntry entry : entries) {
-            formattedMessages.add(entry.messageText);
+            String messageText = entry.messageText;
+            // Assuming user sent more messages after chat was sent to queue
+            if (!messageText.startsWith('Bruker:') && !messageText.startsWith('Frida:')) {
+                messageText = 'Bruker: ' + messageText;
+            }
+            formattedMessages.add(messageText);
         }
 
         return String.join(formattedMessages, '\n');
