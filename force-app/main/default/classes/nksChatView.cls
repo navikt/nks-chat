@@ -9,11 +9,11 @@ public with sharing class nksChatView {
     }
 
     @AuraEnabled(cacheable=true)
-    public static String getChatbotMessage(Id chatId, Id userId) {
+    public static String getChatbotMessage(Id chatId, Id userId, Boolean isChatTranscript) {
         List<User> user = [SELECT accountId FROM User WHERE id = :userId LIMIT 1];
         if (user.size() == 0) {
             return 'Det oppstod en feil';
         }
-        return nksFridaLog.getChatbotMessage(chatId, user[0].accountId);
+        return nksFridaLog.getChatbotMessage(chatId, user[0].accountId, isChatTranscript);
     }
 }
