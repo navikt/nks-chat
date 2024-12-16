@@ -1,10 +1,11 @@
 import { LightningElement, api, wire } from 'lwc';
 import getThreadId from '@salesforce/apex/nksChatView.getThreadId';
-import markasread from '@salesforce/apex/CRM_MessageHelperExperience.markAsRead';
 import getChatbotMessage from '@salesforce/apex/nksChatView.getChatbotMessage';
+import getObjectInfo from '@salesforce/apex/nksChatView.getObjectInfo';
 import { publish, MessageContext } from 'lightning/messageService';
 import globalModalOpen from '@salesforce/messageChannel/globalModalOpen__c';
 import userId from '@salesforce/user/Id';
+import markasread from '@salesforce/apex/CRM_MessageHelperExperience.markAsRead';
 import getmessages from '@salesforce/apex/CRM_MessageHelperExperience.getMessagesFromThread';
 import getContactId from '@salesforce/apex/CRM_MessageHelperExperience.getUserContactId';
 import { CurrentPageReference } from 'lightning/navigation';
@@ -13,13 +14,12 @@ import basepath from '@salesforce/community/basePath';
 export default class NksChatView extends LightningElement {
     @api recordId;
     pageRefChatId;
-    redirected = false;
     threadId;
-    errorList = { title: '', errors: [] };
     modalOpen = false;
     userContactId;
     messages;
     chatbotMessage = 'Laster inn samtale';
+    recordType;
 
     @wire(MessageContext)
     messageContext;
@@ -28,7 +28,6 @@ export default class NksChatView extends LightningElement {
     getStateParameters(currentPageReference) {
         if (currentPageReference) {
             this.pageRefChatId = currentPageReference.state?.id;
-            this.redirected = currentPageReference.state?.redirected != null;
         }
     }
 
@@ -41,6 +40,16 @@ export default class NksChatView extends LightningElement {
             .catch(() => {
                 //Apex error
             });
+    }
+
+    @wire(getObjectInfo, { recordId: '$pageRefChatId' })
+    wiredGetObjectInfo({ error, data }) {
+        if (error) {
+            console.error(error);
+        }
+        if (data) {
+            this.recordType = data;
+        }
     }
 
     @wire(getThreadId, { chatId: '$pageRefChatId' })
@@ -67,11 +76,17 @@ export default class NksChatView extends LightningElement {
         this.modalOpen = true;
         this.termsModal.focusModal();
         publish(this.messageContext, globalModalOpen, { status: 'true' });
-        getChatbotMessage({ chatId: this.pageRefChatId, userId: userId, isChatTranscript: this.redirected }).then(
-            (res) => {
-                this.chatbotMessage = res;
+        getChatbotMessage({
+            chatId: this.pageRefChatId,
+            userId: userId,
+            isChatTranscript: this.recordType === 'LiveChatTranscript'
+        }).then((res) => {
+            this.chatbotMessage = res;
+            if (this.recordType === 'MessagingSession') {
+                // Add new lines to chatbot message for proper formatting for Messaging Session
+                this.chatbotMessage = this.chatbotMessage.replace(/(?:\r\n|\r|\n)/g, '<br>');
             }
-        );
+        });
     }
 
     closeModal() {
@@ -92,7 +107,7 @@ export default class NksChatView extends LightningElement {
     // Redirect for static user notifications links
     redirect() {
         if (this.recordId != null && this.recordId !== '') {
-            const link = basepath + '/chat?id=' + this.recordId + '&redirected=true';
+            const link = basepath + '/chat?id=' + this.recordId;
             // eslint-disable-next-line @locker/locker/distorted-xml-http-request-window-open
             window.open(link, '_self');
         }

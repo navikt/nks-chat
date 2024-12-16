@@ -16,4 +16,13 @@ public with sharing class nksChatView {
         }
         return nksFridaLog.getChatbotMessage(chatId, user[0].accountId, isChatTranscript);
     }
+
+    @AuraEnabled(cacheable=true)
+    public static String getObjectInfo(Id recordId) {
+        try {
+            return recordId.getSObjectType().getDescribe().getName();
+        } catch (Exception e) {
+            throw new AuraHandledException('Unable to determine object type: ' + e.getMessage());
+        }
+    }
 }
