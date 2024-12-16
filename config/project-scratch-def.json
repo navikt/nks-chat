@@ -64,6 +64,9 @@
         },
         "userManagementSettings": {
             "enableNewProfileUI": true
+        },
+        "surveySettings": {
+            "enableSurvey": true
         }
     }
 }
