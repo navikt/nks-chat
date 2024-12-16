@@ -84,7 +84,7 @@ export default class NksChatView extends LightningElement {
             this.chatbotMessage = res;
             if (this.recordType === 'MessagingSession') {
                 // Add new lines to chatbot message for proper formatting for Messaging Session
-                this.chatbotMessage = this.chatbotMessage.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                this.chatbotMessage = this.chatbotMessage?.replace(/(?:\r\n|\r|\n)/g, '<br>');
             }
         });
     }
