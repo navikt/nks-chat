@@ -33,13 +33,13 @@ private class NKS_ConversationEntryController_Test {
 
     @isTest
     static void testConvertConversationEntries() {
-        List<MessagingSession> messagingSessions = [
+        MessagingSession messagingSession = [
             SELECT Id, CRM_Authentication_Status__c
             FROM MessagingSession
             LIMIT 1
         ];
-        messagingSessions[0].CRM_Authentication_Status__c = 'Completed';
-        String messagingSessionId = messagingSessions[0].Id;
+        messagingSession.CRM_Authentication_Status__c = 'Completed';
+        String messagingSessionId = messagingSession.Id;
 
         String jsonResponse =
             '{' +
@@ -67,7 +67,7 @@ private class NKS_ConversationEntryController_Test {
         Test.setMock(HttpCalloutMock.class, new SingleRequestMock(200, 'OK', jsonResponse, null));
 
         Test.startTest();
-        update messagingSessions;
+        update messagingSession;
         Test.stopTest();
 
         Thread__c thread = [
@@ -86,14 +86,14 @@ private class NKS_ConversationEntryController_Test {
 
     @isTest
     static void testGetConversationEntryMessages() {
-        List<MessagingSession> messagingSessions = [
+        MessagingSession messagingSession = [
             SELECT Id, Conversation.ConversationIdentifier
             FROM MessagingSession
             LIMIT 1
         ];
 
-        String messagingSessionId = messagingSessions[0].Id;
-        String conversationIdentifier = messagingSessions[0].Conversation.ConversationIdentifier;
+        String messagingSessionId = messagingSession.Id;
+        String conversationIdentifier = messagingSession.Conversation.ConversationIdentifier;
         Long startTimestamp = 1732111834877L;
         Long endTimestamp = 1732111856833L;
         String queryDirection = 'FromStart';
