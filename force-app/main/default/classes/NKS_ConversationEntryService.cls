@@ -11,13 +11,16 @@ public class NKS_ConversationEntryService {
         Integer recordLimit
     ) {
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:Salesforce_Connect_Rest_API' + buildUrl(conversationIdentifier, startTimestamp, endTimestamp, queryDirection, recordLimit));
+        req.setEndpoint(
+            'callout:Salesforce_Connect_Rest_API' +
+            buildUrl(conversationIdentifier, startTimestamp, endTimestamp, queryDirection, recordLimit)
+        );
         req.setMethod('GET');
         req.setHeader('Content-Type', 'application/json');
         Http http = new Http();
         return http.send(req);
     }
-    
+
     private static String buildUrl(
         String conversationIdentifier,
         Long startTimestamp,

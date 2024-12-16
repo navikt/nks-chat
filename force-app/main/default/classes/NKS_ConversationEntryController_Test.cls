@@ -76,7 +76,7 @@ private class NKS_ConversationEntryController_Test {
             WHERE CRM_Related_Object__c = :messagingSessionId
         ];
         List<Message__c> messages = [SELECT Id FROM Message__c WHERE CRM_Thread__c = :thread.Id];
-        
+
         Assert.isTrue(messages.size() == 4, '4 messages should be inserted (including auth event message).');
         Assert.isTrue(
             thread.Additional_Information__c.contains('Frida: Første chatbotmelding fra Frida.'),

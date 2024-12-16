@@ -170,7 +170,7 @@ public class NKS_ConversationEntryController {
         for (ConversationEntry entry : entries) {
             if (entry.messageText == null) {
                 continue;
-            } 
+            }
             entry.messageText = entry.messageText.unescapeHtml4(); // Connect API returns HTML-encoded strings -> decode for further processing
 
             if (isWelcomeMessage(entry)) {
