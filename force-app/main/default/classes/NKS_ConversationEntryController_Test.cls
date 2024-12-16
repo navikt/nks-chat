@@ -71,7 +71,7 @@ private class NKS_ConversationEntryController_Test {
         Test.stopTest();
 
         Thread__c thread = [
-            SELECT Id, Additional_Information__c
+            SELECT Id, CRM_Additional_Information__c
             FROM Thread__c
             WHERE CRM_Related_Object__c = :messagingSessionId
         ];
@@ -79,7 +79,7 @@ private class NKS_ConversationEntryController_Test {
 
         Assert.isTrue(messages.size() == 4, '4 messages should be inserted (including auth event message).');
         Assert.isTrue(
-            thread.Additional_Information__c.contains('Frida: Første chatbotmelding fra Frida.'),
+            thread.CRM_Additional_Information__c.contains('Frida: Første chatbotmelding fra Frida.'),
             'Fridalog should be added to the field.'
         );
     }

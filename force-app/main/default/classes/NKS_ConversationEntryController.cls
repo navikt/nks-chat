@@ -212,7 +212,7 @@ public class NKS_ConversationEntryController {
     }
 
     private static void storeChatbotConversationOnThread(String threadId, String chatbotConversation) {
-        update new Thread__c(Id = threadId, Additional_Information__c = chatbotConversation);
+        update new Thread__c(Id = threadId, CRM_Additional_Information__c = chatbotConversation);
     }
 
     private static Map<String, User> getNavUserInfoByUserId() {

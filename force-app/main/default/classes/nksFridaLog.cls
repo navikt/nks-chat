@@ -13,7 +13,7 @@ public without sharing class nksFridaLog {
             return NKS_CaseBotConversationHandler.formatBotConversation(caseRef[0].Description);
         } else {
             List<Thread__c> threadRef = [
-                SELECT Additional_Information__c
+                SELECT CRM_Additional_Information__c
                 FROM Thread__c
                 WHERE CRM_Related_Object__c = :chatId AND CRM_Account__c = :accountId
                 LIMIT 1
@@ -21,7 +21,7 @@ public without sharing class nksFridaLog {
             if (threadRef.size() == 0) {
                 return 'Det oppstod en feil';
             }
-            return threadRef[0].Additional_Information__c;
+            return threadRef[0].CRM_Additional_Information__c;
         }
     }
 }
