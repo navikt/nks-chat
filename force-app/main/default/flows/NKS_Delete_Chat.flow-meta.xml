@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
-    <description>Delete Conversation Entry related to ended Messaging Session if the Messaging Session was unauthenticated and queue was Sosial or Gjeldsrådgivning.</description>
+    <description>Delete Conversation Entry related to ended Messaging Session if the Messaging
+        Session was unauthenticated and queue was Sosial or Gjeldsrådgivning.</description>
     <environments>Default</environments>
     <interviewLabel>NKS {!$Flow.CurrentDateTime}</interviewLabel>
     <label>NKS Delete Chat</label>
@@ -93,5 +94,5 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
 </Flow>

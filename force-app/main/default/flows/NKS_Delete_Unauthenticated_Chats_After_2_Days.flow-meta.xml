@@ -4,7 +4,7 @@
     <decisions>
         <name>Check_criteria_to_delete</name>
         <label>Check criteria to delete</label>
-        <locationX>374</locationX>
+        <locationX>440</locationX>
         <locationY>276</locationY>
         <defaultConnectorLabel>Do not delete</defaultConnectorLabel>
         <rules>
@@ -82,7 +82,7 @@
     <recordDeletes>
         <name>Delete_Related_Conversation_Entries</name>
         <label>Delete Related Conversation Entries</label>
-        <locationX>242</locationX>
+        <locationX>176</locationX>
         <locationY>384</locationY>
         <filterLogic>and</filterLogic>
         <filters>
