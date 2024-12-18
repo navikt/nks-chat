@@ -1,4 +1,4 @@
-public with sharing class NKS_DeleteChatsBatch implements Database.Batchable<sObject>, Schedulable  {
+public with sharing class NKS_DeleteChatsBatch implements Database.Batchable<sObject>, Schedulable {
     private final String query;
 
     public NKS_DeleteChatsBatch() {

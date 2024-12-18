@@ -25,7 +25,7 @@ public class NKS_DeleteChatsBatch_Test {
             msgSession.Status = 'Ended';
             msgSession.EndTime = Datetime.now();
             insert msgSession;
-            
+
             // TODO: Not possible to insert Conversation, and it is required to insert Conversation Entry...
             /*ConversationEntry entry = new ConversationEntry();
             entry.ConversationId = '0dwKD0000005IwSYAU';
