@@ -1,5 +1,8 @@
 public class NKS_ConversationEntryController {
     private static LoggerUtility logger = new LoggerUtility('Messaging');
+    // Welcome message text from the Messaging Component in Messaging Settings
+    private static final String welcomeMessageSubstringNO = 'Velkommen til chat med NAV';
+    private static final String welcomeMessageSubstringEN = 'Welcome to chat with NAV';
     private static Map<String, User> navUserInfoByUserId = getNavUserInfoByUserId();
 
     public static void convertConversationEntries(
@@ -75,7 +78,7 @@ public class NKS_ConversationEntryController {
                 createThreadMessages(wrapper, session);
             } else {
                 logger.httpError(
-                    'Failed to get conversation entries. Status Code: ' + response.getStatusCode(),
+                    'Failed to get conversation entries for session: ' + session.Id + '.\nStatus Code: ' + response.getStatusCode(),
                     response,
                     null,
                     CRM_ApplicationDomain.Domain.NKS
@@ -93,7 +96,10 @@ public class NKS_ConversationEntryController {
             return;
         }
 
-        Thread__c thread = getThreadDetails(wrapper.conversationEntries[0].relatedRecords[0]);
+        Thread__c thread = getThreadDetails(session.Id);
+        if (thread == null) {
+            return;
+        }
 
         List<ConversationEntry> chatbotMessages = new List<ConversationEntry>();
         List<ConversationEntry> userMessages = new List<ConversationEntry>();
@@ -101,7 +107,7 @@ public class NKS_ConversationEntryController {
 
         if (!chatbotMessages.isEmpty()) {
             String formattedChatbotMessages = formatChatbotMessagesAsString(chatbotMessages);
-            storeChatbotConversationOnThread(thread.Id, formattedChatbotMessages);
+            thread.CRM_Additional_Information__c = formattedChatbotMessages;
         }
 
         List<Message__c> messagesToInsert = new List<Message__c>();
@@ -114,8 +120,9 @@ public class NKS_ConversationEntryController {
         }
 
         if (!messagesToInsert.isEmpty()) {
-            insertMessagesAndUpdatedThreadCloseDate(messagesToInsert, thread.Id);
+            insertMessages(messagesToInsert);
         }
+        updateThread(thread);
     }
 
     private static Message__c createAuthEventMessage(MessagingSession msgSession, Thread__c thread) {
@@ -126,7 +133,7 @@ public class NKS_ConversationEntryController {
             CRM_Thread__c = thread.Id,
             CRM_Type__c = 'Event',
             CRM_Sent_date__c = msgSession.NKS_Authentication_Timestamp__c,
-            CRM_Read__c = false,
+            CRM_Read__c = true,
             CRM_Message_Text__c = authText
         );
     }
@@ -136,7 +143,7 @@ public class NKS_ConversationEntryController {
         message.CRM_Thread__c = thread.Id;
         message.CRM_Message_Text__c = entry.messageText;
         message.CRM_Sent_Date__c = DateTime.newInstance(entry.serverReceivedTimestamp);
-        message.CRM_Read__c = false;
+        message.CRM_Read__c = true;
         message.CRM_Type__c = 'Message';
 
         if ('Agent'.equals(entry.sender.role)) {
@@ -152,12 +159,21 @@ public class NKS_ConversationEntryController {
         return message;
     }
 
-    private static void insertMessagesAndUpdatedThreadCloseDate(List<Message__c> messages, String threadId) {
+    private static void insertMessages(List<Message__c> messages) {
         try {
             insert messages;
-            updateThreadCloseDate(threadId, System.now());
         } catch (Exception e) {
-            logger.error('Error saving messages: ' + e.getMessage(), null, CRM_ApplicationDomain.Domain.NKS);
+            logger.error('Error inserting messages: ' + e.getMessage(), null, CRM_ApplicationDomain.Domain.NKS);
+        }
+    }
+
+    private static void updateThread(Thread__c thread) {
+        try {
+            thread.CRM_isActive__c = false;
+            thread.CRM_Closed_Date__c = System.now();
+            update thread;
+        } catch (Exception e) {
+            logger.error('Error updating thread: ' + e.getMessage(), null, CRM_ApplicationDomain.Domain.NKS);
         }
     }
 
@@ -175,9 +191,7 @@ public class NKS_ConversationEntryController {
 
             if (isWelcomeMessage(entry)) {
                 automaticGreetingFound = true;
-                entry.sender.role = 'Agent'; // Welcome message is incorrectly set as User message
-                userMessages.add(entry); // Add welcome message to user messages
-                continue;
+                entry.sender.role = 'Agent'; // Welcome message role is incorrectly set
             }
 
             if (automaticGreetingFound) {
@@ -188,12 +202,11 @@ public class NKS_ConversationEntryController {
         }
     }
 
-    // TODO: Only check sender.role == System to avoid this failing if we change the welcome message in the future?
     private static Boolean isWelcomeMessage(ConversationEntry entry) {
         return entry.messageText != null &&
             'System'.equalsIgnoreCase(entry.sender.role) &&
-            (entry.messageText.containsIgnoreCase('Welcome to chat with NAV') ||
-            entry.messageText.containsIgnoreCase('Velkommen til chat med NAV'));
+            (entry.messageText.containsIgnoreCase(welcomeMessageSubstringEN) ||
+            entry.messageText.containsIgnoreCase(welcomeMessageSubstringNO));
     }
 
     private static String formatChatbotMessagesAsString(List<ConversationEntry> entries) {
@@ -211,21 +224,13 @@ public class NKS_ConversationEntryController {
         return String.join(formattedMessages, '\n');
     }
 
-    private static void storeChatbotConversationOnThread(String threadId, String chatbotConversation) {
-        update new Thread__c(Id = threadId, CRM_Additional_Information__c = chatbotConversation);
-    }
-
     private static Map<String, User> getNavUserInfoByUserId() {
         Map<String, User> navUserInfoByUserId = new Map<String, User>();
         for (User usr : [
             SELECT Id, Department
             FROM User
             WHERE
-                Id IN (
-                    SELECT AssigneeId
-                    FROM PermissionSetAssignment
-                    WHERE PermissionSetGroup.DeveloperName = 'Kontaktsenter'
-                )
+                ProfileId IN (SELECT Id FROM Profile WHERE Name LIKE 'NAV Kontaktsenter%')
                 AND IsActive = TRUE
                 AND CRM_NAV_Ident__c != NULL
                 AND CRM_NAV_Ident__c != ''
@@ -238,16 +243,11 @@ public class NKS_ConversationEntryController {
 
     private static Thread__c getThreadDetails(Id messagingSessionId) {
         return [
-            SELECT Id
+            SELECT Id, CRM_Additional_Information__c, CRM_isActive__c, CRM_Closed_Date__c
             FROM Thread__c
             WHERE CRM_Related_Object__c = :messagingSessionId
             FOR UPDATE
         ];
-    }
-
-    @future
-    private static void updateThreadClosedate(String threadId, Datetime closeDate) {
-        update new Thread__c(Id = threadId, CRM_isActive__c = false, CRM_Closed_Date__c = closeDate);
     }
 
     public class ConversationEntryWrapper {

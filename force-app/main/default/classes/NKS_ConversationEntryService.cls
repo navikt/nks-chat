@@ -1,7 +1,5 @@
 public class NKS_ConversationEntryService {
     private static final String API_VERSION = 'v62.0';
-    private static final String API_CONFIG_NAME = 'CONVERSATION_ENTRY_CONNECT_REST_API';
-    private static final String SERVICE_NAME = 'GET_CONVERSATION_ENTRIES';
 
     public static HttpResponse getConversationEntryMessages(
         String conversationIdentifier,
