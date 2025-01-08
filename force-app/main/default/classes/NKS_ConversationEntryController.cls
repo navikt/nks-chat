@@ -109,12 +109,10 @@ public class NKS_ConversationEntryController {
         splitChatbotMessagesFromConversation(wrapper.conversationEntries, chatbotMessages, userMessages);
 
         if (!chatbotMessages.isEmpty()) {
-            String formattedChatbotMessages = formatChatbotMessagesAsString(chatbotMessages);
-            thread.CRM_Additional_Information__c = formattedChatbotMessages;
+            thread.CRM_Additional_Information__c = formatChatbotMessagesAsString(chatbotMessages);
         }
 
-        List<Message__c> messagesToInsert = new List<Message__c>();
-        messagesToInsert.add(createAuthEventMessage(session, thread));
+        List<Message__c> messagesToInsert = new List<Message__c>{ createAuthEventMessage(session, thread) };
 
         for (ConversationEntry entry : userMessages) {
             if (entry.messageText != null) {
@@ -132,6 +130,7 @@ public class NKS_ConversationEntryController {
         String authText = msgSession.EndUserLanguage == 'en_US'
             ? 'Started authenticated chat'
             : 'Startet innlogget chat';
+
         return new Message__c(
             CRM_Thread__c = thread.Id,
             CRM_Type__c = 'Event',
