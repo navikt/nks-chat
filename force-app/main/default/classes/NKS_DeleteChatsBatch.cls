@@ -2,7 +2,7 @@ public with sharing class NKS_DeleteChatsBatch implements Database.Batchable<sOb
     private final String query;
 
     public NKS_DeleteChatsBatch() {
-        this.query = 'SELECT Id FROM ConversationEntry WHERE ConversationId IN (SELECT ConversationId FROM MessagingSession WHERE CreatedDate = TODAY AND EndUserAccountId = NULL AND CRM_Authentication_Status__c != \'Completed\' AND (Status = \'Ended\' OR Status = \'Inactive\') AND (Queue_Name__c = \'NKS_Messaging_Gjeldsraadgivning\' OR Queue_Name__c = \'NKS_Messaging_Sosiale_Tjenester\'))';
+        this.query = 'SELECT Id FROM ConversationEntry WHERE ConversationId IN (SELECT ConversationId FROM MessagingSession WHERE CreatedDate = TODAY AND EndUserAccountId = NULL AND CRM_Authentication_Status__c != \'Completed\' AND (Status IN (\'Ended\', \'Inactive\')) AND Queue_Name__c IN (\'NKS_Messaging_Gjeldsraadgivning\', \'NKS_Messaging_Sosiale_Tjenester\'))';
     }
     public NKS_DeleteChatsBatch(String query) {
         this.query = query;
