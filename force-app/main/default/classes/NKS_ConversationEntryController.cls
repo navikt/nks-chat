@@ -192,7 +192,7 @@ public class NKS_ConversationEntryController {
             }
             entry.messageText = entry.messageText.unescapeHtml4(); // Connect API returns HTML-encoded strings -> decode for further processing
 
-            if (isWelcomeMessage(entry)) {
+            if (!automaticGreetingFound && isWelcomeMessage(entry)) {
                 automaticGreetingFound = true;
                 entry.sender.role = 'Agent'; // Welcome message role is incorrectly set
             }
