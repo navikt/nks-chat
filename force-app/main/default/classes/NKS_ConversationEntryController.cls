@@ -78,7 +78,10 @@ public class NKS_ConversationEntryController {
                 createThreadMessages(wrapper, session);
             } else {
                 logger.httpError(
-                    'Failed to get conversation entries for session: ' + session.Id + '.\nStatus Code: ' + response.getStatusCode(),
+                    'Failed to get conversation entries for session: ' +
+                        session.Id +
+                        '.\nStatus Code: ' +
+                        response.getStatusCode(),
                     response,
                     null,
                     CRM_ApplicationDomain.Domain.NKS
